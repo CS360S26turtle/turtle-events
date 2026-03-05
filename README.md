@@ -58,6 +58,26 @@ Saturday, February 21, 2026
 
 ---
 
+### Meeting – Mar 1st, 2026
+
+#### Date
+Sunday, March 1, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Got previous work reviewed
+- Discussed ideas for user stories
+- Got briefing on Storyboards & CRC
+
+
 #### Prepared Questions & Decisions
 
 **No major issues**
