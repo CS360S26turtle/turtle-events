@@ -3,7 +3,8 @@
 ## Table of Contents
 - [Team Information](#team-information)
 - [Meeting Minutes](#meeting-minutes)
-  - [Meeting – Feb 21, 2026](#meeting--feb-25-2026)
+  - [Meeting – Feb 21, 2026](#meeting--feb-21-2026)
+  - [Meeting – Mar 1, 2026](#meeting--mar-1-2026)
   - [Meeting – TBD](#meeting--tbd)
 
 - [UML Diagrams](#uml-diagrams)
@@ -35,7 +36,7 @@
 
 ## Meeting Minutes
 
-### Meeting – Feb 25, 2026
+### Meeting – Feb 21, 2026
 
 #### Date
 Saturday, February 21, 2026
