@@ -154,6 +154,19 @@ _Add UML diagrams here or link images from the repository._
 
 ---
 
+---
+
+## CRC Diagrams
+_CRC Tables_
+
+---
+
+## StoryBoards
+
+
+---
+
+
 ## Product Backlog
 
 ### Product Backlog – Project Part 1
