@@ -110,6 +110,40 @@ Sunday, March 1, 2026
 
 ---
 
+### Meeting – Mar 7th, 2026
+
+#### Date
+Sunday, March 7, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Finalized User Stories
+- Finalized Storyboards
+- Got some questions cleared for CRC diagrams - to be done by Sunday/Monday
+
+
+#### Prepared Questions & Decisions
+- Guidance on user stories in terms of breadth and quantity
+- Guidance on CRC cards and how to create
+
+#### General Notes
+
+---
+
+#### Action Items
+- [ ] Creating user stories and adding on github
+- [ ] Starting storyboard and CRC cards creation
+
+---
+
 ### Meeting – TBD
 _Content to be added._
 
