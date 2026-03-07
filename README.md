@@ -109,5 +109,9 @@ _Add UML diagrams here or link images from the repository._
 | ID | User Story | Priority | Status |
 |----|------------|----------|--------|
 
+| 01 | User Registration | High | Status |
+|----|------------|----------|--------|
+As a student, I want to create and edit my profile with my courses, academic level, learning goals/style(in-person, online, visual, auditory etc ) so that tutors can understand my needs.
+
 ### Product Backlog – Project Part 2
 | ID |
