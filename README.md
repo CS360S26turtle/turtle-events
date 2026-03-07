@@ -106,15 +106,11 @@ _Add UML diagrams here or link images from the repository._
 ## Product Backlog
 
 ### Product Backlog – Project Part 1
-| ID | User Story | Priority | Status |
-|----|------------|----------|--------|
-
-### Product Backlog – Project Part 1
 
 | ID | User Story | Priority | Status |
 |----|------------|----------|--------|
-| US-01 | As a student, I want to search for peer tutors by subject so that I can find academic help easily. | High | To Do |
-| US-02 | As a student, I want to view tutor profiles so that I can check their expertise and ratings. | High | To Do |
+| US 01 - User Registration | As a student, I want to create and edit my profile with my courses, academic level, learning goals/style(in-person, online, visual, auditory etc ) so that tutors can understand my needs. | High | To Do |
+| US 02 - Session Reminders | As a student or tutor, I want to receive an automatic reminder before my scheduled session so that I don’t forget it. | High | To Do |
 
 ### Product Backlog – Project Part 2
 | ID |
