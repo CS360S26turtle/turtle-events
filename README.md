@@ -121,6 +121,11 @@ _Add UML diagrams here or link images from the repository._
 | US 10 - Tutor Search | As a student, I want to search for tutors by subject and course code and filter the results by rating so that I can quickly find the most suitable tutor. | High | To Do |
 | US 12 - Session Cancelation | As a tutor, I want to be able to reschedule or cancel sessions if a student is unresponsive or if I have other commitments so that I can manage my time efficiently. | High | To Do |
 | US 13 - Recommendation System | As a student, I want to be algorithmically matched with a suitable tutor based on my requirements so that I can find a tutor without having to search manually. | High | To Do |
+| US 14 - Study Notes | As a tutor, I want an interface to manage study resources (links, PDFs, notes) for each student so that I can organize lessons and provide personalized materials efficiently. | High | To Do |
+| US 15 - Chat Feature | As a student or tutor, I want to be able to chat with the other party so that I can communicate whenever needed. | Medium | To Do |
+| US 16 - Reporting | As a student or tutor, I want to be able to report inappropriate behavior so that the platform maintains safety and accountability. | High | To Do |
+| US 17 - Tutor Verification | As an administrator, I want to verify tutor credentials, so that the platform maintains quality and trust. | High | To Do |
+
 
 ### Product Backlog – Project Part 2
 | ID |
