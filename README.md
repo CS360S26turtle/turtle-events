@@ -8,6 +8,8 @@
   - [Meeting – TBD](#meeting--tbd)
 
 - [UML Diagrams](#uml-diagrams)
+- [CRC Diagrams](#crc-diagrams)
+- [StoryBoards](#StoryBoards)
 
 - [Product Backlog](#product-backlog)
   - [Product Backlog – Project Part 1](#product-backlog--project-part-1)
