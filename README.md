@@ -119,6 +119,8 @@ _Add UML diagrams here or link images from the repository._
 | US 08 - Achievement Badges | As a tutor, I want achievement badges so students can trust my credibility. | Low | To Do |
 | US 09 - Tutor Review | As a student, I want to be able to leave rating and reviews for tutors and read existing reviews so that I, and other students, can pick more suitable tutors. | Medium | To Do |
 | US 10 - Tutor Search | As a student, I want to search for tutors by subject and course code and filter the results by rating so that I can quickly find the most suitable tutor. | High | To Do |
+| US 12 - Session Cancelation | As a tutor, I want to be able to reschedule or cancel sessions if a student is unresponsive or if I have other commitments so that I can manage my time efficiently. | High | To Do |
+| US 13 - Recommendation System | As a student, I want to be algorithmically matched with a suitable tutor based on my requirements so that I can find a tutor without having to search manually. | High | To Do |
 
 ### Product Backlog – Project Part 2
 | ID |
