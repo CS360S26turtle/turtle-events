@@ -97,16 +97,16 @@ Sunday, March 1, 2026
 
 
 #### Prepared Questions & Decisions
-- Guidance on user stories in terms of breadth and quantity
-- Guidance on CRC cards and how to create
+
+**No major issues**
 
 #### General Notes
 
 ---
 
 #### Action Items
-- [ ] Creating user stories and adding on github
-- [ ] Starting storyboard and CRC cards creation
+- [ ] Creating home page with team info 
+- [ ] Maintain meeting minutes for every meeting
 
 ---
 
@@ -131,16 +131,16 @@ Sunday, March 7, 2026
 
 
 #### Prepared Questions & Decisions
-- Guidance on user stories in terms of breadth and quantity
-- Guidance on CRC cards and how to create
+
+**No major issues**
 
 #### General Notes
 
 ---
 
 #### Action Items
-- [ ] Creating user stories and adding on github
-- [ ] Starting storyboard and CRC cards creation
+- [ ] Creating home page with team info 
+- [ ] Maintain meeting minutes for every meeting
 
 ---
 
