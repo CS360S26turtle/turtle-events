@@ -57,6 +57,21 @@ Saturday, February 21, 2026
 - Make product backlog wiki page
 - Make storyboard demonstrating app pages etc.
 
+
+#### Prepared Questions & Decisions
+
+**No major issues**
+
+#### General Notes
+
+---
+
+#### Action Items
+- [ ] Creating home page with team info 
+- [ ] Maintain meeting minutes for every meeting
+
+---
+
 ---
 
 ### Meeting – Mar 1st, 2026
@@ -80,16 +95,16 @@ Sunday, March 1, 2026
 
 
 #### Prepared Questions & Decisions
-
-**No major issues**
+- Guidance on user stories in terms of breadth and quantity
+- Guidance on CRC cards and how to create
 
 #### General Notes
 
 ---
 
 #### Action Items
-- [ ] Creating home page with team info 
-- [ ] Maintain meeting minutes for every meeting
+- [ ] Creating user stories and adding on github
+- [ ] Starting storyboard and CRC cards creation
 
 ---
 
