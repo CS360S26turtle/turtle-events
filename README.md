@@ -74,8 +74,6 @@ Saturday, February 21, 2026
 
 ---
 
----
-
 ### Meeting – Mar 1st, 2026
 
 #### Date
@@ -105,8 +103,7 @@ Sunday, March 1, 2026
 ---
 
 #### Action Items
-- [ ] Creating home page with team info 
-- [ ] Maintain meeting minutes for every meeting
+- [ ] Get started on user stories, storyboard, and CRC cards
 
 ---
 
@@ -139,8 +136,8 @@ Sunday, March 7, 2026
 ---
 
 #### Action Items
-- [ ] Creating home page with team info 
-- [ ] Maintain meeting minutes for every meeting
+- [ ] Finalize storyboards
+- [ ] Create CRC diagrams
 
 ---
 
