@@ -224,6 +224,20 @@ Chat Screen: This screen displays the chatting function
 of the application where students and tutors can communicate
 with each other.
 
+## Student Flow
+
+<p align="center">
+  <img src="images/sumenu.png" width="100">
+  <img src="images/student frame.png" width="150">
+  <img src="images/stupsessions.png" width="150">
+  <img src="images/sututors.png" width="150">
+   <img src="images/sututor.png" width="150">
+  <img src="images/suchat.png" width="150">
+</p>
+
+<p align="center">
+  <b>Tutor Profile</b> → <b>Tutor Upcoming Sessions</b> → <b>My Students</b> → <b>Chat</b>
+</p>
 
 ---
 
