@@ -160,6 +160,16 @@ _CRC Tables_
 
 ## StoryBoards
 
+## Application Flow
+
+<p align="center">
+  <img src="images/login.png" width="220">
+  <img src="images/role frame.png" width="220">
+</p>
+
+<p align="center">
+  <b>Login</b> → <b>role frame</b>
+</p>
 
 ---
 
