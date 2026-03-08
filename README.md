@@ -162,16 +162,17 @@ _CRC Tables_
 
 ## Application Flow
 
-Login Frame → Role Frame
-
----
-
-## Login Frame
 <p align="center">
-  <img src="images/login.png" width="200">
+  <img src="images/login.png" width="220">
+  <img src="images/role frame.png" width="220">
 </p>
 
-This screen allows a user to login to their account, 
+<p align="center">
+  <b>Login</b> → <b>role frame</b>
+</p>
+
+
+Login Frame: This screen allows a user to login to their account, 
 one account can be used as both a tutor and a student so after 
 logging in user is asked what role they want to continue in, 
 this allows history tracking for users
@@ -179,14 +180,7 @@ There are certain logins specific for admin,
 when those accounts are logged in the admin 
 screen is automatically loaded
 
----
-
-## Role Frame
-<p align="center">
-  <img src="images/role frame.png" width="200">
-</p>
-
-This screen allows a user to continue as a tutor or student, 
+Role Frame: This screen allows a user to continue as a tutor or student, 
 both lead to different UI, based on the functionality required 
 for students and tutors
 
