@@ -227,17 +227,51 @@ with each other.
 ## Student Flow
 
 <p align="center">
-  <img src="images/sumenu.png" width="100">
-  <img src="images/student frame.png" width="150">
-  <img src="images/stupsessions.png" width="150">
-  <img src="images/sututors.png" width="150">
-   <img src="images/sututor.png" width="150">
-  <img src="images/suchat.png" width="150">
+  <img src="images/sumenu.png" width="80">
+  <img src="images/student frame.png" width="120">
+  <img src="images/findtutor.png" width="120">
+  <img src="images/stupsessions.png" width="120">
+  <img src="images/sututors.png" width="120">
+  <img src="images/sututor.png" width="120">
+  <img src="images/suchat.png" width="120">
 </p>
 
 <p align="center">
-  <b>Tutor Profile</b> → <b>Tutor Upcoming Sessions</b> → <b>My Students</b> → <b>Chat</b>
+  <b>Student Profile</b> → <b>Find a Tutor</b> → <b>My Upcoming Sessions</b> → <b>My Tutors</b>  → <b>My Tutor History</b>  → <b>Chat</b>
 </p>
+
+Student menu options: This navigates the 
+student to the relevant screen for each option
+(Find a tutor, View my tutors, view upcoming sessions, 
+View Profile, Chat).
+
+Student Frame: This screen shows a student’s profile. It displays 
+their name and profile picture.
+There is a menu at the top left which allows the user to navigate 
+to other features.
+
+Find tutor: This screen displays the find a tutor option
+in our application where students can search for instructors
+based on their requirements like subjects/schools, pricing, 
+location, etc.  
+
+Student Upcoming Session:  This screen displays a student’s 
+upcoming sessions, indicating booked days with tutors when 
+coloured.
+
+My Tutors: This frame displays the current tutors
+that a student type of user is currently taking sessions from on a 
+single screen.
+
+Single Tutor History: This frame displays the profile of the tutor
+when a student clicks upon a current tutor’s name. It shows 
+the tutor details, shared resources from that tutor, 
+the option to give a review for the tutor and the session notes 
+from sessions with the tutor.
+
+Chat Screen: This screen displays the chatting function
+of the application where students and tutors can communicate
+with each other.
 
 ---
 
