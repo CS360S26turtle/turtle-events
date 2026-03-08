@@ -168,7 +168,7 @@ _CRC Tables_
 </p>
 
 <p align="center">
-  <b>Login</b> → <b>role frame</b>
+  <b>Login</b> → <b>Roles</b>
 </p>
 
 
