@@ -187,11 +187,11 @@ for students and tutors
 ## Tutor Flow
 
 <p align="center">
-  <img src="images/tutormenu.png" width="150">
-  <img src="images/tutor frame.png" width="200">
-  <img src="images/tupsessions.png" width="200">
-  <img src="images/studenthis.png" width="200">
-  <img src="images/tuchat.png" width="200">
+  <img src="images/tutormenu.png" width="50">
+  <img src="images/tutor frame.png" width="100">
+  <img src="images/tupsessions.png" width="100">
+  <img src="images/studenthis.png" width="100">
+  <img src="images/tuchat.png" width="100">
 </p>
 
 <p align="center">
@@ -219,6 +219,10 @@ previous sessions.
 My Students: This frame displays the current students
 that a tutor type of user is currently teaching on a 
 single screen.
+
+Chat Screen: This screen displays the chatting function
+of the application where students and tutors can communicate
+with each other.
 
 
 ---
