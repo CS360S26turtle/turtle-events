@@ -199,17 +199,27 @@ for students and tutors
 </p>
 
 
-Login Frame: This screen allows a user to login to their account, 
-one account can be used as both a tutor and a student so after 
-logging in user is asked what role they want to continue in, 
-this allows history tracking for users
-There are certain logins specific for admin, 
-when those accounts are logged in the admin 
-screen is automatically loaded
+Tutor menu options: This navigates the tutor to the relevant screen for 
+each option (View my students, view upcoming sessions, 
+View Profile, Chat).
 
-Role Frame: This screen allows a user to continue as a tutor or student, 
-both lead to different UI, based on the functionality required 
-for students and tutors
+Tutor Frame: This screen a tutor’s profile. It displays their 
+name, profile picture, overall rating, and achievement badges
+There is a menu at the top left which allows the user to navigate 
+to other features
+
+Tutor Upcoming Session:  This screen displays a tutor’s upcoming
+sessions, indicating booked days with students when coloured.
+
+Student View: This frame displays the profile of the student
+when a tutor clicks upon a current student’s name. It shows 
+the student details and session notes and resources from
+previous sessions.
+
+My Students: This frame displays the current students
+that a tutor type of user is currently teaching on a 
+single screen.
+
 
 ---
 
