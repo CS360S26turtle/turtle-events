@@ -188,7 +188,7 @@ for students and tutors
 
 <p align="center">
   <img src="images/tutormenu.png" width="220">
-  <img src="images/tutorframe.png" width="220">
+  <img src="images/tutor frame.png" width="220">
   <img src="images/tupsessions.png" width="220">
   <img src="images/studenthis.png" width="220">
   <img src="images/tuchat.png" width="220">
