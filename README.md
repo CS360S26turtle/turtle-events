@@ -195,8 +195,8 @@ for students and tutors
 </p>
 
 <p align="center">
-  <b>Tutor Profile</b> → <b>Tutor Upcoming Sessions</b> → <b>My Students</b> → <b>Chat</b>
-  <b>Tutor Profile</b> → <b>My Students</b> → <b>Chat</b> → <b>Tutor Upcoming Sessions</b>
+  <b>Tutor Profile</b> → <b>Tutor Upcoming Sessions</b> → <b>My Students</b> → <b>Chat</b><br>
+  <b>Tutor Profile</b> → <b>My Students</b> → <b>Chat</b> → <b>Tutor Upcoming Sessions</b><br>
   <b>Tutor Profile</b> → <b>Chat</b> → <b>My Students</b> → <b>Tutor Upcoming Sessions</b>
 </p>
 
@@ -239,8 +239,8 @@ with each other.
 </p>
 
 <p align="center">
-  <b>Student Profile</b> → <b>Find a Tutor</b> → <b>My Upcoming Sessions</b> → <b>My Tutors</b>  → <b>My Tutor History</b>  → <b>Chat</b>
-  <b>Student Profile</b> → <b>My Upcoming Sessions</b> → <b>Chat</b> → <b>Find a Tutor</b> → <b>My Tutors</b> → <b>My Tutor History</b>
+  <b>Student Profile</b> → <b>Find a Tutor</b> → <b>My Upcoming Sessions</b> → <b>My Tutors</b>  → <b>My Tutor History</b>  → <b>Chat</b><br>
+  <b>Student Profile</b> → <b>My Upcoming Sessions</b> → <b>Chat</b> → <b>Find a Tutor</b> → <b>My Tutors</b> → <b>My Tutor History</b><br>
   <b>Student Profile</b> → <b>My Tutors</b> → <b>Find a Tutor</b> → <b>Chat</b> → <b>My Upcoming Sessions</b> → <b>My Tutor History</b>
 </p>
 
