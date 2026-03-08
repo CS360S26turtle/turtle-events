@@ -184,6 +184,33 @@ Role Frame: This screen allows a user to continue as a tutor or student,
 both lead to different UI, based on the functionality required 
 for students and tutors
 
+## Tutor Flow
+
+<p align="center">
+  <img src="images/tutormenu.png" width="220">
+  <img src="images/tutorframe.png" width="220">
+  <img src="images/tupsessions.png" width="220">
+  <img src="images/studenthis.png" width="220">
+  <img src="images/tuchat.png" width="220">
+</p>
+
+<p align="center">
+  <b>Tutor Profile</b> → <b>Tutor Upcoming Sessions</b> → <b>My Students</b> → <b>Chat</b>
+</p>
+
+
+Login Frame: This screen allows a user to login to their account, 
+one account can be used as both a tutor and a student so after 
+logging in user is asked what role they want to continue in, 
+this allows history tracking for users
+There are certain logins specific for admin, 
+when those accounts are logged in the admin 
+screen is automatically loaded
+
+Role Frame: This screen allows a user to continue as a tutor or student, 
+both lead to different UI, based on the functionality required 
+for students and tutors
+
 ---
 
 
