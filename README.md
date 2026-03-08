@@ -187,11 +187,11 @@ for students and tutors
 ## Tutor Flow
 
 <p align="center">
-  <img src="images/tutormenu.png" width="220">
-  <img src="images/tutor frame.png" width="220">
-  <img src="images/tupsessions.png" width="220">
-  <img src="images/studenthis.png" width="220">
-  <img src="images/tuchat.png" width="220">
+  <img src="images/tutormenu.png" width="150">
+  <img src="images/tutor frame.png" width="200">
+  <img src="images/tupsessions.png" width="200">
+  <img src="images/studenthis.png" width="200">
+  <img src="images/tuchat.png" width="200">
 </p>
 
 <p align="center">
