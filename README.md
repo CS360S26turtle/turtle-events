@@ -237,7 +237,7 @@ with each other.
 
 <p align="center">
   <img src="images/sumenu.png" width="80">
-  <img src="images/studentframe.png" width="120">
+  <img src="images/student frame.png" width="120">
   <img src="images/findtutor.png" width="120">
   <img src="images/stupsessions.png" width="120">
   <img src="images/sututors.png" width="120">
