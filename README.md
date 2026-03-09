@@ -157,9 +157,9 @@ _Add UML diagrams here or link images from the repository._
 ## CRC Diagrams
 
 <p align="center">
-  <img src="images/crc1.png" width="200">
-  <img src="images/crc2.png" width="200">
-  <img src="images/crc3.png" width="200">
+  <img src="images/crc1.png" width="300">
+  <img src="images/crc2.png" width="300">
+  <img src="images/crc3.png" width="300">
 </p>
 
 ---
