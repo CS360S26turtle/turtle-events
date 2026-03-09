@@ -193,17 +193,17 @@ for students and tutors
 ## Tutor Flow
 
 <p align="center">
-  <img src="images/tutormenu.png" width="100">
-  <img src="images/tutorframe.png" width="150">
-  <img src="images/mystudents.png" width="150">
-  <img src="images/tupsessions.png" width="150">
-  <img src="images/studenthis.png" width="150">
-  <img src="images/tuchat.png" width="150">
+  <img src="images/tutormenu.png" width="80">
+  <img src="images/tutorframe.png" width="120">
+  <img src="images/mystudents.png" width="120">
+  <img src="images/tupsessions.png" width="120">
+  <img src="images/studenthis.png" width="120">
+  <img src="images/tuchat.png" width="120">
 </p>
 
 <p align="center">
-  <b>Tutor Profile</b> → <b>Tutor Upcoming Sessions</b> → <b>My Students</b> → <b>Chat</b><br>
-  <b>Tutor Profile</b> → <b>My Students</b> → <b>Chat</b> → <b>Tutor Upcoming Sessions</b><br>
+  <b>Tutor Profile</b> → <b>Tutor Upcoming Sessions</b> → <b>My Students</b> → <b>Chat</b> → <b>Specific Student History</b><br>
+  <b>Tutor Profile</b> → <b>My Students</b> → <b>Specific Student History</b> → <b>Tutor Upcoming Sessions</b><br>
   <b>Tutor Profile</b> → <b>Chat</b> → <b>My Students</b> → <b>Tutor Upcoming Sessions</b>
 </p>
 
