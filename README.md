@@ -155,7 +155,12 @@ _Add UML diagrams here or link images from the repository._
 ---
 
 ## CRC Diagrams
-_CRC Tables_
+
+<p align="center">
+  <img src="images/crc1.png" width="400">
+  <img src="images/crc2.png" width="400">
+  <img src="images/crc3.png" width="400">
+</p>
 
 ---
 
