@@ -162,8 +162,8 @@ _CRC Tables_
 ## StoryBoards
 
 <p align="center">
-  <img src="images/storyboard.png" width="500">
-  <img src="images/flow.png" width="500">
+  <img src="images/storyboard.png" width="400">
+  <img src="images/flow.png" width="400">
 </p>
 
 ## Application Flow
