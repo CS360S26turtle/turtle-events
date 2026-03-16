@@ -6,6 +6,7 @@
   - [Meeting – Feb 21, 2026](#meeting--feb-21-2026)
   - [Meeting – Mar 1, 2026](#meeting--mar-1-2026)
   - [Meeting – Mar 7, 2026](#meeting--mar-7-2026)
+  - [Meeting – Mar 16, 2026](#meeting--mar-16-2026)
   - [Meeting – TBD](#meeting--tbd)
 
 - [UML Diagrams](#uml-diagrams)
@@ -139,6 +140,40 @@ Sunday, March 7, 2026
 #### Action Items
 - [ ] Finalize storyboards
 - [ ] Create CRC diagrams
+
+---
+
+### Meeting – Mar, 2026
+
+#### Date
+Monday, February 16, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Evaluation of entire phase 2(User stories, Storyboards & CRC diagrams)
+- Discussion of next phase deliverables, clarified a few things on getting started.
+
+
+
+#### Prepared Questions & Decisions
+
+**No major issues**
+
+#### General Notes
+
+---
+
+#### Action Items
+- [ ] Creating home page with team info 
+- [ ] Maintain meeting minutes for every meeting
 
 ---
 
