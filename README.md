@@ -143,7 +143,7 @@ Sunday, March 7, 2026
 
 ---
 
-### Meeting – Mar, 2026
+### Meeting – Mar 16th, 2026
 
 #### Date
 Monday, February 16, 2026
