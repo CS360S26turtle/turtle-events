@@ -138,8 +138,8 @@ Sunday, March 7, 2026
 ---
 
 #### Action Items
-- [ ] Finalize storyboards
-- [ ] Create CRC diagrams
+- [ ] 
+- [ ] 
 
 ---
 
@@ -172,8 +172,8 @@ Monday, February 16, 2026
 ---
 
 #### Action Items
-- [ ] Creating home page with team info 
-- [ ] Maintain meeting minutes for every meeting
+- [ ] 
+- [ ] 
 
 ---
 
