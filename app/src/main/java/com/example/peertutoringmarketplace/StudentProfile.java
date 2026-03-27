@@ -3,19 +3,18 @@ package com.example.peertutoringmarketplace;
 import java.util.List;
 
 public class StudentProfile {
-    private String profileId;
-
+    private String studentId;
     private List<String> courses;
     private String learningStyle;
     private String academicLevel;
     private String learningGoals;
 
-    public String getProfileId() {
-        return profileId;
+    public String getStudentId() {
+        return studentId;
     }
 
-    public void setProfileId(String profileId) {
-        this.profileId = profileId;
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
     public List<String> getCourses() {

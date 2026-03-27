@@ -1,15 +1,14 @@
 package com.example.peertutoringmarketplace;
 
-import java.time.LocalDateTime;
+import com.google.type.DateTime;
 
 public class Review {
     private String reviewId;
     private int rating;
     private String comment;
-    private StudentProfile author;
-    private TutorProfile target;
-    private Session session;
-    private LocalDateTime createdAt;
+    private String studentId;
+    private String tutorId;
+    private DateTime createdAt;
 
     public String getReviewId() {
         return reviewId;
@@ -35,35 +34,27 @@ public class Review {
         this.comment = comment;
     }
 
-    public StudentProfile getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(StudentProfile author) {
-        this.author = author;
-    }
-
-    public TutorProfile getTarget() {
-        return target;
-    }
-
-    public void setTarget(TutorProfile target) {
-        this.target = target;
-    }
-
-    public Session getSession() {
-        return session;
-    }
-
-    public void setSession(Session session) {
-        this.session = session;
-    }
-
-    public LocalDateTime getCreatedAt() {
+    public DateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(DateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
+    public String getTutorId() {
+        return tutorId;
+    }
+
+    public void setTutorId(String tutorId) {
+        this.tutorId = tutorId;
     }
 }

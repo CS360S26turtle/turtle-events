@@ -1,10 +1,14 @@
 package com.example.peertutoringmarketplace;
 
+import java.util.List;
+
 public class User {
     private String userId;
     private String email;
     private StudentProfile studentProfile;
     private TutorProfile tutorProfile;
+    private List<String> sessions;
+
 
     public String getEmail() {
         return email;

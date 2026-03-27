@@ -4,19 +4,19 @@ import java.util.List;
 
 enum TeachingMode{};
 public class TutorProfile {
-    private String profileId;
+    private String tutorId;
     private List<String> subjects;
     private double hourlyRate;
     private TeachingMode teachingMode;
     private boolean isVerified;
     private int totalHoursTaught;
 
-    public String getProfileId() {
-        return profileId;
+    public String getTutorId() {
+        return tutorId;
     }
 
-    public void setProfileId(String profileId) {
-        this.profileId = profileId;
+    public void setProfileId(String tutorId) {
+        this.tutorId = tutorId;
     }
 
     public List<String> getSubjects() {
