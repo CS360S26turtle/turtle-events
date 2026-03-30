@@ -1,6 +1,8 @@
 package com.example.peertutoringmarketplace;
 
 import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +24,7 @@ public class AdminActivity extends AppCompatActivity {
     TutorAdapter adapter;
     List<User> tutorList;
     FirebaseFirestore db;
+    TextView textPendingCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,8 @@ public class AdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin);
 
         recyclerView = findViewById(R.id.recyclerViewTutors);
+        textPendingCount = findViewById(R.id.textPendingCount);
+
         tutorList = new ArrayList<>();
         adapter = new TutorAdapter(tutorList);
 
@@ -38,7 +43,7 @@ public class AdminActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.appBarLayout), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -65,6 +70,11 @@ public class AdminActivity extends AppCompatActivity {
                         }
                     }
                     adapter.notifyDataSetChanged();
-                });
+                    
+                    if (textPendingCount != null) {
+                        textPendingCount.setText(String.valueOf(tutorList.size()));
+                    }
+                })
+                .addOnFailureListener(e -> Toast.makeText(AdminActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show());
     }
 }

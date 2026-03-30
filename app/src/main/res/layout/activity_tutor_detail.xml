@@ -1,84 +1,101 @@
-<androidx.constraintlayout.widget.ConstraintLayout
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="#5F8F73"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/primary_background"
+    android:padding="24dp">
 
     <TextView
-        android:id="@+id/USER_INFO"
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/red_hat_text_medium"
-        android:text="User Info:"
-        android:textColor="#FFFDFD"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginBottom="32dp"
+        android:text="User Detail"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
+    <!-- User ID -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User ID:"
+        android:textColor="#A8C8B6"
+        android:textSize="12sp"/>
+    <TextView
+        android:id="@+id/detailUserId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User ID"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Email -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email:"
+        android:textColor="#A8C8B6"
+        android:textSize="12sp"/>
     <TextView
         android:id="@+id/detailEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:text="Email"
+        android:text="Email Address"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/USER_INFO" />
+        android:layout_marginBottom="16dp"/>
 
+    <!-- Role -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Role:"
+        android:textColor="#A8C8B6"
+        android:textSize="12sp"/>
     <TextView
         android:id="@+id/detailRole"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:text="Role"
         android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="@id/detailEmail"
-        app:layout_constraintTop_toBottomOf="@id/detailEmail" />
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp"/>
 
+    <!-- Status -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status:"
+        android:textColor="#A8C8B6"
+        android:textSize="12sp"/>
     <TextView
         android:id="@+id/detailStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         android:text="Status"
         android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="@id/detailRole"
-        app:layout_constraintTop_toBottomOf="@id/detailRole" />
+        android:textSize="18sp"
+        android:layout_marginBottom="40dp"/>
 
     <Button
         android:id="@+id/ACCEPT_BUTTON"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#EFEBEB"
-        android:text="Accept"
-        android:textColor="#578974"
-        android:textColorLink="#8AA298"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/REJECT_BUTTON"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detailStatus"
-        app:layout_constraintVertical_bias="0.5" />
+        android:text="Approve"
+        android:backgroundTint="#FFFFFF"
+        android:textColor="#4a7c6f"
+        android:layout_marginBottom="12dp"/>
 
     <Button
         android:id="@+id/REJECT_BUTTON"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#85AF9D"
         android:text="Reject"
-        android:textColor="#EFEBEB"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/ACCEPT_BUTTON"
-        app:layout_constraintTop_toBottomOf="@+id/detailStatus"
-        app:layout_constraintVertical_bias="0.5" />
+        android:backgroundTint="#FF5252"
+        android:textColor="#FFFFFF"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
