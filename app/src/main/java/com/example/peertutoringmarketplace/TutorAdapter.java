@@ -57,7 +57,7 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
             intent.putExtra("email", user.getEmail());
             intent.putExtra("role", user.getRole());
             intent.putExtra("status", user.getVerificationStatus());
-            intent.putExtra("uid", user.getDocID());
+            intent.putExtra("uid", user.getUserID());
             v.getContext().startActivity(intent);
         });
     }

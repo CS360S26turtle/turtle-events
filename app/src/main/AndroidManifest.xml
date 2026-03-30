@@ -32,13 +32,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- OTHER ACTIVITIES -->
-        <activity
-            android:name=".TutorActivity"
-            android:exported="false" />
-        <activity
-            android:name=".StudentActivity"
-            android:exported="false" />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

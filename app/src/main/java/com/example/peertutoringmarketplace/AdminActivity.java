@@ -65,7 +65,7 @@ public class AdminActivity extends AppCompatActivity {
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         User user = doc.toObject(User.class);
                         if (user != null) {
-                            user.setDocID(doc.getId());
+                            user.setUserID(doc.getId());
                             tutorList.add(user);
                         }
                     }
