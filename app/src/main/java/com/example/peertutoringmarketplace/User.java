@@ -7,7 +7,11 @@ public class User {
     private String email;
     private StudentProfile studentProfile;
     private TutorProfile tutorProfile;
+    private String role;
+    private String verificationStatus;
     private List<String> sessions;
+
+    public User(){}
 
 
     public String getEmail() {
@@ -40,5 +44,21 @@ public class User {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getVerificationStatus() {
+        return verificationStatus;
+    }
+
+    public void setVerificationStatus(String verificationStatus) {
+        this.verificationStatus = verificationStatus;
     }
 }
