@@ -113,7 +113,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:hint="University email"
+                    android:hint="Email"
                     app:boxStrokeColor="#FFFFFF"
                     app:boxStrokeWidth="1.5dp"
                     app:hintTextColor="#FFFFFF"

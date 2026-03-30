@@ -3,6 +3,7 @@ package com.example.peertutoringmarketplace;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,17 +36,17 @@ public class LoginActivity extends AppCompatActivity {
 
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
-        MaterialButton login_button = findViewById(R.id.loginButton);
+        MaterialButton loginButton = findViewById(R.id.loginButton);
 
-        login_button.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loginUser();
             }
         });
 
-        TextView forgot_password_button = findViewById(R.id.forgotPasswordText);
-        forgot_password_button.setOnClickListener(new View.OnClickListener() {
+        TextView forgotPasswordButton = findViewById(R.id.forgotPasswordText);
+        forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
@@ -53,19 +54,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        TextView make_account_text = findViewById(R.id.registerText);
-        make_account_text.setOnClickListener(new View.OnClickListener() {
+        TextView makeAccountText = findViewById(R.id.registerText);
+        makeAccountText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegisterAccountActivity.class);
                 startActivity(intent);
             }
-        });
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
         });
     }
 
@@ -83,12 +78,17 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        if (!(Patterns.EMAIL_ADDRESS.matcher(email).matches())) {
+            emailEditText.setError("Please enter a valid email address");
+            return;
+        }
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> {
                     checkUserRole(authResult.getUser().getUid());
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(LoginActivity.this, "Login Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Login Failed: Invalid Username or Password", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -99,6 +99,9 @@ public class LoginActivity extends AppCompatActivity {
                         String role = documentSnapshot.getString("role");
                         if ("admin".equalsIgnoreCase(role)) {
                             startActivity(new Intent(LoginActivity.this, AdminActivity.class));
+                        }
+                        else {
+                            startActivity(new Intent(LoginActivity.this, RoleActivity.class));
                         }
                         finish();
                     } else {

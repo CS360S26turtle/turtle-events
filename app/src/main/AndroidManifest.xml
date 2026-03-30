@@ -12,11 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PeerTutoringMarketplace">
         <activity
+            android:name=".RoleActivity"
+            android:exported="false" />
+        <activity
             android:name=".TutorDetailActivity"
             android:exported="false" />
-        <!-- ✅ ADMIN ACTIVITY (LAUNCHER) -->
-        <activity
-            android:name=".AdminActivity" />
+        <activity android:name=".AdminActivity" />
         <activity
             android:name=".ForgetPasswordActivity"
             android:exported="false" />
@@ -31,7 +32,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- OTHER ACTIVITIES -->
+        </activity>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
