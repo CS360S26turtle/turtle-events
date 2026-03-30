@@ -99,10 +99,6 @@ public class LoginActivity extends AppCompatActivity {
                         String role = documentSnapshot.getString("role");
                         if ("admin".equalsIgnoreCase(role)) {
                             startActivity(new Intent(LoginActivity.this, AdminActivity.class));
-                        } else if ("tutor".equalsIgnoreCase(role)) {
-                            startActivity(new Intent(LoginActivity.this, TutorActivity.class));
-                        } else {
-                            startActivity(new Intent(LoginActivity.this, StudentActivity.class));
                         }
                         finish();
                     } else {

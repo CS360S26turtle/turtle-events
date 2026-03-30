@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class TutorDetailActivity extends AppCompatActivity {
-
     TextView email, role, status;
 
     @Override
@@ -25,10 +24,11 @@ public class TutorDetailActivity extends AppCompatActivity {
 
         // receive data
         Intent intent = getIntent();
-
-        email.setText(intent.getStringExtra("email"));
-        role.setText(intent.getStringExtra("role"));
-        status.setText(intent.getStringExtra("status"));
+        if (intent != null) {
+            email.setText(intent.getStringExtra("email"));
+            role.setText(intent.getStringExtra("role"));
+            status.setText(intent.getStringExtra("status"));
+        }
 
         Button approve = findViewById(R.id.ACCEPT_BUTTON);
         Button reject = findViewById(R.id.REJECT_BUTTON);
@@ -37,32 +37,32 @@ public class TutorDetailActivity extends AppCompatActivity {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        approve.setOnClickListener(v -> {
-            if (uid != null) {
-                db.collection("users").document(uid)
-                        .update("verificationStatus", "approved")
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(TutorDetailActivity.this, "Tutor Approved", Toast.LENGTH_SHORT).show();
-                            finish(); // Goes back to AdminActivity
-                        })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(TutorDetailActivity.this, "Error updating status", Toast.LENGTH_SHORT).show();
-                        });
-            }
-        });
+        if (approve != null) {
+            approve.setOnClickListener(v -> {
+                if (uid != null) {
+                    db.collection("users").document(uid)
+                            .update("verificationStatus", "approved")
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(TutorDetailActivity.this, "Tutor Approved", Toast.LENGTH_SHORT).show();
+                                finish();
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(TutorDetailActivity.this, "Error updating status", Toast.LENGTH_SHORT).show());
+                }
+            });
+        }
 
-        reject.setOnClickListener(v -> {
-            if (uid != null) {
-                db.collection("users").document(uid)
-                        .update("verificationStatus", "rejected")
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(TutorDetailActivity.this, "Tutor Rejected", Toast.LENGTH_SHORT).show();
-                            finish(); // Goes back to AdminActivity
-                        })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(TutorDetailActivity.this, "Error updating status", Toast.LENGTH_SHORT).show();
-                        });
-            }
-        });
+        if (reject != null) {
+            reject.setOnClickListener(v -> {
+                if (uid != null) {
+                    db.collection("users").document(uid)
+                            .update("verificationStatus", "rejected")
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(TutorDetailActivity.this, "Tutor Rejected", Toast.LENGTH_SHORT).show();
+                                finish();
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(TutorDetailActivity.this, "Error updating status", Toast.LENGTH_SHORT).show());
+                }
+            });
+        }
     }
 }

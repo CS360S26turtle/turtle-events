@@ -22,12 +22,13 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView email, status;
+        TextView email, status, initials;
 
         public ViewHolder(View itemView) {
             super(itemView);
             email = itemView.findViewById(R.id.textEmail);
             status = itemView.findViewById(R.id.textStatus);
+            initials = itemView.findViewById(R.id.textInitials);
         }
     }
 
@@ -43,18 +44,20 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
         User user = tutorList.get(position);
 
         holder.email.setText(user.getEmail());
-        holder.status.setText(user.getVerificationStatus());
         holder.status.setText(user.getRole() + " - " + user.getVerificationStatus());
 
+        // Set dynamic initials
+        if (user.getEmail() != null && !user.getEmail().isEmpty()) {
+            String initial = user.getEmail().substring(0, 1).toUpperCase();
+            holder.initials.setText(initial);
+        }
+
         holder.itemView.setOnClickListener(v -> {
-
             Intent intent = new Intent(v.getContext(), TutorDetailActivity.class);
-
             intent.putExtra("email", user.getEmail());
             intent.putExtra("role", user.getRole());
             intent.putExtra("status", user.getVerificationStatus());
             intent.putExtra("uid", user.getDocID());
-
             v.getContext().startActivity(intent);
         });
     }
