@@ -11,9 +11,17 @@ public class User {
     private String role;
     private String verificationStatus;
     private List<String> sessions;
+    private String docID;
 
     public User(){}
 
+    public String getDocID() {
+        return docID;
+    }
+
+    public void setDocID(String docID) {
+        this.docID = docID;
+    }
 
     public String getEmail() {
         return email;

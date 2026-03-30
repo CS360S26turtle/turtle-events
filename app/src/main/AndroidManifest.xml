@@ -12,11 +12,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PeerTutoringMarketplace">
         <activity
+            android:name=".TutorDetailActivity"
+            android:exported="false" />
+        <!-- ✅ ADMIN ACTIVITY (LAUNCHER) -->
+        <activity
+            android:name=".AdminActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- OTHER ACTIVITIES -->
+        <activity
             android:name=".TutorActivity"
             android:exported="false" />
         <activity
             android:name=".StudentActivity"
             android:exported="false" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
