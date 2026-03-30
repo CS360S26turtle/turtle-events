@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#578974"
-    android:id="@+id/main">
+    android:background="#578974">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="with"
-                    android:textColor="#c8e6c0"
+                    android:textColor="#EFEBEB"
                     android:textSize="18sp" />
 
                 <TextView
@@ -70,16 +70,16 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:hint="Email"
-            app:boxStrokeColor="#80FFFFFF"
-            app:hintTextColor="#FFFFFF">
+            app:boxStrokeColor="#EFEBEB"
+            app:hintTextColor="#EFEBEB">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/emailEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#80FFFFFF"/>
+                android:textColor="#EFEBEB"
+                android:textColorHint="#EFEBEB"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -89,8 +89,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:hint="Password"
-            app:boxStrokeColor="#80FFFFFF"
-            app:hintTextColor="#FFFFFF"
+            app:boxStrokeColor="#EFEBEB"
+            app:hintTextColor="#EFEBEB"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -98,8 +98,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#80FFFFFF"/>
+                android:textColor="#EFEBEB"
+                android:textColorHint="#EFEBEB"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -109,7 +109,7 @@
             android:layout_gravity="end"
             android:layout_marginBottom="24dp"
             android:text="Forgot password?"
-            android:textColor="#c8e6c0"
+            android:textColor="#EFEBEB"
             android:textSize="13sp"/>
 
         <com.google.android.material.button.MaterialButton
@@ -134,7 +134,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+ Make an Account"
-            android:textColor="#c8e6c0"
+            android:textColor="#EFEBEB"
             android:textSize="14sp"
             android:layout_marginTop="8dp"/>
 

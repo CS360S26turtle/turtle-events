@@ -2,7 +2,7 @@ package com.example.peertutoringmarketplace;
 
 import java.util.List;
 
-enum TeachingMode{};
+enum TeachingMode{ONLINE, IN_PERSON};
 public class TutorProfile {
     private String tutorId;
     private List<String> subjects;

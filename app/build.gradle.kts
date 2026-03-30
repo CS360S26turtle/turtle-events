@@ -42,6 +42,8 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.protolite.well.known.types)
+    implementation(libs.activity)
+    implementation(libs.constraintlayout)
     implementation(libs.constraintlayout)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
