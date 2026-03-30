@@ -11,40 +11,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PeerTutoringMarketplace">
-
-        <activity
-            android:name=".TutorProfileActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
         <activity
             android:name=".TutorDetailActivity"
             android:exported="false" />
-
         <activity
-            android:name=".AdminActivity"
-            android:exported="false" />
-
+            android:name=".AdminActivity" />
         <activity
             android:name=".ForgetPasswordActivity"
             android:exported="false" />
-
         <activity
             android:name=".RegisterAccountActivity"
             android:exported="false" />
-
         <activity
             android:name=".LoginActivity"
-            android:exported="true" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".RoleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TutorProfileActivity"
+            android:exported="false" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
     </application>
 
 </manifest>

@@ -18,9 +18,10 @@ public class User {
         tutorID = null;
     }
 
-    public User(String email, String fullName, String role, String status){
-        studentID = null;
-        tutorID = null;
+    public User(String userID, String email, String fullName, String role){
+        this.userID = userID;
+        this.studentID = null;
+        this.tutorID = null;
         this.email = email;
         this.fullName = fullName;
         this.role = role;
