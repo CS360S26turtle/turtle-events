@@ -2,10 +2,11 @@ package com.example.peertutoringmarketplace;
 
 import com.google.type.DateTime;
 
+import java.util.Date;
 public class TimeSlot {
     private String slotId;
-    private DateTime startTime;
-    private DateTime endTime;
+    private Date startTime;
+    private Date endTime;
     private int maxCapacity;
 
     public String getSlotId() {
@@ -16,19 +17,19 @@ public class TimeSlot {
         this.slotId = slotId;
     }
 
-    public DateTime getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(DateTime startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public DateTime getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(DateTime endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
