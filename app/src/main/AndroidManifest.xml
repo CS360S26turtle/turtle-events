@@ -16,7 +16,15 @@
             android:exported="false" />
         <!-- ✅ ADMIN ACTIVITY (LAUNCHER) -->
         <activity
-            android:name=".AdminActivity"
+            android:name=".AdminActivity" />
+        <activity
+            android:name=".ForgetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterAccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
