@@ -8,8 +8,20 @@ public class User {
     private String fullName;
     private StudentProfile studentProfile;
     private TutorProfile tutorProfile;
+    private String role;
+    private String verificationStatus;
     private List<String> sessions;
+    private String docID;
 
+    public User(){}
+
+    public String getDocID() {
+        return docID;
+    }
+
+    public void setDocID(String docID) {
+        this.docID = docID;
+    }
 
     public String getEmail() {
         return email;
@@ -49,6 +61,21 @@ public class User {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getVerificationStatus() {
+        return verificationStatus;
+    }
+
+    public void setVerificationStatus(String verificationStatus) {
+        this.verificationStatus = verificationStatus;
     }
 
     public List<String> getSessions() {
