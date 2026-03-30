@@ -5,6 +5,7 @@ import java.util.List;
 public class User {
     private String userId;
     private String email;
+    private String fullName;
     private StudentProfile studentProfile;
     private TutorProfile tutorProfile;
     private String role;
@@ -30,6 +31,14 @@ public class User {
         this.tutorProfile = tutorProfile;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public StudentProfile getStudentProfile() {
         return studentProfile;
     }
@@ -45,7 +54,6 @@ public class User {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
     public String getRole() {
         return role;
     }
@@ -60,5 +68,13 @@ public class User {
 
     public void setVerificationStatus(String verificationStatus) {
         this.verificationStatus = verificationStatus;
+    }
+
+    public List<String> getSessions() {
+        return sessions;
+    }
+
+    public void setSessions(List<String> sessions) {
+        this.sessions = sessions;
     }
 }
