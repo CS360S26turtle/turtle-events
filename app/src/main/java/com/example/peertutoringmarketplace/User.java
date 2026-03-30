@@ -3,13 +3,37 @@ package com.example.peertutoringmarketplace;
 import java.util.List;
 
 public class User {
-    private String userId;
+    private String userID;
     private String email;
     private String fullName;
-    private StudentProfile studentProfile;
-    private TutorProfile tutorProfile;
+    private String studentID;
+    private String tutorID;
+    private String role;
+    //make options (limit)
+    private String verificationStatus;
     private List<String> sessions;
 
+    public User(){
+        studentID = null;
+        tutorID = null;
+    }
+
+    public User(String email, String fullName, String role, String status){
+        studentID = null;
+        tutorID = null;
+        this.email = email;
+        this.fullName = fullName;
+        this.role = role;
+        this.verificationStatus = "pending";
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
 
     public String getEmail() {
         return email;
@@ -17,14 +41,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public TutorProfile getTutorProfile() {
-        return tutorProfile;
-    }
-
-    public void setTutorProfile(TutorProfile tutorProfile) {
-        this.tutorProfile = tutorProfile;
     }
 
     public String getFullName() {
@@ -35,20 +51,36 @@ public class User {
         this.fullName = fullName;
     }
 
-    public StudentProfile getStudentProfile() {
-        return studentProfile;
+    public String getStudentID() {
+        return studentID;
     }
 
-    public void setStudentProfile(StudentProfile studentProfile) {
-        this.studentProfile = studentProfile;
+    public void setStudentID(String studentID) {
+        this.studentID = studentID;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getRole() {
+        return role;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getTutorID() {
+        return tutorID;
+    }
+
+    public void setTutorID(String tutorID) {
+        this.tutorID = tutorID;
+    }
+
+    public String getVerificationStatus() {
+        return verificationStatus;
+    }
+
+    public void setVerificationStatus(String verificationStatus) {
+        this.verificationStatus = verificationStatus;
     }
 
     public List<String> getSessions() {

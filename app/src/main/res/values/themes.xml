@@ -1,6 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
+<<<<<<< HEAD
     <style name="Theme.PeerTutoringMarketplace" parent="Theme.Material3.DayNight.NoActionBar">
+=======
+    <style name="Theme.PeerTutoringMarketplace" parent="Theme.MaterialComponents.Light.NoActionBar">
+>>>>>>> 8de14441e9af73b30a6477e10655aab8470910d9
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -13,7 +17,14 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+<<<<<<< HEAD
     <style name="CircleImage" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerSize">50%</item>
+=======
+    <!-- Base application theme. -->
+    <style name="Base.Theme.PeerTutoringMarketplace" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+>>>>>>> 8de14441e9af73b30a6477e10655aab8470910d9
     </style>
 </resources>

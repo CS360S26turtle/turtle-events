@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/primary_background"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="User Detail"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!-- User ID -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User ID:"
+        android:textColor="#A8C8B6"
+        android:textSize="12sp"/>
+    <TextView
+        android:id="@+id/detailUserId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User ID"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Email -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email:"
+        android:textColor="#A8C8B6"
+        android:textSize="12sp"/>
+    <TextView
+        android:id="@+id/detailEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email Address"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Role -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Role:"
+        android:textColor="#A8C8B6"
+        android:textSize="12sp"/>
+    <TextView
+        android:id="@+id/detailRole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Role"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Status -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status:"
+        android:textColor="#A8C8B6"
+        android:textSize="12sp"/>
+    <TextView
+        android:id="@+id/detailStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:layout_marginBottom="40dp"/>
+
+    <Button
+        android:id="@+id/ACCEPT_BUTTON"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Approve"
+        android:backgroundTint="#FFFFFF"
+        android:textColor="#4a7c6f"
+        android:layout_marginBottom="12dp"/>
+
+    <Button
+        android:id="@+id/REJECT_BUTTON"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reject"
+        android:backgroundTint="#FF5252"
+        android:textColor="#FFFFFF"/>
+
+</LinearLayout>
