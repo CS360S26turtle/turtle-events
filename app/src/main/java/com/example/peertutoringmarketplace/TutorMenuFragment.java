@@ -1,5 +1,7 @@
 package com.example.peertutoringmarketplace;
+import android.content.Intent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +27,10 @@ public class TutorMenuFragment extends Fragment {
         btnStudents.setOnClickListener(v ->
                 Toast.makeText(getActivity(), "My Students", Toast.LENGTH_SHORT).show());
 
-        btnUpcoming.setOnClickListener(v ->
-                Toast.makeText(getActivity(), "Upcoming Sessions", Toast.LENGTH_SHORT).show());
+        btnUpcoming.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), UpcomingSessionsActivity.class);
+            startActivity(intent);
+        });
 
         btnChat.setOnClickListener(v ->
                 Toast.makeText(getActivity(), "Opening Chat...", Toast.LENGTH_SHORT).show());
