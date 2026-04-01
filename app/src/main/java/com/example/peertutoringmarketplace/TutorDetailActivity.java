@@ -3,6 +3,7 @@ package com.example.peertutoringmarketplace;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,11 @@ public class TutorDetailActivity extends AppCompatActivity {
             email.setText(intent.getStringExtra("email"));
             role.setText(intent.getStringExtra("role"));
             status.setText(intent.getStringExtra("status"));
+        }
+
+        ImageButton btnBack = findViewById(R.id.btnBack);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
         }
 
         Button approve = findViewById(R.id.ACCEPT_BUTTON);
