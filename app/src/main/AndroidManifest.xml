@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PeerTutoringMarketplace">
         <activity
+            android:name=".StudentProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".TutorDetailActivity"
             android:exported="false" />
         <activity
@@ -40,6 +43,7 @@
         <activity
             android:name=".UpcomingSessionsActivity"
             android:exported="false" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

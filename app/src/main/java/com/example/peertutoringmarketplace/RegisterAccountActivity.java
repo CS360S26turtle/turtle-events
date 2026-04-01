@@ -96,7 +96,11 @@ public class RegisterAccountActivity extends AppCompatActivity {
                             .document(uid)
                             .set(newUser)
                             .addOnSuccessListener(unused -> {
+                                // Set the session data before navigating
+                                SessionManager.getInstance().setCurrentUser(newUser);
+                                
                                 startActivity(new Intent(this, RoleActivity.class));
+                                finish();
                             })
                             .addOnFailureListener(e -> {
                                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();

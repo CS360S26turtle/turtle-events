@@ -10,9 +10,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -85,31 +82,36 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> {
-                    checkUserRole(authResult.getUser().getUid());
+                    fetchUserDataAndSetSession(authResult.getUser().getUid());
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(LoginActivity.this, "Login Failed: Invalid Username or Password", Toast.LENGTH_SHORT).show();
                 });
     }
 
-    private void checkUserRole(String uid) {
+    private void fetchUserDataAndSetSession(String uid) {
         db.collection("users").document(uid).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        String role = documentSnapshot.getString("role");
-                        if ("admin".equalsIgnoreCase(role)) {
-                            startActivity(new Intent(LoginActivity.this, AdminActivity.class));
+                        User user = documentSnapshot.toObject(User.class);
+                        if (user != null) {
+                            // Set the session data
+                            SessionManager.getInstance().setCurrentUser(user);
+
+                            String role = user.getRole();
+                            if ("admin".equalsIgnoreCase(role)) {
+                                startActivity(new Intent(LoginActivity.this, AdminActivity.class));
+                            } else {
+                                startActivity(new Intent(LoginActivity.this, RoleActivity.class));
+                            }
+                            finish();
                         }
-                        else {
-                            startActivity(new Intent(LoginActivity.this, RoleActivity.class));
-                        }
-                        finish();
                     } else {
                         Toast.makeText(LoginActivity.this, "User data not found", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(LoginActivity.this, "Error fetching user role", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Error fetching user data", Toast.LENGTH_SHORT).show();
                 });
     }
 }
