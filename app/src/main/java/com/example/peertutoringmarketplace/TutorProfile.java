@@ -10,6 +10,8 @@ public class TutorProfile {
     private TeachingMode teachingMode;
     private boolean isVerified;
     private int totalHoursTaught;
+    private String bio;
+
 
     public String getTutorId() {
         return tutorId;

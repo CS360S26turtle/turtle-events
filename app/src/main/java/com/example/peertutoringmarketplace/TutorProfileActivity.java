@@ -1,48 +1,56 @@
 package com.example.peertutoringmarketplace;
 
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import android.os.Bundle;
-import android.widget.ImageView; // Added
+import android.widget.ImageView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
-import androidx.core.view.GravityCompat; // Added
+import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.drawerlayout.widget.DrawerLayout; // Added
+import androidx.drawerlayout.widget.DrawerLayout;
 
 public class TutorProfileActivity extends AppCompatActivity {
+
+    private TextView tvName, tvBio, tvRate, tvSubjects;
+    private ImageView ivProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_tutor_profile);
+        // ... your existing EdgeToEdge and Drawer code ...
 
-        // 1. Initialize the Drawer and the Hamburger Button
-        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-        ImageView btnHamburger = findViewById(R.id.btn_hamburger);
+        // Initialize your UI elements
+        tvName = findViewById(R.id.tutor_name); // Check your XML IDs!
+        tvBio = findViewById(R.id.tutor_bio);
+        tvRate = findViewById(R.id.tutor_rate);
+        ivProfile = findViewById(R.id.profile_image);
+    }
 
-        // 2. Set the click listener to open the drawer
-        btnHamburger.setOnClickListener(v -> {
-            drawerLayout.openDrawer(GravityCompat.START);
-        });
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateUIFromSingleton();
+    }
 
-        // 3. Keep your EdgeToEdge logic but use the top-level drawer ID
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawer_layout), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+    private void updateUIFromSingleton() {
+        User user = UserSession.getInstance().getCurrentUser();
+        if (user != null) {
+            tvName.setText(user.getFullName());
+            tvBio.setText(user.getBio());
+            tvRate.setText("$" + user.getHourlyRate());
 
-        // 4. Load the fragment into the sidebar container
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .setReorderingAllowed(true)
-                    .replace(R.id.menu_container, new TutorMenuFragment())
-                    .commit();
+            // Use Glide for the profile picture
+            if (user.getProfileImage() != null) {
+                Glide.with(this)
+                        .load(user.getProfileImage())
+                        .placeholder(R.drawable.default_avatar)
+                        .into(ivProfile);
+            }
         }
     }
 }

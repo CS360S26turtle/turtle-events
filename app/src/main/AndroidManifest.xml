@@ -18,7 +18,11 @@
             android:name=".TutorDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".AdminActivity" />
+            android:name=".UpdateProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivity"
+            android:exported="false" />
         <activity
             android:name=".ForgetPasswordActivity"
             android:exported="false" />

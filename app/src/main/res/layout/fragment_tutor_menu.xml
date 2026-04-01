@@ -98,7 +98,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/menu_settings"
+        android:id="@+id/menu_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -114,7 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="16dp"
-            android:text="My Settings"
+            android:text="Update my Profile"
             android:textColor="#578974"
             android:textSize="18sp"
             android:textStyle="bold" />
