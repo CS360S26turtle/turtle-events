@@ -1,15 +1,23 @@
 package com.example.peertutoringmarketplace;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,6 +45,8 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
     private String selectedTutorId;
     private String selectedDateKey;
     private int selectedPosition = -1;
+    private DrawerLayout drawerLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +55,12 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
+
+        // hamburger menu
+        drawerLayout = findViewById(R.id.drawer_layout);
+        ImageView btnHamburger = findViewById(R.id.btn_hamburger);
+        btnHamburger.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
+        setupNavigationDrawer();
 
         calendarView = findViewById(R.id.calendarView);
         listViewSessions = findViewById(R.id.listViewSessions);
@@ -92,6 +108,55 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
         });
 
         loadCurrentTutorIdAndSessions();
+    }
+    // dynamic menu
+    private void setupNavigationDrawer() {
+        FrameLayout menuContainer = findViewById(R.id.menu_container);
+        if (menuContainer == null) return;
+
+        View menuView = getLayoutInflater().inflate(R.layout.fragment_tutor_menu, menuContainer, false);
+        menuContainer.removeAllViews();
+        menuContainer.addView(menuView);
+
+        // Change "Upcoming Sessions" text to "My Profile"
+        TextView tvUpcomingText = menuView.findViewById(R.id.tv_menu_upcoming_text);
+        if (tvUpcomingText != null) {
+            tvUpcomingText.setText("My Profile");
+        }
+
+        // Logic for the Profile Button (goes to Update Profile)
+        LinearLayout menuUpdateProfile = menuView.findViewById(R.id.menu_profile);
+        if (menuUpdateProfile != null) {
+            menuUpdateProfile.setOnClickListener(v -> {
+                startActivity(new Intent(this, UpdateProfileActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });
+        }
+
+        // Logic for the Session Button (now labeled "My Profile", goes to TutorProfileActivity)
+        LinearLayout menuUpcoming = menuView.findViewById(R.id.menu_upcoming);
+        if (menuUpcoming != null) {
+            menuUpcoming.setOnClickListener(v -> {
+                Intent intent = new Intent(this, TutorProfileActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                drawerLayout.closeDrawer(GravityCompat.START);
+                finish(); // Finish current sessions screen
+            });
+        }
+        LinearLayout menuLogout = menuView.findViewById(R.id.menu_logout);
+        if (menuLogout != null) {
+            menuLogout.setOnClickListener(v -> {
+                // Sign out from Firebase
+                com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
+
+                // Redirect to Login
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            });
+        }
     }
 
     private void loadCurrentTutorIdAndSessions() {
@@ -209,6 +274,7 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Failed to load sessions", Toast.LENGTH_SHORT).show()
                 );
+
     }
 
     private void checkDone(int totalSessions, int processedSessions, boolean foundAny) {

@@ -30,6 +30,9 @@
             android:name=".RegisterAccountActivity"
             android:exported="false" />
         <activity
+            android:name=".TutorVerificationActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
