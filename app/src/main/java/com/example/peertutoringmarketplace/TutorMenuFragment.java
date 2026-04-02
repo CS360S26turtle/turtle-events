@@ -22,7 +22,7 @@ public class TutorMenuFragment extends Fragment {
         LinearLayout btnStudents = view.findViewById(R.id.menu_students);
         LinearLayout btnUpcoming = view.findViewById(R.id.menu_upcoming);
         LinearLayout btnChat = view.findViewById(R.id.menu_chat);
-        LinearLayout btnSettings = view.findViewById(R.id.menu_settings);
+        LinearLayout btnSettings = view.findViewById(R.id.menu_profile);
 
         btnStudents.setOnClickListener(v ->
                 Toast.makeText(getActivity(), "My Students", Toast.LENGTH_SHORT).show());
@@ -35,9 +35,11 @@ public class TutorMenuFragment extends Fragment {
         btnChat.setOnClickListener(v ->
                 Toast.makeText(getActivity(), "Opening Chat...", Toast.LENGTH_SHORT).show());
 
-        btnSettings.setOnClickListener(v ->
-                Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show());
-
+        btnSettings.setOnClickListener(v -> {
+            // This replaces the Toast and opens your new screen
+            Intent intent = new Intent(getActivity(), UpdateProfileActivity.class);
+            startActivity(intent);
+        });
         return view;
     }
 }

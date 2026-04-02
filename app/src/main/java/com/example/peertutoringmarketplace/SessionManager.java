@@ -4,6 +4,7 @@ public class SessionManager {
     private static SessionManager instance;
     private User currentUser;
     private String currentRole;
+    private TutorProfile currentTutorProfile;
 
     private SessionManager() {}
 
@@ -40,5 +41,11 @@ public class SessionManager {
     public void logout() {
         currentUser = null;
         currentRole = null;
+    }
+    public void setCurrentTutorProfile(TutorProfile profile) {
+        this.currentTutorProfile = profile;
+    }
+    public TutorProfile getCurrentTutorProfile() {
+        return currentTutorProfile;
     }
 }
