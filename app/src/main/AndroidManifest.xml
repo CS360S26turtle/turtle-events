@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PeerTutoringMarketplace">
         <activity
+            android:name=".SearchTutorActivity"
+            android:exported="false" />
+        <activity
             android:name=".StudentProfileActivity"
             android:exported="false" />
         <activity

@@ -43,22 +43,32 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         User user = tutorList.get(position);
 
-        holder.email.setText(user.getEmail());
+        holder.email.setText(user.getFullName() != null ? user.getFullName() : user.getEmail());
         holder.status.setText(user.getRole() + " - " + user.getVerificationStatus());
 
         // Set dynamic initials
-        if (user.getEmail() != null && !user.getEmail().isEmpty()) {
-            String initial = user.getEmail().substring(0, 1).toUpperCase();
+        String name = user.getFullName();
+        if (name == null || name.isEmpty()) name = user.getEmail();
+        if (name != null && !name.isEmpty()) {
+            String initial = name.substring(0, 1).toUpperCase();
             holder.initials.setText(initial);
         }
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), TutorDetailActivity.class);
-            intent.putExtra("email", user.getEmail());
-            intent.putExtra("role", user.getRole());
-            intent.putExtra("status", user.getVerificationStatus());
-            intent.putExtra("uid", user.getUserID());
-            v.getContext().startActivity(intent);
+            String currentRole = SessionManager.getInstance().getCurrentRole();
+            if ("admin".equalsIgnoreCase(currentRole)) {
+                Intent intent = new Intent(v.getContext(), TutorDetailActivity.class);
+                intent.putExtra("email", user.getEmail());
+                intent.putExtra("role", user.getRole());
+                intent.putExtra("status", user.getVerificationStatus());
+                intent.putExtra("uid", user.getUserID());
+                v.getContext().startActivity(intent);
+            } else {
+                // Student searching for a tutor
+                Intent intent = new Intent(v.getContext(), TutorProfileActivity.class);
+                intent.putExtra("tutorId", user.getUserID());
+                v.getContext().startActivity(intent);
+            }
         });
     }
 

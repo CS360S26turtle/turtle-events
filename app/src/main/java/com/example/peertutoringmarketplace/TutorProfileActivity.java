@@ -7,13 +7,16 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.List;
 
 public class TutorProfileActivity extends AppCompatActivity {
@@ -23,11 +26,17 @@ public class TutorProfileActivity extends AppCompatActivity {
     private ChipGroup chipGroupSubjects;
     private ImageView ivMenuHamburger;
     private DrawerLayout drawerLayout;
+    private MaterialButton btnBookSession;
+    private FirebaseFirestore db;
+    private String viewedTutorId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_profile);
+
+        db = FirebaseFirestore.getInstance();
+        viewedTutorId = getIntent().getStringExtra("tutorId");
 
         // 1. Initialize Views
         tvName = findViewById(R.id.tutor_name);
@@ -36,6 +45,7 @@ public class TutorProfileActivity extends AppCompatActivity {
         ivProfile = findViewById(R.id.profile_image);
         chipGroupSubjects = findViewById(R.id.chip_group_subjects);
         tvTeachingMode = findViewById(R.id.tv_teaching_mode_display);
+        btnBookSession = findViewById(R.id.btn_book_session);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         ivMenuHamburger = findViewById(R.id.btn_hamburger);
@@ -48,22 +58,70 @@ public class TutorProfileActivity extends AppCompatActivity {
             });
         }
 
-        // 4. CALL THE SETUP METHOD (This was missing)
-        setupNavigationDrawer();
+        if (viewedTutorId != null && !viewedTutorId.equals(SessionManager.getInstance().getCurrentUserId())) {
+            // Viewing another tutor's profile (likely as a student)
+            loadTutorProfile(viewedTutorId);
+            if (btnBookSession != null) {
+                btnBookSession.setVisibility(View.VISIBLE);
+                btnBookSession.setOnClickListener(v -> {
+                    Toast.makeText(this, "Booking feature coming soon!", Toast.LENGTH_SHORT).show();
+                });
+            }
+            // For now, hide hamburger if viewing another's profile to avoid menu confusion
+            if (ivMenuHamburger != null) ivMenuHamburger.setVisibility(View.GONE);
+            if (drawerLayout != null) drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        } else {
+            // Viewing own profile
+            if (btnBookSession != null) btnBookSession.setVisibility(View.GONE);
+            setupNavigationDrawer();
+            updateUIFromSession();
+        }
+    }
+
+    private void loadTutorProfile(String tutorId) {
+        // Fetch User Info
+        db.collection("users").document(tutorId).get()
+                .addOnSuccessListener(userDoc -> {
+                    if (userDoc.exists()) {
+                        tvName.setText(userDoc.getString("fullName"));
+                    }
+                });
+
+        // Fetch Tutor Profile Info
+        db.collection("tutors").document(tutorId).get()
+                .addOnSuccessListener(tutorDoc -> {
+                    if (tutorDoc.exists()) {
+                        TutorProfile profile = tutorDoc.toObject(TutorProfile.class);
+                        if (profile != null) {
+                            if (tvBio != null) tvBio.setText(profile.getBio());
+                            if (tvRate != null) tvRate.setText("$" + profile.getHourlyRate());
+                            if (tvTeachingMode != null) tvTeachingMode.setText(profile.getTeachingMode());
+                            updateSubjectChips(profile.getSubjects());
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> Toast.makeText(this, "Error loading profile", Toast.LENGTH_SHORT).show());
     }
 
     private void setupNavigationDrawer() {
         FrameLayout menuContainer = findViewById(R.id.menu_container);
-
-        // Check if container exists to prevent crashes
         if (menuContainer == null) return;
 
-        // Inflate the menu layout into the drawer's frame
-        View menuView = getLayoutInflater().inflate(R.layout.fragment_tutor_menu, menuContainer, false);
-        menuContainer.removeAllViews(); // Clean start
+        String role = SessionManager.getInstance().getCurrentRole();
+        int menuLayout = "tutor".equalsIgnoreCase(role) ? R.layout.fragment_tutor_menu : R.layout.fragment_student_menu;
+
+        View menuView = getLayoutInflater().inflate(menuLayout, menuContainer, false);
+        menuContainer.removeAllViews();
         menuContainer.addView(menuView);
 
-        // Set up the "Update Profile" click inside the menu
+        if ("tutor".equalsIgnoreCase(role)) {
+            setupTutorMenu(menuView);
+        } else {
+            setupStudentMenu(menuView);
+        }
+    }
+
+    private void setupTutorMenu(View menuView) {
         LinearLayout menuProfile = menuView.findViewById(R.id.menu_profile);
         if (menuProfile != null) {
             menuProfile.setOnClickListener(v -> {
@@ -74,38 +132,41 @@ public class TutorProfileActivity extends AppCompatActivity {
         LinearLayout menuUpcoming = menuView.findViewById(R.id.menu_upcoming);
         if (menuUpcoming != null) {
             menuUpcoming.setOnClickListener(v -> {
-                // Navigate to UpcomingSessionsActivity
-                Intent intent = new Intent(this, UpcomingSessionsActivity.class);
-                startActivity(intent);
-
-                // Close the drawer before leaving the screen
-                if (drawerLayout != null) {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                }
+                startActivity(new Intent(this, UpcomingSessionsActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
             });
         }
-
         LinearLayout menuLogout = menuView.findViewById(R.id.menu_logout);
         if (menuLogout != null) {
             menuLogout.setOnClickListener(v -> {
-                // Sign out from Firebase
                 com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
-
-                // Redirect to Login
                 Intent intent = new Intent(this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
             });
         }
+    }
 
-        // Add other menu items here if needed (Chats, etc.)
+    private void setupStudentMenu(View menuView) {
+        LinearLayout menuLogout = menuView.findViewById(R.id.menu_logout);
+        if (menuLogout != null) {
+            menuLogout.setOnClickListener(v -> {
+                com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            });
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        updateUIFromSession();
+        if (viewedTutorId == null || viewedTutorId.equals(SessionManager.getInstance().getCurrentUserId())) {
+            updateUIFromSession();
+        }
     }
 
     private void updateUIFromSession() {
@@ -119,22 +180,13 @@ public class TutorProfileActivity extends AppCompatActivity {
         if (profile != null) {
             if (tvBio != null) tvBio.setText(profile.getBio());
             if (tvRate != null) tvRate.setText("$" + profile.getHourlyRate());
-
             if (tvTeachingMode != null && profile.getTeachingMode() != null) {
                 tvTeachingMode.setText(profile.getTeachingMode());
             }
-
-//            String imageUrl = profile.getProfileImage();
-//            if (imageUrl != null && !imageUrl.isEmpty()) {
-//                Glide.with(this)
-//                        .load(imageUrl)
-//                        .placeholder(android.R.drawable.sym_def_app_icon)
-//                        .circleCrop()
-//                        .into(ivProfile);
-//            }
             updateSubjectChips(profile.getSubjects());
         }
     }
+
     private void updateSubjectChips(List<String> subjects) {
         if (chipGroupSubjects == null || subjects == null) return;
         chipGroupSubjects.removeAllViews();
