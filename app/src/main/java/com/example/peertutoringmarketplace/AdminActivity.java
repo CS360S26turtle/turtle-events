@@ -2,6 +2,7 @@ package com.example.peertutoringmarketplace;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,14 +25,14 @@ import java.util.List;
 
 public class AdminActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    TutorAdapter adapter;
-    List<User> tutorList;
-    FirebaseFirestore db;
-    TextView textPendingCount;
-    ImageButton btnLogout;
-    ChipGroup filterChipGroup;
-    String currentFilter = "all";
+    private RecyclerView recyclerView;
+    private TutorAdapter adapter;
+    private List<User> tutorList;
+    private FirebaseFirestore db;
+    private TextView textPendingCount;
+    private ImageButton btnLogout;
+    private ChipGroup filterChipGroup;
+    private String currentFilter = "all";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,9 @@ public class AdminActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin);
 
+        db = FirebaseFirestore.getInstance();
+        
+        // Initialize Views
         recyclerView = findViewById(R.id.recyclerViewTutors);
         textPendingCount = findViewById(R.id.textPendingCount);
         btnLogout = findViewById(R.id.btnLogout);
@@ -47,36 +51,44 @@ public class AdminActivity extends AppCompatActivity {
         tutorList = new ArrayList<>();
         adapter = new TutorAdapter(tutorList);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        if (recyclerView != null) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(adapter);
+        }
 
-        db = FirebaseFirestore.getInstance();
+        if (btnLogout != null) {
+            btnLogout.setOnClickListener(v -> {
+                FirebaseAuth.getInstance().signOut();
+                SessionManager.getInstance().logout();
+                Intent intent = new Intent(AdminActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            });
+        }
 
-        btnLogout.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            SessionManager.getInstance().logout();
-            Intent intent = new Intent(AdminActivity.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        });
+        if (filterChipGroup != null) {
+            filterChipGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                if (checkedId == R.id.chipAll) {
+                    currentFilter = "all";
+                } else if (checkedId == R.id.chipTutors) {
+                    currentFilter = "tutor";
+                } else if (checkedId == R.id.chipStudents) {
+                    currentFilter = "student";
+                }
+                fetchPendingAccounts();
+            });
+        }
 
-        filterChipGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.chipAll) {
-                currentFilter = "all";
-            } else if (checkedId == R.id.chipTutors) {
-                currentFilter = "tutor";
-            } else if (checkedId == R.id.chipStudents) {
-                currentFilter = "student";
-            }
-            fetchPendingAccounts();
-        });
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.appBarLayout), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        // Fix: Use the root layout ID for window insets
+        View mainView = findViewById(R.id.main_content);
+        if (mainView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            });
+        }
     }
 
     @Override
@@ -97,6 +109,8 @@ public class AdminActivity extends AppCompatActivity {
                         fetchUserByUid(uid);
                     }
                 }
+                // Call updateUI here to ensure the count is updated even if no tutors are found
+                updateUI();
             });
         } else {
             db.collection("users")
@@ -106,9 +120,7 @@ public class AdminActivity extends AppCompatActivity {
                         for (DocumentSnapshot doc : queryDocumentSnapshots) {
                             User user = doc.toObject(User.class);
                             if (user != null) {
-                                // Double check: never show admins in the verification list
                                 if ("admin".equalsIgnoreCase(user.getRole())) continue;
-
                                 user.setUserID(doc.getId());
                                 
                                 if ("all".equals(currentFilter)) {
@@ -127,10 +139,8 @@ public class AdminActivity extends AppCompatActivity {
         db.collection("users").document(uid).get().addOnSuccessListener(doc -> {
             User user = doc.toObject(User.class);
             if (user != null) {
-                // Ensure only pending, non-admin users are added
                 if ("pending".equalsIgnoreCase(user.getVerificationStatus()) && 
                     !"admin".equalsIgnoreCase(user.getRole())) {
-                    
                     user.setUserID(doc.getId());
                     tutorList.add(user);
                     updateUI();

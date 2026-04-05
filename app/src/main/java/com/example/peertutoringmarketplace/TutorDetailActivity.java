@@ -14,14 +14,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TutorDetailActivity extends AppCompatActivity {
     TextView email, role, status, subjects;
     TextView labelSubjects, labelTranscript;
     ImageView transcriptImage;
-    String pendingSubjects = "";
+    Button btnApprove, btnReject;
+    String pendingSubjectsString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +38,11 @@ public class TutorDetailActivity extends AppCompatActivity {
         labelSubjects = findViewById(R.id.labelSubjects);
         labelTranscript = findViewById(R.id.labelTranscript);
         transcriptImage = findViewById(R.id.detailTranscript);
+        btnApprove = findViewById(R.id.ACCEPT_BUTTON);
+        btnReject = findViewById(R.id.REJECT_BUTTON);
 
         Intent intent = getIntent();
-        String uid = intent.getStringExtra("uid");
+        String uid = (intent != null) ? intent.getStringExtra("uid") : null;
         if (intent != null) {
             email.setText(intent.getStringExtra("email"));
             role.setText(intent.getStringExtra("role"));
@@ -49,46 +54,61 @@ public class TutorDetailActivity extends AppCompatActivity {
             btnBack.setOnClickListener(v -> finish());
         }
 
+        // Disable approve button until we load the pending data
+        if (btnApprove != null) btnApprove.setEnabled(false);
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Fetch extra data if it's a tutor application
-        db.collection("pendingTutors").document(uid).get().addOnSuccessListener(doc -> {
-            if (doc.exists()) {
-                pendingSubjects = doc.getString("subjects");
-                subjects.setText(pendingSubjects);
-                
-                // Show hidden fields
-                labelSubjects.setVisibility(View.VISIBLE);
-                subjects.setVisibility(View.VISIBLE);
-                labelTranscript.setVisibility(View.VISIBLE);
-                transcriptImage.setVisibility(View.VISIBLE);
-                
-                // Note: Actual image loading logic (e.g. Glide) would go here
-            }
-        });
+        if (uid != null) {
+            // Fetch extra data if it's a tutor application
+            db.collection("pendingTutors").document(uid).get().addOnSuccessListener(doc -> {
+                if (doc.exists()) {
+                    pendingSubjectsString = doc.getString("subjects");
+                    if (pendingSubjectsString != null) {
+                        subjects.setText(pendingSubjectsString);
+                    }
+                    
+                    // Show hidden fields
+                    if (labelSubjects != null) labelSubjects.setVisibility(View.VISIBLE);
+                    if (subjects != null) subjects.setVisibility(View.VISIBLE);
+                    if (labelTranscript != null) labelTranscript.setVisibility(View.VISIBLE);
+                    if (transcriptImage != null) transcriptImage.setVisibility(View.VISIBLE);
+                }
+                // Data loaded, enable buttons
+                if (btnApprove != null) btnApprove.setEnabled(true);
+            }).addOnFailureListener(e -> {
+                if (btnApprove != null) btnApprove.setEnabled(true);
+            });
+        }
 
-        Button approve = findViewById(R.id.ACCEPT_BUTTON);
-        Button reject = findViewById(R.id.REJECT_BUTTON);
-
-        if (approve != null) {
-            approve.setOnClickListener(v -> {
+        if (btnApprove != null) {
+            btnApprove.setOnClickListener(v -> {
                 if (uid != null) {
-                    Map<String, Object> tutorData = new HashMap<>();
-                    tutorData.put("userID", uid);
-                    tutorData.put("email", email.getText().toString());
-                    tutorData.put("subjects", pendingSubjects != null ? pendingSubjects : "");
-                    tutorData.put("verificationStatus", "approved");
-                    tutorData.put("rating", 0.0);
-                    tutorData.put("hoursTaught", 0);
+                    List<String> subjectList = new ArrayList<>();
+                    if (pendingSubjectsString != null && !pendingSubjectsString.trim().isEmpty()) {
+                        // Split by comma and trim each subject
+                        String[] parts = pendingSubjectsString.split(",");
+                        for (String s : parts) {
+                            if (!s.trim().isEmpty()) {
+                                subjectList.add(s.trim());
+                            }
+                        }
+                    }
 
-                    // 1. Create entry in tutors collection
+                    Map<String, Object> tutorData = new HashMap<>();
+                    tutorData.put("subjects", subjectList);
+                    tutorData.put("bio", "");
+                    tutorData.put("hourlyRate", 0.0);
+                    tutorData.put("teachingMode", "");
+                    tutorData.put("profileImage", "");
+
                     db.collection("tutors").document(uid).set(tutorData)
                             .addOnSuccessListener(aVoid -> {
-                                // 2. Update user document
                                 db.collection("users").document(uid)
-                                        .update("tutorID", uid, "verificationStatus", "approved")
+                                        .update("tutorID", uid, 
+                                                "verificationStatus", "approved",
+                                                "role", "tutor") // Ensure role is updated to tutor
                                         .addOnSuccessListener(unused -> {
-                                            // 3. Delete from pendingTutors
                                             db.collection("pendingTutors").document(uid).delete();
                                             Toast.makeText(this, "Tutor Approved", Toast.LENGTH_SHORT).show();
                                             finish();
@@ -99,8 +119,8 @@ public class TutorDetailActivity extends AppCompatActivity {
             });
         }
 
-        if (reject != null) {
-            reject.setOnClickListener(v -> {
+        if (btnReject != null) {
+            btnReject.setOnClickListener(v -> {
                 if (uid != null) {
                     db.collection("users").document(uid)
                             .update("verificationStatus", "rejected")

@@ -1,5 +1,4 @@
 package com.example.peertutoringmarketplace;
-import android.content.Intent;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class TutorMenuFragment extends Fragment {
 
@@ -22,7 +22,8 @@ public class TutorMenuFragment extends Fragment {
         LinearLayout btnStudents = view.findViewById(R.id.menu_students);
         LinearLayout btnUpcoming = view.findViewById(R.id.menu_upcoming);
         LinearLayout btnChat = view.findViewById(R.id.menu_chat);
-        LinearLayout btnSettings = view.findViewById(R.id.menu_profile);
+        LinearLayout btnUpdateProfile = view.findViewById(R.id.menu_profile);
+        LinearLayout btnLogout = view.findViewById(R.id.menu_logout);
 
         btnStudents.setOnClickListener(v ->
                 Toast.makeText(getActivity(), "My Students", Toast.LENGTH_SHORT).show());
@@ -33,13 +34,24 @@ public class TutorMenuFragment extends Fragment {
         });
 
         btnChat.setOnClickListener(v ->
-                Toast.makeText(getActivity(), "Opening Chat...", Toast.LENGTH_SHORT).show());
+                    Toast.makeText(getActivity(), "Opening Chat...", Toast.LENGTH_SHORT).show());
 
-        btnSettings.setOnClickListener(v -> {
-            // This replaces the Toast and opens your new screen
-            Intent intent = new Intent(getActivity(), UpdateProfileActivity.class);
-            startActivity(intent);
+        btnUpdateProfile.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(), UpdateProfileActivity.class);
+                startActivity(intent);
         });
+
+        btnLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            SessionManager.getInstance().logout();
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            if (getActivity() != null) {
+                getActivity().finish();
+            }
+        });
+
         return view;
     }
 }

@@ -50,11 +50,9 @@ public class RoleActivity extends AppCompatActivity {
         db.collection("users").document(uid).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     String status = documentSnapshot.getString("verificationStatus");
-                    // Check if they have actually submitted the transcript yet
                     Boolean hasSubmitted = documentSnapshot.getBoolean("hasSubmittedTranscript");
                     if (hasSubmitted == null) hasSubmitted = false;
 
-                    // 1. If status is "approved" -> Go to Profile/Setup
                     if ("approved".equalsIgnoreCase(status)) {
                         proceedToTutorFlow(uid, currentUser, sessionManager);
                         return;
@@ -86,13 +84,15 @@ public class RoleActivity extends AppCompatActivity {
             startActivity(new Intent(RoleActivity.this, TutorProfileActivity.class));
             finish();
         } else {
-            db.collection("tutors").document(uid).set(new HashMap<String, Object>() {{
-                        put("bio", "");
-                        put("hourlyRate", 0.0);
-                        put("subjects", new ArrayList<String>());
-                        put("teachingMode", "");
-                        put("profileImage", "");
-                    }}, com.google.firebase.firestore.SetOptions.merge())
+            // Explicitly initialize subjects as an empty ArrayList to prevent deserialization crashes
+            Map<String, Object> initialData = new HashMap<>();
+            initialData.put("bio", "");
+            initialData.put("hourlyRate", 0.0);
+            initialData.put("subjects", new ArrayList<String>());
+            initialData.put("teachingMode", "");
+            initialData.put("profileImage", "");
+
+            db.collection("tutors").document(uid).set(initialData, com.google.firebase.firestore.SetOptions.merge())
                     .addOnSuccessListener(aVoid -> {
                         currentUser.setTutorID(uid);
                         db.collection("users").document(uid).update("tutorID", uid)
@@ -113,6 +113,11 @@ public class RoleActivity extends AppCompatActivity {
             studentData.put("bio", "");
             studentData.put("rating", 0.0);
             studentData.put("sessionsAttended", 0);
+            // Ensure student fields are initialized as well
+            studentData.put("academicLevel", "");
+            studentData.put("learningGoals", "");
+            studentData.put("learningPreference", "");
+            studentData.put("courses", new ArrayList<String>());
 
             db.collection("students").add(studentData).addOnSuccessListener(documentReference -> {
                 String studentID = documentReference.getId();
