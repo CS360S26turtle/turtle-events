@@ -31,7 +31,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private MaterialButton btnSave;
     private FirebaseFirestore db;
     private String userId;
-
     private DrawerLayout drawerLayout;
 
     @Override
@@ -71,7 +70,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
         FrameLayout menuContainer = findViewById(R.id.menu_container);
         if (menuContainer == null) return;
 
-        // Inflate the menu into the drawer
         View menuView = getLayoutInflater().inflate(R.layout.fragment_tutor_menu, menuContainer, false);
         menuContainer.removeAllViews();
         menuContainer.addView(menuView);
@@ -81,7 +79,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
             menuText.setText("My Profile");
         }
 
-        // Find the "Profile" item in the side menu
         LinearLayout menuProfile = menuView.findViewById(R.id.menu_profile);
         if (menuProfile != null) {
             menuProfile.setOnClickListener(v -> {
@@ -95,17 +92,15 @@ public class UpdateProfileActivity extends AppCompatActivity {
         LinearLayout menuUpcoming = menuView.findViewById(R.id.menu_upcoming);
         if (menuUpcoming != null) {
             menuUpcoming.setOnClickListener(v -> {
-                Intent intent = new Intent(this, UpcomingSessionsActivity.class);
-                startActivity(intent);
-                if (drawerLayout != null) {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                }
+                startActivity(new Intent(this, UpcomingSessionsActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
             });
         }
         LinearLayout menuLogout = menuView.findViewById(R.id.menu_logout);
         if (menuLogout != null) {
             menuLogout.setOnClickListener(v -> {
                 com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
+                SessionManager.getInstance().logout();
                 Intent intent = new Intent(this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -128,15 +123,12 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         etBio.setText(documentSnapshot.getString("bio"));
-
                         Object rate = documentSnapshot.get("hourlyRate");
                         if (rate != null) etRate.setText(String.valueOf(rate));
-
                         List<String> subjects = (List<String>) documentSnapshot.get("subjects");
                         if (subjects != null) {
                             etSubjects.setText(TextUtils.join(", ", subjects));
                         }
-
                         String mode = documentSnapshot.getString("teachingMode");
                         if (mode != null) tvTeachingMode.setText(mode, false);
                     }
@@ -148,12 +140,13 @@ public class UpdateProfileActivity extends AppCompatActivity {
         final String mode = tvTeachingMode.getText().toString();
         String subjectsString = etSubjects.getText().toString().trim();
 
-        // Process subjects: lowercase and trim for search consistency
-        String[] parts = subjectsString.toLowerCase().split("\\s*,\\s*");
         final List<String> subjectList = new ArrayList<>();
-        for (String s : parts) {
-            if (!s.isEmpty()) {
-                subjectList.add(s.trim());
+        if (!subjectsString.isEmpty()) {
+            String[] parts = subjectsString.split("\\s*,\\s*");
+            for (String s : parts) {
+                if (!s.trim().isEmpty()) {
+                    subjectList.add(s.trim().toLowerCase());
+                }
             }
         }
 
@@ -175,9 +168,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
         db.collection("tutors").document(userId)
                 .set(updates, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> {
-                    // Sync subjects to users collection for search consistency
-                    db.collection("users").document(userId).update("subjects", subjectList);
-
                     SessionManager session = SessionManager.getInstance();
                     TutorProfile profile = session.getCurrentTutorProfile();
 

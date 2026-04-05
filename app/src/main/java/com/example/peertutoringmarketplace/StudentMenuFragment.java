@@ -1,5 +1,6 @@
 package com.example.peertutoringmarketplace;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class StudentMenuFragment extends Fragment {
 
@@ -21,18 +23,35 @@ public class StudentMenuFragment extends Fragment {
         LinearLayout btnUpcoming = view.findViewById(R.id.menu_upcoming);
         LinearLayout btnChat = view.findViewById(R.id.menu_chat);
         LinearLayout btnSettings = view.findViewById(R.id.menu_settings);
+        LinearLayout btnLogout = view.findViewById(R.id.menu_logout);
 
         btnTutors.setOnClickListener(v ->
                 Toast.makeText(getActivity(), "My Tutors", Toast.LENGTH_SHORT).show());
 
-        btnUpcoming.setOnClickListener(v ->
-                Toast.makeText(getActivity(), "Upcoming Sessions", Toast.LENGTH_SHORT).show());
+        btnUpcoming.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                getActivity().startActivity(new Intent(getActivity(), StudentUpcomingSessionsActivity.class));
+            }
+        });
 
         btnChat.setOnClickListener(v ->
                 Toast.makeText(getActivity(), "Opening Chat...", Toast.LENGTH_SHORT).show());
 
         btnSettings.setOnClickListener(v ->
                 Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show());
+
+        if (btnLogout != null) {
+            btnLogout.setOnClickListener(v -> {
+                FirebaseAuth.getInstance().signOut();
+                SessionManager.getInstance().logout();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                if (getActivity() != null) {
+                    getActivity().finish();
+                }
+            });
+        }
 
         return view;
     }

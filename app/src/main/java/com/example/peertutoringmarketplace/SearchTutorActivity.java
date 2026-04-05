@@ -55,28 +55,46 @@ public class SearchTutorActivity extends AppCompatActivity {
         tutorList.clear();
         adapter.notifyDataSetChanged();
 
-        // Query the 'users' collection directly since it contains both subjects and approval status
-        db.collection("users")
-                .whereEqualTo("verificationStatus", "approved")
+        // 1. Search the 'tutors' collection for the subject
+        db.collection("tutors")
                 .whereArrayContains("subjects", subject)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (queryDocumentSnapshots.isEmpty()) {
-                        Toast.makeText(this, "No approved tutors found for '" + subject + "'", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "No tutors found for '" + subject + "'", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                        User user = doc.toObject(User.class);
-                        if (user != null) {
-                            user.setUserID(doc.getId());
-                            tutorList.add(user);
-                        }
+                        String tutorId = doc.getId();
+
+                        // 2. For each tutor found, fetch their details from 'users' to ensure they are approved
+                        db.collection("users").document(tutorId).get()
+                                .addOnSuccessListener(userDoc -> {
+                                    if (userDoc.exists()) {
+                                        User user = userDoc.toObject(User.class);
+                                        if (user != null && "approved".equalsIgnoreCase(user.getVerificationStatus())) {
+                                            user.setUserID(userDoc.getId());
+                                            
+                                            // 3. Avoid duplicates and add to list
+                                            boolean exists = false;
+                                            for(User u : tutorList) {
+                                                if(u.getUserID() != null && u.getUserID().equals(user.getUserID())) {
+                                                    exists = true;
+                                                    break;
+                                                }
+                                            }
+                                            if(!exists) {
+                                                tutorList.add(user);
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        }
+                                    }
+                                });
                     }
-                    adapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Search Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 }

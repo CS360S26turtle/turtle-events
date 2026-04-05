@@ -43,19 +43,9 @@ public class TutorVerificationActivity extends AppCompatActivity {
     private void saveSubmissionToFirestore(String subjects) {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // 1. Process string into a clean lowercase List
-        String[] parts = subjects.toLowerCase().split("\\s*,\\s*");
-        List<String> subjectList = new ArrayList<>();
-        for (String s : parts) {
-            if (!s.isEmpty()) {
-                subjectList.add(s.trim());
-            }
-        }
-
         Map<String, Object> data = new HashMap<>();
         data.put("hasSubmittedTranscript", true);
-        data.put("appliedSubjects", subjects);
-        data.put("subjects", subjectList); // Store as list for searching later
+        data.put("appliedSubjects", subjects.toLowerCase());
 
         FirebaseFirestore.getInstance().collection("users").document(uid)
                 .update(data)
@@ -69,7 +59,9 @@ public class TutorVerificationActivity extends AppCompatActivity {
                 .setMessage("Your transcript has been sent for verification. You will be logged out now. Please check back later!")
                 .setCancelable(false)
                 .setPositiveButton("OK", (dialog, which) -> {
+                    // Log out
                     FirebaseAuth.getInstance().signOut();
+                    // Go to Login
                     Intent intent = new Intent(TutorVerificationActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

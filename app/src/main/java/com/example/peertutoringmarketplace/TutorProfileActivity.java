@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -106,18 +105,12 @@ public class TutorProfileActivity extends AppCompatActivity {
         FrameLayout menuContainer = findViewById(R.id.menu_container);
         if (menuContainer == null) return;
 
-        String role = SessionManager.getInstance().getCurrentRole();
-        int menuLayout = "tutor".equalsIgnoreCase(role) ? R.layout.fragment_tutor_menu : R.layout.fragment_student_menu;
-
-        View menuView = getLayoutInflater().inflate(menuLayout, menuContainer, false);
+        // Force Tutor menu for TutorProfileActivity since it's the Tutor's domain
+        View menuView = getLayoutInflater().inflate(R.layout.fragment_tutor_menu, menuContainer, false);
         menuContainer.removeAllViews();
         menuContainer.addView(menuView);
 
-        if ("tutor".equalsIgnoreCase(role)) {
-            setupTutorMenu(menuView);
-        } else {
-            setupStudentMenu(menuView);
-        }
+        setupTutorMenu(menuView);
     }
 
     private void setupTutorMenu(View menuView) {
@@ -139,19 +132,7 @@ public class TutorProfileActivity extends AppCompatActivity {
         if (menuLogout != null) {
             menuLogout.setOnClickListener(v -> {
                 com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            });
-        }
-    }
-
-    private void setupStudentMenu(View menuView) {
-        LinearLayout menuLogout = menuView.findViewById(R.id.menu_logout);
-        if (menuLogout != null) {
-            menuLogout.setOnClickListener(v -> {
-                com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
+                SessionManager.getInstance().logout();
                 Intent intent = new Intent(this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

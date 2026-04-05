@@ -3,6 +3,7 @@ package com.example.peertutoringmarketplace;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.TextView;
@@ -93,18 +94,36 @@ public class LoginActivity extends AppCompatActivity {
         db.collection("users").document(uid).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        User user = documentSnapshot.toObject(User.class);
-                        if (user != null) {
-                            // Set the session data
-                            SessionManager.getInstance().setCurrentUser(user);
+                        try {
+                            User user = documentSnapshot.toObject(User.class);
+                            if (user != null) {
+                                user.setUserID(uid);
+                                SessionManager.getInstance().setCurrentUser(user);
 
-                            String role = user.getRole();
-                            if ("admin".equalsIgnoreCase(role)) {
-                                startActivity(new Intent(LoginActivity.this, AdminActivity.class));
-                            } else {
-                                startActivity(new Intent(LoginActivity.this, RoleActivity.class));
+                                // If they are a tutor, fetch their profile as well
+                                String tutorId = user.getTutorID();
+                                if (tutorId != null && !tutorId.isEmpty()) {
+                                    db.collection("tutors").document(tutorId).get()
+                                            .addOnSuccessListener(tutorDoc -> {
+                                                if (tutorDoc.exists()) {
+                                                    try {
+                                                        TutorProfile profile = tutorDoc.toObject(TutorProfile.class);
+                                                        SessionManager.getInstance().setCurrentTutorProfile(profile);
+                                                    } catch (Exception ex) {
+                                                        Log.e("LoginActivity", "Error parsing tutor profile: " + ex.getMessage());
+                                                        // Continue even if profile is malformed
+                                                    }
+                                                }
+                                                navigateBasedOnRole(user.getRole());
+                                            })
+                                            .addOnFailureListener(e -> navigateBasedOnRole(user.getRole()));
+                                } else {
+                                    navigateBasedOnRole(user.getRole());
+                                }
                             }
-                            finish();
+                        } catch (Exception ex) {
+                            Log.e("LoginActivity", "Error parsing user data: " + ex.getMessage());
+                            Toast.makeText(this, "Error processing user data", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(LoginActivity.this, "User data not found", Toast.LENGTH_SHORT).show();
@@ -113,5 +132,14 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Toast.makeText(LoginActivity.this, "Error fetching user data", Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private void navigateBasedOnRole(String role) {
+        if ("admin".equalsIgnoreCase(role)) {
+            startActivity(new Intent(LoginActivity.this, AdminActivity.class));
+        } else {
+            startActivity(new Intent(LoginActivity.this, RoleActivity.class));
+        }
+        finish();
     }
 }
