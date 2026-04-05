@@ -28,8 +28,11 @@ public class StudentMenuFragment extends Fragment {
         btnTutors.setOnClickListener(v ->
                 Toast.makeText(getActivity(), "My Tutors", Toast.LENGTH_SHORT).show());
 
-        btnUpcoming.setOnClickListener(v ->
-                Toast.makeText(getActivity(), "Upcoming Sessions", Toast.LENGTH_SHORT).show());
+        btnUpcoming.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                getActivity().startActivity(new Intent(getActivity(), StudentUpcomingSessionsActivity.class));
+            }
+        });
 
         btnChat.setOnClickListener(v ->
                 Toast.makeText(getActivity(), "Opening Chat...", Toast.LENGTH_SHORT).show());

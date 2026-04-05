@@ -70,19 +70,51 @@
                     android:layout_weight="1"
                     android:choiceMode="singleChoice"
                     android:divider="@android:color/transparent"
-                    android:dividerHeight="10dp"
-                    android:background="#FFFFFF" />
+                    android:dividerHeight="10dp" />
 
-                <Button
-                    android:id="@+id/btnCancelSession"
-                    android:layout_width="wrap_content"
+                <!-- Empty state — not a list item, not clickable -->
+                <TextView
+                    android:id="@+id/tvEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="No sessions for this date."
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
                     android:layout_marginTop="16dp"
-                    android:backgroundTint="#BED2D0"
-                    android:text="Cancel Session"
-                    android:textAllCaps="false"
-                    android:textColor="#567D6A" />
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAddSession"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="Add Session"
+                        android:textAllCaps="false"
+                        android:textColor="#567D6A"
+                        android:visibility="visible"
+                        app:backgroundTint="#BED2D0"
+                        app:cornerRadius="24dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCancelSession"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Cancel Session"
+                        android:textAllCaps="false"
+                        android:textColor="#7D3030"
+                        app:backgroundTint="#E8B4B4"
+                        app:cornerRadius="24dp" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
