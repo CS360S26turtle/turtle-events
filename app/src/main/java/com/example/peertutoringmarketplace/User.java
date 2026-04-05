@@ -1,7 +1,16 @@
+/*
+ * File: User.java
+ * Purpose: Central class for user identity, authentication, and role mapping.
+ * Design Pattern: Domain Entity.
+ * Outstanding Issues: Role and Verification status should be converted to Enums.
+ */
 package com.example.peertutoringmarketplace;
 
 import java.util.List;
 
+/**
+ * Represents a registered user within the system.
+ */
 public class User {
     private String userID;
     private String email;
@@ -9,15 +18,24 @@ public class User {
     private String studentID;
     private String tutorID;
     private String role;
-    //make options (limit)
     private String verificationStatus;
     private List<String> sessions;
 
+    /**
+     * Default constructor for Firebase.
+     */
     public User(){
         studentID = null;
         tutorID = null;
     }
 
+    /**
+     * Initializing constructor for new users.
+     * @param userID Unique system ID.
+     * @param email User email address.
+     * @param fullName User legal name.
+     * @param role System role.
+     */
     public User(String userID, String email, String fullName, String role){
         this.userID = userID;
         this.studentID = null;
@@ -28,67 +46,83 @@ public class User {
         this.verificationStatus = "pending";
     }
 
-    public String getUserID() {
-        return userID;
-    }
+    /**
+     * @return Unique user ID.
+     */
+    public String getUserID() { return userID; }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
+    /**
+     * @param userID User ID to set.
+     */
+    public void setUserID(String userID) { this.userID = userID; }
 
-    public String getEmail() {
-        return email;
-    }
+    /**
+     * @return Email address.
+     */
+    public String getEmail() { return email; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    /**
+     * @param email Email to set.
+     */
+    public void setEmail(String email) { this.email = email; }
 
-    public String getFullName() {
-        return fullName;
-    }
+    /**
+     * @return Full display name.
+     */
+    public String getFullName() { return fullName; }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+    /**
+     * @param fullName Full name to set.
+     */
+    public void setFullName(String fullName) { this.fullName = fullName; }
 
-    public String getStudentID() {
-        return studentID;
-    }
+    /**
+     * @return Associated student profile ID.
+     */
+    public String getStudentID() { return studentID; }
 
-    public void setStudentID(String studentID) {
-        this.studentID = studentID;
-    }
+    /**
+     * @param studentID Student profile ID to set.
+     */
+    public void setStudentID(String studentID) { this.studentID = studentID; }
 
-    public String getRole() {
-        return role;
-    }
+    /**
+     * @return System role (Student/Tutor/Admin).
+     */
+    public String getRole() { return role; }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
+    /**
+     * @param role Role to set.
+     */
+    public void setRole(String role) { this.role = role; }
 
-    public String getTutorID() {
-        return tutorID;
-    }
+    /**
+     * @return Associated tutor profile ID.
+     */
+    public String getTutorID() { return tutorID; }
 
-    public void setTutorID(String tutorID) {
-        this.tutorID = tutorID;
-    }
+    /**
+     * @param tutorID Tutor profile ID to set.
+     */
+    public void setTutorID(String tutorID) { this.tutorID = tutorID; }
 
-    public String getVerificationStatus() {
-        return verificationStatus;
-    }
+    /**
+     * @return Current account verification status.
+     */
+    public String getVerificationStatus() { return verificationStatus; }
 
-    public void setVerificationStatus(String verificationStatus) {
-        this.verificationStatus = verificationStatus;
-    }
+    /**
+     * @param verificationStatus Status to set.
+     */
+    public void setVerificationStatus(String verificationStatus) { this.verificationStatus = verificationStatus; }
 
-    public List<String> getSessions() {
-        return sessions;
-    }
+    /**
+     * @return List of session IDs associated with the user.
+     */
+    public List<String> getSessions() { return sessions; }
 
-    public void setSessions(List<String> sessions) {
-        this.sessions = sessions;
-    }
+    /**
+     * @param sessions List of session IDs to set.
+     */
+    public void setSessions(List<String> sessions) { this.sessions = sessions; }
 }

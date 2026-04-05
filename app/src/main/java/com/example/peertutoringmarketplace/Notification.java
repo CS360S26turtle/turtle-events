@@ -1,22 +1,35 @@
+/*
+ * File: Notification.java
+ * Purpose: Stores system messages intended for specific users.
+ * Design Pattern: Domain Entity.
+ * Outstanding Issues: Needs a 'userId' field to specify the recipient.
+ */
 package com.example.peertutoringmarketplace;
 
+/**
+ * Represents a system-generated notification message.
+ */
 public class Notification {
     private String notificationId;
     private String message;
 
-    public String getNotificationId() {
-        return notificationId;
-    }
+    /**
+     * @return The unique ID of the notification.
+     */
+    public String getNotificationId() { return notificationId; }
 
-    public void setNotificationId(String notificationId) {
-        this.notificationId = notificationId;
-    }
+    /**
+     * @param notificationId The unique ID to set.
+     */
+    public void setNotificationId(String notificationId) { this.notificationId = notificationId; }
 
-    public String getMessage() {
-        return message;
-    }
+    /**
+     * @return The content of the notification message.
+     */
+    public String getMessage() { return message; }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    /**
+     * @param message The message text to set.
+     */
+    public void setMessage(String message) { this.message = message; }
 }

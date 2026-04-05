@@ -1,3 +1,11 @@
+/**
+ * TutorDetailActivity displays detailed information about a tutor application (email, subjects, transcript)
+ * and allows the admin to approve or reject the request.
+ *
+ * Design: Acts as a controller between Firebase data and the UI.
+ * Known Issue: Multiple async operations may lead to delayed or repeated UI updates.
+ */
+
 package com.example.peertutoringmarketplace;
 
 import android.content.Intent;

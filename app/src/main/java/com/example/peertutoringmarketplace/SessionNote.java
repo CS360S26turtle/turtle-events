@@ -1,31 +1,46 @@
+/*
+ * File: SessionNote.java
+ * Purpose: Stores supplemental text notes for a specific tutoring session.
+ * Design Pattern: Domain Entity.
+ * Outstanding Issues: Note creator's identity is not tracked.
+ */
 package com.example.peertutoringmarketplace;
 
+/**
+ * Represents notes or documentation associated with a specific session.
+ */
 public class SessionNote {
     private String noteId;
     private String content;
     private String sessionId;
 
-    public String getNoteId() {
-        return noteId;
-    }
+    /**
+     * @return The unique ID of the note.
+     */
+    public String getNoteId() { return noteId; }
 
-    public void setNoteId(String noteId) {
-        this.noteId = noteId;
-    }
+    /**
+     * @param noteId The unique ID to set.
+     */
+    public void setNoteId(String noteId) { this.noteId = noteId; }
 
-    public String getContent() {
-        return content;
-    }
+    /**
+     * @return The text content of the note.
+     */
+    public String getContent() { return content; }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+    /**
+     * @param content The text content to set.
+     */
+    public void setContent(String content) { this.content = content; }
 
-    public String getSessionId() {
-        return sessionId;
-    }
+    /**
+     * @return The ID of the session linked to this note.
+     */
+    public String getSessionId() { return sessionId; }
 
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
+    /**
+     * @param sessionId The session ID to set.
+     */
+    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
 }

@@ -1,3 +1,12 @@
+/**
+ * AdminActivity provides an interface for admins to view and manage
+ * user accounts pending verification in the peer tutoring application.
+ * It supports filtering by user roles and handles admin logout.
+ *
+ * Design: Acts as a controller between Firebase (data layer) and UI components.
+ * Known Issue: Multiple async calls may cause repeated UI updates.
+ */
+
 package com.example.peertutoringmarketplace;
 
 import android.content.Intent;
@@ -25,11 +34,11 @@ import java.util.List;
 
 public class AdminActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private TutorAdapter adapter;
-    private List<User> tutorList;
+    RecyclerView recyclerView;
+    TutorAdapter adapter;
+    List<User> tutorList;
+    TextView textPendingCount;
     private FirebaseFirestore db;
-    private TextView textPendingCount;
     private ImageButton btnLogout;
     private ChipGroup filterChipGroup;
     private String currentFilter = "all";
@@ -80,7 +89,6 @@ public class AdminActivity extends AppCompatActivity {
             });
         }
 
-        // Fix: Use the root layout ID for window insets
         View mainView = findViewById(R.id.main_content);
         if (mainView != null) {
             ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
@@ -99,7 +107,7 @@ public class AdminActivity extends AppCompatActivity {
 
     private void fetchPendingAccounts() {
         tutorList.clear();
-        adapter.notifyDataSetChanged();
+        updateUI(); // Reset UI immediately when clearing to keep items and count in sync
 
         if ("tutor".equals(currentFilter)) {
             db.collection("pendingTutors").get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -109,7 +117,6 @@ public class AdminActivity extends AppCompatActivity {
                         fetchUserByUid(uid);
                     }
                 }
-                // Call updateUI here to ensure the count is updated even if no tutors are found
                 updateUI();
             });
         } else {
@@ -150,7 +157,7 @@ public class AdminActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        adapter.notifyDataSetChanged();
+        if (adapter != null) adapter.notifyDataSetChanged();
         if (textPendingCount != null) {
             textPendingCount.setText(String.valueOf(tutorList.size()));
         }

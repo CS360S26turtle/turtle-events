@@ -1,7 +1,16 @@
+/*
+ * File: StudentProfile.java
+ * Purpose: Maintains the specific learning preferences and history of a student.
+ * Design Pattern: Domain Entity / Profile Pattern.
+ * Outstanding Issues: 'Rating' logic needs to be integrated with Review objects.
+ */
 package com.example.peertutoringmarketplace;
 
 import java.util.List;
 
+/**
+ * Represents the profile details for a user acting as a student.
+ */
 public class StudentProfile {
     private String studentId;
     private String bio;
@@ -12,70 +21,88 @@ public class StudentProfile {
     private String learningGoals;
     private List<String> courses;
 
-    // Default constructor for Firebase
+    /**
+     * Default constructor for Firebase serialization.
+     */
     public StudentProfile() {}
 
-    public String getStudentId() {
-        return studentId;
-    }
+    /**
+     * @return The unique student ID.
+     */
+    public String getStudentId() { return studentId; }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
+    /**
+     * @param studentId The student ID to set.
+     */
+    public void setStudentId(String studentId) { this.studentId = studentId; }
 
-    public String getBio() {
-        return bio;
-    }
+    /**
+     * @return The student's biography.
+     */
+    public String getBio() { return bio; }
 
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
+    /**
+     * @param bio The biography to set.
+     */
+    public void setBio(String bio) { this.bio = bio; }
 
-    public double getRating() {
-        return rating;
-    }
+    /**
+     * @return The student's average rating.
+     */
+    public double getRating() { return rating; }
 
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
+    /**
+     * @param rating The average rating to set.
+     */
+    public void setRating(double rating) { this.rating = rating; }
 
-    public int getSessionsAttended() {
-        return sessionsAttended;
-    }
+    /**
+     * @return Total count of sessions attended.
+     */
+    public int getSessionsAttended() { return sessionsAttended; }
 
-    public void setSessionsAttended(int sessionsAttended) {
-        this.sessionsAttended = sessionsAttended;
-    }
+    /**
+     * @param sessionsAttended The session count to set.
+     */
+    public void setSessionsAttended(int sessionsAttended) { this.sessionsAttended = sessionsAttended; }
 
-    public String getLearningPreference() {
-        return learningPreference;
-    }
+    /**
+     * @return Preferred learning style.
+     */
+    public String getLearningPreference() { return learningPreference; }
 
-    public void setLearningPreference(String learningPreference) {
-        this.learningPreference = learningPreference;
-    }
+    /**
+     * @param learningPreference The learning style to set.
+     */
+    public void setLearningPreference(String learningPreference) { this.learningPreference = learningPreference; }
 
-    public String getAcademicLevel() {
-        return academicLevel;
-    }
+    /**
+     * @return Current grade or academic year.
+     */
+    public String getAcademicLevel() { return academicLevel; }
 
-    public void setAcademicLevel(String academicLevel) {
-        this.academicLevel = academicLevel;
-    }
+    /**
+     * @param academicLevel The academic level to set.
+     */
+    public void setAcademicLevel(String academicLevel) { this.academicLevel = academicLevel; }
 
-    public String getLearningGoals() {
-        return learningGoals;
-    }
+    /**
+     * @return Text description of learning objectives.
+     */
+    public String getLearningGoals() { return learningGoals; }
 
-    public void setLearningGoals(String learningGoals) {
-        this.learningGoals = learningGoals;
-    }
+    /**
+     * @param learningGoals The goals to set.
+     */
+    public void setLearningGoals(String learningGoals) { this.learningGoals = learningGoals; }
 
-    public List<String> getCourses() {
-        return courses;
-    }
+    /**
+     * @return List of course codes or names.
+     */
+    public List<String> getCourses() { return courses; }
 
-    public void setCourses(List<String> courses) {
-        this.courses = courses;
-    }
+    /**
+     * @param courses The list of courses to set.
+     */
+    public void setCourses(List<String> courses) { this.courses = courses; }
 }
