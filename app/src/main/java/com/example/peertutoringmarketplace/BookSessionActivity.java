@@ -2,13 +2,17 @@ package com.example.peertutoringmarketplace;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,9 +42,8 @@ public class BookSessionActivity extends AppCompatActivity {
     private String selectedTutorId;
     private String selectedStudentId;
 
-    private final ArrayList<String> displayList = new ArrayList<>();
     private final ArrayList<SlotItem> freeSlotItems = new ArrayList<>();
-    private ArrayAdapter<String> adapter;
+    private SlotAdapter adapter;
 
     private int selectedPosition = -1;
     private long selectedDateMillis;
@@ -68,18 +71,14 @@ public class BookSessionActivity extends AppCompatActivity {
 
         selectedDateMillis = calendarView.getDate();
 
-        adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_single_choice,
-                displayList
-        );
+        adapter = new SlotAdapter();
         listViewSessions.setAdapter(adapter);
-        listViewSessions.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         btnBack.setOnClickListener(v -> finish());
 
         listViewSessions.setOnItemClickListener((parent, view, position, id) -> {
             selectedPosition = position;
+            adapter.notifyDataSetChanged();
         });
 
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
@@ -111,8 +110,8 @@ public class BookSessionActivity extends AppCompatActivity {
 
             new AlertDialog.Builder(this)
                     .setTitle("Book Session")
-                    .setMessage("Do you want to book this slot?\n\n" +
-                            formatTime(selectedSlot.startTime) + " - " + formatTime(selectedSlot.endTime))
+                    .setMessage("Do you want to book this slot?\n\n"
+                            + formatTime(selectedSlot.startTime) + " - " + formatTime(selectedSlot.endTime))
                     .setPositiveButton("Yes", (dialog, which) -> createSessionForSlot(selectedSlot))
                     .setNegativeButton("No", null)
                     .show();
@@ -133,7 +132,9 @@ public class BookSessionActivity extends AppCompatActivity {
                 .document(uid)
                 .get()
                 .addOnSuccessListener(userDoc -> {
-                    if (!userDoc.exists()) return;
+                    if (!userDoc.exists()) {
+                        return;
+                    }
 
                     selectedStudentId = userDoc.getString("studentID");
                     if (selectedStudentId == null || selectedStudentId.isEmpty()) {
@@ -143,10 +144,8 @@ public class BookSessionActivity extends AppCompatActivity {
     }
 
     private void loadSlotsForTutorAndDate() {
-        displayList.clear();
         freeSlotItems.clear();
         selectedPosition = -1;
-        listViewSessions.clearChoices();
         adapter.notifyDataSetChanged();
 
         db.collection("slots")
@@ -208,14 +207,11 @@ public class BookSessionActivity extends AppCompatActivity {
 
                                 matchingSlots.sort(Comparator.comparing(slot -> slot.startTime));
 
-                                for (SlotItem item : matchingSlots) {
-                                    freeSlotItems.add(item);
-                                    displayList.add(buildSlotText(item));
-                                }
-
+                                freeSlotItems.clear();
+                                freeSlotItems.addAll(matchingSlots);
                                 adapter.notifyDataSetChanged();
 
-                                if (displayList.isEmpty()) {
+                                if (freeSlotItems.isEmpty()) {
                                     Toast.makeText(this, "No free slots for selected date.", Toast.LENGTH_SHORT).show();
                                 }
                             })
@@ -238,13 +234,6 @@ public class BookSessionActivity extends AppCompatActivity {
         return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
                 && c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH)
                 && c1.get(Calendar.DAY_OF_MONTH) == c2.get(Calendar.DAY_OF_MONTH);
-    }
-
-    private String buildSlotText(SlotItem item) {
-        int remaining = item.maxCapacity - item.bookedCount;
-
-        return "Time: " + formatTime(item.startTime) + " - " + formatTime(item.endTime)
-                + "\nRemaining Seats: " + remaining + "/" + item.maxCapacity;
     }
 
     private void createSessionForSlot(SlotItem slot) {
@@ -295,6 +284,39 @@ public class BookSessionActivity extends AppCompatActivity {
 
     private String formatTime(Date date) {
         return new SimpleDateFormat("hh:mm a", Locale.getDefault()).format(date);
+    }
+
+    private class SlotAdapter extends ArrayAdapter<SlotItem> {
+
+        public SlotAdapter() {
+            super(BookSessionActivity.this, 0, freeSlotItems);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = getLayoutInflater().inflate(R.layout.item_session_slot, parent, false);
+            }
+
+            SlotItem item = getItem(position);
+
+            TextView tvSlotTime = convertView.findViewById(R.id.tvSlotTime);
+            TextView tvSlotSeats = convertView.findViewById(R.id.tvSlotSeats);
+
+            if (item != null) {
+                int remaining = item.maxCapacity - item.bookedCount;
+                tvSlotTime.setText(formatTime(item.startTime) + " - " + formatTime(item.endTime));
+                tvSlotSeats.setText("Remaining Seats: " + remaining + "/" + item.maxCapacity);
+            }
+
+            if (position == selectedPosition) {
+                convertView.setBackgroundResource(R.drawable.bg_slot_item_selected);
+            } else {
+                convertView.setBackgroundResource(R.drawable.bg_slot_item);
+            }
+
+            return convertView;
+        }
     }
 
     private static class SlotItem {
