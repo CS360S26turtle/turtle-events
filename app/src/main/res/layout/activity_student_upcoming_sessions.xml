@@ -2,12 +2,10 @@
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".UpcomingSessionsActivity">
+    android:fitsSystemWindows="true">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -22,6 +20,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="70dp">
+
                 <ImageView
                     android:id="@+id/btn_hamburger"
                     android:layout_width="45dp"
@@ -33,29 +32,35 @@
                     app:tint="#EFEBEB" />
             </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingHorizontal="16dp"
+                android:paddingLeft="16dp"
+                android:paddingTop="0dp"
+                android:paddingRight="16dp"
                 android:paddingBottom="16dp">
 
                 <TextView
+                    android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Upcoming Sessions"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="20dp"
+                    android:text="My Upcoming Sessions"
                     android:textColor="#FFFFFF"
                     android:textSize="28sp"
-                    android:textStyle="bold"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="20dp" />
+                    android:textStyle="bold" />
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/calendarCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/tvTitle"
+                    android:layout_marginTop="20dp"
                     android:layout_marginBottom="16dp"
                     app:cardCornerRadius="24dp"
                     app:cardElevation="4dp">
+
                     <CalendarView
                         android:id="@+id/calendarView"
                         android:layout_width="match_parent"
@@ -63,59 +68,48 @@
                         android:padding="8dp" />
                 </androidx.cardview.widget.CardView>
 
-                <ListView
-                    android:id="@+id/listViewSessions"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:choiceMode="singleChoice"
-                    android:divider="@android:color/transparent"
-                    android:dividerHeight="10dp" />
-
-                <!-- Empty state — not a list item, not clickable -->
-                <TextView
-                    android:id="@+id/tvEmpty"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="No sessions for this date."
-                    android:textColor="#FFFFFF"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
-
                 <LinearLayout
+                    android:id="@+id/bottomButtonRow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="end"
                     android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnAddSession"
-                        android:layout_width="0dp"
+                        android:id="@+id/btnUnbookSession"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="8dp"
-                        android:text="Add Session"
-                        android:textAllCaps="false"
-                        android:textColor="#567D6A"
-                        android:visibility="visible"
-                        app:backgroundTint="#BED2D0"
-                        app:cornerRadius="24dp" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnCancelSession"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="8dp"
-                        android:text="Cancel Session"
+                        android:minWidth="160dp"
+                        android:text="Unbook Session"
                         android:textAllCaps="false"
                         android:textColor="#7D3030"
                         app:backgroundTint="#E8B4B4"
                         app:cornerRadius="24dp" />
                 </LinearLayout>
-            </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/bottomButtonRow"
+                    android:layout_below="@id/calendarCard"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="#FFFFFF"
+                    android:visibility="gone" />
+
+                <ListView
+                    android:id="@+id/listViewSessions"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/calendarCard"
+                    android:layout_above="@id/bottomButtonRow"
+                    android:choiceMode="singleChoice"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="10dp" />
+
+            </RelativeLayout>
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -126,6 +120,7 @@
         android:layout_gravity="start"
         android:background="@android:color/transparent"
         app:elevation="0dp">
+
         <FrameLayout
             android:id="@+id/menu_container"
             android:layout_width="wrap_content"
