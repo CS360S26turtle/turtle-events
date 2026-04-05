@@ -64,7 +64,6 @@ public class TutorProfileActivity extends AppCompatActivity {
             if (btnBookSession != null) {
                 btnBookSession.setVisibility(View.VISIBLE);
                 btnBookSession.setOnClickListener(v -> {
-                    Toast.makeText(this, "Booking feature coming soon!", Toast.LENGTH_SHORT).show();
                 });
             }
             // For now, hide hamburger if viewing another's profile to avoid menu confusion

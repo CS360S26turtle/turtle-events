@@ -42,6 +42,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         userId = SessionManager.getInstance().getCurrentUserId();
 
+        // Initialize Views
         etBio = findViewById(R.id.et_bio);
         etRate = findViewById(R.id.et_hourly_rate);
         etSubjects = findViewById(R.id.et_subjects);
@@ -51,11 +52,13 @@ public class UpdateProfileActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         ImageView btnHamburger = findViewById(R.id.btn_hamburger);
 
-        btnHamburger.setOnClickListener(v -> {
-            if (drawerLayout != null) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
+        if (btnHamburger != null) {
+            btnHamburger.setOnClickListener(v -> {
+                if (drawerLayout != null) {
+                    drawerLayout.openDrawer(GravityCompat.START);
+                }
+            });
+        }
 
         setupNavigationDrawer();
         setupTeachingModeDropdown();
@@ -68,6 +71,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         FrameLayout menuContainer = findViewById(R.id.menu_container);
         if (menuContainer == null) return;
 
+        // Inflate the menu into the drawer
         View menuView = getLayoutInflater().inflate(R.layout.fragment_tutor_menu, menuContainer, false);
         menuContainer.removeAllViews();
         menuContainer.addView(menuView);
@@ -77,6 +81,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             menuText.setText("My Profile");
         }
 
+        // Find the "Profile" item in the side menu
         LinearLayout menuProfile = menuView.findViewById(R.id.menu_profile);
         if (menuProfile != null) {
             menuProfile.setOnClickListener(v -> {
@@ -143,7 +148,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         final String mode = tvTeachingMode.getText().toString();
         String subjectsString = etSubjects.getText().toString().trim();
 
-        // Split by comma, trim each element, and convert to lowercase for searching
+        // Process subjects: lowercase and trim for search consistency
         String[] parts = subjectsString.toLowerCase().split("\\s*,\\s*");
         final List<String> subjectList = new ArrayList<>();
         for (String s : parts) {

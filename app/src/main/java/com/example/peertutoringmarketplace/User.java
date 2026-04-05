@@ -10,7 +10,7 @@ public class User {
     private String tutorID;
     private String role;
     private String verificationStatus;
-    private List<String> subjects; // Added subjects field
+    private List<String> subjects;
     private List<String> sessions;
 
     public User(){

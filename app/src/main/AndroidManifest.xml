@@ -53,6 +53,9 @@
         <activity
             android:name=".UpcomingSessionsActivity"
             android:exported="false" />
+        <activity
+            android:name=".BookSessionActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"
