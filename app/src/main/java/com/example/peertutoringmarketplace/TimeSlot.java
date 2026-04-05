@@ -9,6 +9,7 @@ public class TimeSlot {
     private Date endTime;
     private int maxCapacity;
 
+    private String tutorId;
     public String getSlotId() {
         return slotId;
     }
