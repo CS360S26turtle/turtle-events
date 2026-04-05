@@ -9,8 +9,8 @@ public class User {
     private String studentID;
     private String tutorID;
     private String role;
-    //make options (limit)
     private String verificationStatus;
+    private List<String> subjects;
     private List<String> sessions;
 
     public User(){
@@ -82,6 +82,14 @@ public class User {
 
     public void setVerificationStatus(String verificationStatus) {
         this.verificationStatus = verificationStatus;
+    }
+
+    public List<String> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<String> subjects) {
+        this.subjects = subjects;
     }
 
     public List<String> getSessions() {

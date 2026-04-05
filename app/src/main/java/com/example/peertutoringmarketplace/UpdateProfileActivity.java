@@ -18,6 +18,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -138,7 +139,16 @@ public class UpdateProfileActivity extends AppCompatActivity {
         final String bio = etBio.getText().toString().trim();
         final String mode = tvTeachingMode.getText().toString();
         String subjectsString = etSubjects.getText().toString().trim();
-        final List<String> subjectList = Arrays.asList(subjectsString.split("\\s*,\\s*"));
+
+        final List<String> subjectList = new ArrayList<>();
+        if (!subjectsString.isEmpty()) {
+            String[] parts = subjectsString.split("\\s*,\\s*");
+            for (String s : parts) {
+                if (!s.trim().isEmpty()) {
+                    subjectList.add(s.trim().toLowerCase());
+                }
+            }
+        }
 
         double tempRate = 0.0;
         try {
@@ -158,15 +168,22 @@ public class UpdateProfileActivity extends AppCompatActivity {
         db.collection("tutors").document(userId)
                 .set(updates, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, "Profile Updated!", Toast.LENGTH_SHORT).show();
-                    // Keep the session updated without closing activity
-                    TutorProfile profile = SessionManager.getInstance().getCurrentTutorProfile();
-                    if (profile == null) profile = new TutorProfile();
+                    SessionManager session = SessionManager.getInstance();
+                    TutorProfile profile = session.getCurrentTutorProfile();
+
+                    if (profile == null) {
+                        profile = new TutorProfile();
+                    }
+
                     profile.setBio(bio);
                     profile.setHourlyRate(hourlyRate);
                     profile.setSubjects(subjectList);
                     profile.setTeachingMode(mode);
-                    SessionManager.getInstance().setCurrentTutorProfile(profile);
+
+                    session.setCurrentTutorProfile(profile);
+
+                    Toast.makeText(this, "Profile Updated!", Toast.LENGTH_SHORT).show();
+                    finish();
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }

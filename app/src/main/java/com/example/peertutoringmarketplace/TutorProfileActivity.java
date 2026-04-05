@@ -63,9 +63,6 @@ public class TutorProfileActivity extends AppCompatActivity {
             if (btnBookSession != null) {
                 btnBookSession.setVisibility(View.VISIBLE);
                 btnBookSession.setOnClickListener(v -> {
-                    Intent intent = new Intent(TutorProfileActivity.this, BookSessionActivity.class);
-                    intent.putExtra("tutorId", viewedTutorId);
-                    startActivity(intent);
                 });
             }
             // For now, hide hamburger if viewing another's profile to avoid menu confusion
@@ -77,7 +74,6 @@ public class TutorProfileActivity extends AppCompatActivity {
             setupNavigationDrawer();
             updateUIFromSession();
         }
-
     }
 
     private void loadTutorProfile(String tutorId) {

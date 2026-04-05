@@ -79,8 +79,6 @@ public class AdminActivity extends AppCompatActivity {
                 fetchPendingAccounts();
             });
         }
-
-        // Fix: Use the root layout ID for window insets
         View mainView = findViewById(R.id.main_content);
         if (mainView != null) {
             ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
