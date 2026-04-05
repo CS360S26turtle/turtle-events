@@ -1,19 +1,19 @@
 package com.example.peertutoringmarketplace;
 
-import android.content.Intent; // NEW
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View; // NEW
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.FrameLayout; // NEW
-import android.widget.ImageView; // NEW
-import android.widget.LinearLayout; // NEW
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat; // NEW
-import androidx.drawerlayout.widget.DrawerLayout; // NEW
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,10 +30,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private MaterialButton btnSave;
     private FirebaseFirestore db;
     private String userId;
-
-    // --- ADDED FOR HAMBURGER ---
     private DrawerLayout drawerLayout;
-    // ---------------------------
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,74 +47,59 @@ public class UpdateProfileActivity extends AppCompatActivity {
         tvTeachingMode = findViewById(R.id.tv_teaching_mode);
         btnSave = findViewById(R.id.btn_save_profile);
 
-        // --- ADDED FOR HAMBURGER ---
         drawerLayout = findViewById(R.id.drawer_layout);
         ImageView btnHamburger = findViewById(R.id.btn_hamburger);
 
-        btnHamburger.setOnClickListener(v -> {
-            if (drawerLayout != null) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
+        if (btnHamburger != null) {
+            btnHamburger.setOnClickListener(v -> {
+                if (drawerLayout != null) {
+                    drawerLayout.openDrawer(GravityCompat.START);
+                }
+            });
+        }
 
         setupNavigationDrawer();
-        // ---------------------------
-
         setupTeachingModeDropdown();
         loadCurrentData();
 
         btnSave.setOnClickListener(v -> saveProfile());
     }
 
-    // --- ADDED NAVIGATION METHOD ---
     private void setupNavigationDrawer() {
         FrameLayout menuContainer = findViewById(R.id.menu_container);
         if (menuContainer == null) return;
 
-        // Inflate the menu into the drawer
         View menuView = getLayoutInflater().inflate(R.layout.fragment_tutor_menu, menuContainer, false);
         menuContainer.removeAllViews();
         menuContainer.addView(menuView);
 
         TextView menuText = menuView.findViewById(R.id.tv_menu_profile_text);
         if (menuText != null) {
-            menuText.setText("My Profile"); // Change the label only for this activity
+            menuText.setText("My Profile");
         }
 
-        // Find the "Profile" item in the side menu
         LinearLayout menuProfile = menuView.findViewById(R.id.menu_profile);
         if (menuProfile != null) {
             menuProfile.setOnClickListener(v -> {
-                // IMPORTANT: Navigate to My Profile (TutorProfileActivity)
                 Intent intent = new Intent(this, TutorProfileActivity.class);
-                // Clear the stack so you don't have multiple copies of the profile open
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
-
                 drawerLayout.closeDrawer(GravityCompat.START);
-                finish(); // Close the update screen
+                finish();
             });
         }
         LinearLayout menuUpcoming = menuView.findViewById(R.id.menu_upcoming);
         if (menuUpcoming != null) {
             menuUpcoming.setOnClickListener(v -> {
-                // Navigate to UpcomingSessionsActivity
-                Intent intent = new Intent(this, UpcomingSessionsActivity.class);
-                startActivity(intent);
-
-                // Close the drawer before leaving the screen
-                if (drawerLayout != null) {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                }
+                startActivity(new Intent(this, UpcomingSessionsActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
             });
         }
         LinearLayout menuLogout = menuView.findViewById(R.id.menu_logout);
         if (menuLogout != null) {
             menuLogout.setOnClickListener(v -> {
-                // Sign out from Firebase
                 com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
-
-                // Redirect to Login
+                SessionManager.getInstance().logout();
                 Intent intent = new Intent(this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -140,15 +122,12 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         etBio.setText(documentSnapshot.getString("bio"));
-
                         Object rate = documentSnapshot.get("hourlyRate");
                         if (rate != null) etRate.setText(String.valueOf(rate));
-
                         List<String> subjects = (List<String>) documentSnapshot.get("subjects");
                         if (subjects != null) {
                             etSubjects.setText(TextUtils.join(", ", subjects));
                         }
-
                         String mode = documentSnapshot.getString("teachingMode");
                         if (mode != null) tvTeachingMode.setText(mode, false);
                     }
@@ -159,7 +138,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
         final String bio = etBio.getText().toString().trim();
         final String mode = tvTeachingMode.getText().toString();
         String subjectsString = etSubjects.getText().toString().trim();
-
         final List<String> subjectList = Arrays.asList(subjectsString.split("\\s*,\\s*"));
 
         double tempRate = 0.0;
@@ -180,22 +158,15 @@ public class UpdateProfileActivity extends AppCompatActivity {
         db.collection("tutors").document(userId)
                 .set(updates, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> {
-                    SessionManager session = SessionManager.getInstance();
-                    TutorProfile profile = session.getCurrentTutorProfile();
-
-                    if (profile == null) {
-                        profile = new TutorProfile();
-                    }
-
+                    Toast.makeText(this, "Profile Updated!", Toast.LENGTH_SHORT).show();
+                    // Keep the session updated without closing activity
+                    TutorProfile profile = SessionManager.getInstance().getCurrentTutorProfile();
+                    if (profile == null) profile = new TutorProfile();
                     profile.setBio(bio);
                     profile.setHourlyRate(hourlyRate);
                     profile.setSubjects(subjectList);
                     profile.setTeachingMode(mode);
-
-                    session.setCurrentTutorProfile(profile);
-
-                    Toast.makeText(this, "Profile Updated!", Toast.LENGTH_SHORT).show();
-                    finish();
+                    SessionManager.getInstance().setCurrentTutorProfile(profile);
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }

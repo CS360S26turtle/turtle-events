@@ -4,10 +4,16 @@ import java.util.List;
 
 public class StudentProfile {
     private String studentId;
-    private List<String> courses;
-    private String learningStyle;
+    private String bio;
+    private double rating;
+    private int sessionsAttended;
+    private String learningPreference;
     private String academicLevel;
     private String learningGoals;
+    private List<String> courses;
+
+    // Default constructor for Firebase
+    public StudentProfile() {}
 
     public String getStudentId() {
         return studentId;
@@ -17,20 +23,36 @@ public class StudentProfile {
         this.studentId = studentId;
     }
 
-    public List<String> getCourses() {
-        return courses;
+    public String getBio() {
+        return bio;
     }
 
-    public void setCourses(List<String> courses) {
-        this.courses = courses;
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
-    public String getLearningStyle() {
-        return learningStyle;
+    public double getRating() {
+        return rating;
     }
 
-    public void setLearningStyle(String learningStyle) {
-        this.learningStyle = learningStyle;
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public int getSessionsAttended() {
+        return sessionsAttended;
+    }
+
+    public void setSessionsAttended(int sessionsAttended) {
+        this.sessionsAttended = sessionsAttended;
+    }
+
+    public String getLearningPreference() {
+        return learningPreference;
+    }
+
+    public void setLearningPreference(String learningPreference) {
+        this.learningPreference = learningPreference;
     }
 
     public String getAcademicLevel() {
@@ -47,5 +69,13 @@ public class StudentProfile {
 
     public void setLearningGoals(String learningGoals) {
         this.learningGoals = learningGoals;
+    }
+
+    public List<String> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<String> courses) {
+        this.courses = courses;
     }
 }
