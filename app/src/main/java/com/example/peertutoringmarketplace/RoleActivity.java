@@ -80,7 +80,6 @@ public class RoleActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> Toast.makeText(this, "Error checking status", Toast.LENGTH_SHORT).show());
     }
 
-    // Moved your Step 2 logic here to keep it clean
     private void proceedToTutorFlow(String uid, User currentUser, SessionManager sessionManager) {
         TutorProfile profile = sessionManager.getCurrentTutorProfile();
         if (profile != null && profile.getBio() != null && !profile.getBio().trim().isEmpty()) {

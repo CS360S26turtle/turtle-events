@@ -40,15 +40,26 @@ public class TutorVerificationActivity extends AppCompatActivity {
 
     private void saveSubmissionToFirestore(String subjects) {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("hasSubmittedTranscript", true); // This is the flag for RoleActivity
-        data.put("appliedSubjects", subjects);
+        Map<String, Object> pendingData = new HashMap<>();
+        pendingData.put("uid", uid);
+        pendingData.put("subjects", subjects);
+        pendingData.put("transcript", "image_placeholder_url");
 
-        FirebaseFirestore.getInstance().collection("users").document(uid)
-                .update(data)
-                .addOnSuccessListener(aVoid -> showSuccessAndLogout())
-                .addOnFailureListener(e -> Toast.makeText(this, "Error saving request", Toast.LENGTH_SHORT).show());
+        // 1. Add to pendingTutors collection
+        db.collection("pendingTutors").document(uid).set(pendingData)
+                .addOnSuccessListener(aVoid -> {
+                    // 2. Update user status to pending
+                    Map<String, Object> userUpdate = new HashMap<>();
+                    userUpdate.put("hasSubmittedTranscript", true);
+                    userUpdate.put("verificationStatus", "pending");
+                    
+                    db.collection("users").document(uid).update(userUpdate)
+                            .addOnSuccessListener(unused -> showSuccessAndLogout())
+                            .addOnFailureListener(e -> Toast.makeText(this, "Error updating user status", Toast.LENGTH_SHORT).show());
+                })
+                .addOnFailureListener(e -> Toast.makeText(this, "Error submitting application", Toast.LENGTH_SHORT).show());
     }
 
     private void showSuccessAndLogout() {
@@ -57,9 +68,7 @@ public class TutorVerificationActivity extends AppCompatActivity {
                 .setMessage("Your transcript has been sent for verification. You will be logged out now. Please check back later!")
                 .setCancelable(false)
                 .setPositiveButton("OK", (dialog, which) -> {
-                    // Log out
                     FirebaseAuth.getInstance().signOut();
-                    // Go to Login
                     Intent intent = new Intent(TutorVerificationActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
