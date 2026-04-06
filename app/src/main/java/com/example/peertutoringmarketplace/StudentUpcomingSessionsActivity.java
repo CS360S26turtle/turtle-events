@@ -1,3 +1,9 @@
+/**
+ * Displays the currently logged-in student's booked sessions for the selected date.
+ * The activity loads the student's sessions, shows the associated tutor name and
+ * session time, and allows the student to unbook a selected session.
+ */
+
 package com.example.peertutoringmarketplace;
 
 import android.app.AlertDialog;

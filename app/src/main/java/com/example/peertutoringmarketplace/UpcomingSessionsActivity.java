@@ -1,3 +1,9 @@
+/**
+ * Displays a tutor's upcoming sessions and available slots for the selected date.
+ * The activity allows tutors to add new session slots, cancel existing sessions,
+ * and view booking details including the names of booked students.
+ */
+
 package com.example.peertutoringmarketplace;
 
 import android.app.AlertDialog;

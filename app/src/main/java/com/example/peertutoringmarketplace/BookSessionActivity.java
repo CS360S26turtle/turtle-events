@@ -1,3 +1,9 @@
+/**
+ * Allows a student to view a tutor's available time slots for a selected date
+ * and book a session. The activity loads the current student's profile ID,
+ * displays available slots, and creates or updates a session in Firestore
+ * when a booking is confirmed.
+ */
 package com.example.peertutoringmarketplace;
 
 import android.app.AlertDialog;
