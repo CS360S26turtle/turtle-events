@@ -387,7 +387,7 @@ with each other.
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | To Do |
 
 
-### Product Backlog – Project Part 2
+### Product Backlog – Project Part 2 (Halfway)
 | ID | User Story | Priority | Status |
 |----|------------|----------|--------|
 | US 01 - User Registration | As a student, I want to create and edit my profile with my courses, academic level, learning goals/style(in-person, online, visual, auditory etc ) so that tutors can understand my needs. | High | Done |
@@ -463,3 +463,107 @@ with each other.
   <img src="images/UML Diagram - Halfway.png" width="500">
 </p>
 
+
+## Sprint Meetings
+
+### Sprint Planning Meeting 1
+
+#### Date
+March 16, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Discussed which user stories to cover in the half checkpoint
+- Divided the functionality and user stories among the members
+- Discussed basic class structures to work on
+
+#### Action Items
+- [ Maha ] Start work on Authentication
+- [ Sehrish ] Start work on Tutor system
+- [ Esha ] Start work on Tutor Search
+- [ Sehrish ] Start work on Session Bookings + Calender
+- [ Dua ] Start work on Tutor Verification / Admin functionality
+
+---
+
+### Sprint Review 1 and Planning Meeting 2
+
+#### Date
+March 27, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Discussed major blocks in our implementations
+- Created a draft UML diagram to have consistent view of the system so we can work concurrently
+- Clarified doubts about each other's implementations
+- Discussed the design pattern to follow - singleton used to store session instance
+
+#### Action Items
+- [ All ] Continue work on individual parts, ensure github usage to share documents and ensure we are on the same page
+
+---
+
+### Sprint Review 2 and Planning Meeting 3
+
+#### Date
+March 30, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Everyone shared their progress - main UI interfaces setup and navigation implemented, search to be implemented
+- Discussed roadblocks - mainly inconsistencies in firebase structure
+- Discussed firebase implementation + completed firebase setup
+- Ensured everyone followed same firebase structure
+
+#### Action Items
+- [ All ] Continue work on individual parts, ensure integration and github usage to share documents and ensure we are on the same page
+
+---
+
+### Final Sprint Review for halfway
+
+#### Date
+April 6, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Reviewed everyone's progress, all main features implemented
+- Sorted out some minor bugs and tests
+- Finalized documentation
+
+#### Action Items
+- [ ] None
+
+---
