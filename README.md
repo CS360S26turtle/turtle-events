@@ -440,3 +440,19 @@ with each other.
   <img src="images/student_view_tutors_upcoming_halfway.png" width="120">
   <img src="images/student_hamburger_menu_halfway.png" width="120">
 </p>
+
+### Tutor Verification - Tutor Request Submission
+
+<p align="center">
+  <img src="images/tutor_verification_halfway.png" width="80">
+  <img src="images/submit_photo_halfway.png" width="120">
+  <img src="images/verification_confirmation_halfway.png" width="120">
+</p>
+
+### Tutor Verification - Admin View
+
+<p align="center">
+  <img src="images/admin_view_all_halfway.png" width="80">
+  <img src="images/admins_tutor_view_halfway.png" width="120">
+  <img src="images/admin_view_tutors_halfway.png" width="120">
+</p>
