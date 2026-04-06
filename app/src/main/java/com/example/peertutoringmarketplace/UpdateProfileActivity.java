@@ -59,7 +59,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
         setupNavigationDrawer();
         setupTeachingModeDropdown();
-        
+
         // Disable save button until data is loaded to prevent accidental empty saves
         btnSave.setEnabled(false);
         loadCurrentData();
@@ -126,12 +126,12 @@ public class UpdateProfileActivity extends AppCompatActivity {
                         etBio.setText(documentSnapshot.getString("bio"));
                         Object rate = documentSnapshot.get("hourlyRate");
                         if (rate != null) etRate.setText(String.valueOf(rate));
-                        
+
                         List<String> subjects = (List<String>) documentSnapshot.get("subjects");
                         if (subjects != null) {
                             etSubjects.setText(TextUtils.join(", ", subjects));
                         }
-                        
+
                         String mode = documentSnapshot.getString("teachingMode");
                         if (mode != null) tvTeachingMode.setText(mode, false);
                     }
@@ -150,7 +150,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
         final List<String> subjectList = new ArrayList<>();
         if (!subjectsString.isEmpty()) {
-            String[] parts = subjectsString.split("[,;\\n]"); 
+            String[] parts = subjectsString.split("[,;\\n]");
             for (String s : parts) {
                 if (!s.trim().isEmpty()) {
                     subjectList.add(s.trim().toLowerCase());

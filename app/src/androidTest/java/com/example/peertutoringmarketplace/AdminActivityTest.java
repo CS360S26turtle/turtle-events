@@ -11,6 +11,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import androidx.test.espresso.IdlingPolicies;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -22,6 +23,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @RunWith(AndroidJUnit4.class)
@@ -33,6 +35,10 @@ public class AdminActivityTest {
 
     @Before
     public void setUp() {
+        // Increase timeouts for CI environments like GitHub Actions
+        IdlingPolicies.setMasterPolicyTimeout(60, TimeUnit.SECONDS);
+        IdlingPolicies.setIdlingResourceTimeout(60, TimeUnit.SECONDS);
+        
         Intents.init();
         // IMPORTANT: Set session role to admin to ensure TutorAdapter navigates to Detail screen
         User adminUser = new User("test_admin", "admin@test.com", "Admin User", "admin");
@@ -47,6 +53,8 @@ public class AdminActivityTest {
 
     @Test
     public void testUiElementsDisplayed() {
+        // Use a small wait to ensure window focus in CI
+        waitFor(1000);
         onView(withId(R.id.title)).check(matches(isDisplayed()));
         onView(withId(R.id.recyclerViewTutors)).check(matches(isDisplayed()));
         onView(withId(R.id.filterChipGroup)).check(matches(isDisplayed()));
@@ -54,15 +62,16 @@ public class AdminActivityTest {
 
     @Test
     public void testFilterChipsDisplayed() {
+        waitFor(1000);
         onView(withId(R.id.chipAll)).check(matches(isDisplayed()));
         onView(withId(R.id.chipTutors)).check(matches(isDisplayed()));
         onView(withId(R.id.chipStudents)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testPendingCountMatchesData() throws InterruptedException {
-        // Wait for Firebase data to fetch
-        Thread.sleep(3000);
+    public void testPendingCountMatchesData() {
+        // Wait longer for Firebase data in CI
+        waitFor(5000);
 
         activityRule.getScenario().onActivity(activity -> {
             int itemCount = activity.adapter.getItemCount();
@@ -72,12 +81,12 @@ public class AdminActivityTest {
     }
 
     @Test
-    public void testFilterSwitchingUpdatesCount() throws InterruptedException {
-        Thread.sleep(2000);
+    public void testFilterSwitchingUpdatesCount() {
+        waitFor(2000);
 
         // Click Tutors filter
         onView(withId(R.id.chipTutors)).perform(click());
-        Thread.sleep(2000);
+        waitFor(3000); // Wait for filter to apply and Firebase to respond
         
         activityRule.getScenario().onActivity(activity -> {
             String countText = activity.textPendingCount.getText().toString();
@@ -86,9 +95,9 @@ public class AdminActivityTest {
     }
 
     @Test
-    public void testNavigationToDetailActivity() throws InterruptedException {
+    public void testNavigationToDetailActivity() {
         // Wait for list to load
-        Thread.sleep(3000);
+        waitFor(5000);
 
         AtomicInteger itemCount = new AtomicInteger(0);
         activityRule.getScenario().onActivity(activity -> {
@@ -101,6 +110,14 @@ public class AdminActivityTest {
 
             // Verify navigation
             intended(hasComponent(TutorDetailActivity.class.getName()));
+        }
+    }
+
+    private void waitFor(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

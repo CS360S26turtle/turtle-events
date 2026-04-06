@@ -75,7 +75,7 @@ public class TutorDetailActivity extends AppCompatActivity {
                     if (pendingSubjectsString != null) {
                         subjects.setText(pendingSubjectsString);
                     }
-                    
+
                     // Show hidden fields
                     if (labelSubjects != null) labelSubjects.setVisibility(View.VISIBLE);
                     if (subjects != null) subjects.setVisibility(View.VISIBLE);
@@ -113,7 +113,7 @@ public class TutorDetailActivity extends AppCompatActivity {
                     db.collection("tutors").document(uid).set(tutorData)
                             .addOnSuccessListener(aVoid -> {
                                 db.collection("users").document(uid)
-                                        .update("tutorID", uid, 
+                                        .update("tutorID", uid,
                                                 "verificationStatus", "approved",
                                                 "role", "tutor") // Ensure role is updated to tutor
                                         .addOnSuccessListener(unused -> {

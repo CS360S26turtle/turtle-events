@@ -50,7 +50,7 @@ public class RoleActivity extends AppCompatActivity {
     private void handleTutorSelection() {
         SessionManager sessionManager = SessionManager.getInstance();
         User currentUser = sessionManager.getCurrentUser();
-        
+
         if (currentUser == null) {
             Toast.makeText(this, "Session error. Please login again.", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, LoginActivity.class));
@@ -74,7 +74,7 @@ public class RoleActivity extends AppCompatActivity {
                         finish();
                         return;
                     }
-                    
+
                     if ("pending".equalsIgnoreCase(status) && hasSubmitted) {
                         new androidx.appcompat.app.AlertDialog.Builder(RoleActivity.this)
                                 .setTitle("Verification in Progress")
@@ -100,7 +100,7 @@ public class RoleActivity extends AppCompatActivity {
     private void handleStudentSelection() {
         SessionManager sessionManager = SessionManager.getInstance();
         User currentUser = sessionManager.getCurrentUser();
-        
+
         if (currentUser == null) {
             Toast.makeText(this, "Session error. Please login again.", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, LoginActivity.class));

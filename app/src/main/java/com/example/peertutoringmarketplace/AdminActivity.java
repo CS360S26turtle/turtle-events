@@ -50,7 +50,7 @@ public class AdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin);
 
         db = FirebaseFirestore.getInstance();
-        
+
         // Initialize Views
         recyclerView = findViewById(R.id.recyclerViewTutors);
         textPendingCount = findViewById(R.id.textPendingCount);
@@ -129,7 +129,7 @@ public class AdminActivity extends AppCompatActivity {
                             if (user != null) {
                                 if ("admin".equalsIgnoreCase(user.getRole())) continue;
                                 user.setUserID(doc.getId());
-                                
+
                                 if ("all".equals(currentFilter)) {
                                     tutorList.add(user);
                                 } else if ("student".equals(currentFilter) && user.getStudentID() != null) {
@@ -146,8 +146,8 @@ public class AdminActivity extends AppCompatActivity {
         db.collection("users").document(uid).get().addOnSuccessListener(doc -> {
             User user = doc.toObject(User.class);
             if (user != null) {
-                if ("pending".equalsIgnoreCase(user.getVerificationStatus()) && 
-                    !"admin".equalsIgnoreCase(user.getRole())) {
+                if ("pending".equalsIgnoreCase(user.getVerificationStatus()) &&
+                        !"admin".equalsIgnoreCase(user.getRole())) {
                     user.setUserID(doc.getId());
                     tutorList.add(user);
                     updateUI();

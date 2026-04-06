@@ -65,7 +65,7 @@ public class TutorProfileActivity extends AppCompatActivity {
         if (viewedTutorId != null && !viewedTutorId.equals(currentUserId)) {
             // Viewing ANOTHER tutor's profile (likely as a student)
             loadTutorProfile(viewedTutorId);
-            
+
             if (btnBookSession != null) {
                 btnBookSession.setVisibility(View.VISIBLE);
                 btnBookSession.setOnClickListener(v -> {

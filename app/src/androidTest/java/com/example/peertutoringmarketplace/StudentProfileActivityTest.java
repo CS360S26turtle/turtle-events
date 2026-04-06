@@ -15,6 +15,7 @@ import android.content.Intent;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.IdlingPolicies;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,6 +40,10 @@ public class StudentProfileActivityTest {
 
     @Before
     public void setUp() throws InterruptedException {
+        // Increase timeouts for CI
+        IdlingPolicies.setMasterPolicyTimeout(60, TimeUnit.SECONDS);
+        IdlingPolicies.setIdlingResourceTimeout(60, TimeUnit.SECONDS);
+
         db = FirebaseFirestore.getInstance();
         
         // 1. Create a dummy User
@@ -59,7 +64,7 @@ public class StudentProfileActivityTest {
         db.collection("users").document(testUid).set(user).addOnCompleteListener(t -> setupLatch.countDown());
         db.collection("students").document(testStudentId).set(studentData).addOnCompleteListener(t -> setupLatch.countDown());
         
-        setupLatch.await(5, TimeUnit.SECONDS);
+        setupLatch.await(10, TimeUnit.SECONDS);
         
         // 3. Set Session
         SessionManager.getInstance().setCurrentUser(user);
@@ -73,11 +78,11 @@ public class StudentProfileActivityTest {
     }
 
     @Test
-    public void testProfileDataLoads() throws InterruptedException {
+    public void testProfileDataLoads() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), StudentProfileActivity.class);
         try (ActivityScenario<StudentProfileActivity> scenario = ActivityScenario.launch(intent)) {
-            // Wait for fetch
-            Thread.sleep(2000);
+            // Wait for window focus and fetch
+            waitFor(3000);
             
             onView(withId(R.id.student_name)).check(matches(withText("Test Student")));
             onView(withId(R.id.et_student_bio)).check(matches(withText("Initial Bio")));
@@ -90,7 +95,7 @@ public class StudentProfileActivityTest {
     public void testSaveProfileUpdatesFirestore() throws InterruptedException {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), StudentProfileActivity.class);
         try (ActivityScenario<StudentProfileActivity> scenario = ActivityScenario.launch(intent)) {
-            Thread.sleep(2000);
+            waitFor(3000);
 
             // Change bio and academic level
             onView(withId(R.id.et_student_bio)).perform(replaceText("Updated Bio"));
@@ -100,7 +105,7 @@ public class StudentProfileActivityTest {
             onView(withId(R.id.btn_save_student_profile)).perform(scrollTo(), click());
 
             // Wait for Firestore update
-            Thread.sleep(2000);
+            waitFor(5000);
 
             CountDownLatch verifyLatch = new CountDownLatch(1);
             db.collection("students").document(testStudentId).get().addOnSuccessListener(doc -> {
@@ -109,7 +114,15 @@ public class StudentProfileActivityTest {
                 }
             });
 
-            assertTrue("Firestore student profile was not updated", verifyLatch.await(10, TimeUnit.SECONDS));
+            assertTrue("Firestore student profile was not updated", verifyLatch.await(15, TimeUnit.SECONDS));
+        }
+    }
+
+    private void waitFor(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
