@@ -1,14 +1,15 @@
 name: Java CI
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # This allows manual triggering only
 
 jobs:
   build:
+    # macos-latest is required for hardware acceleration (M1/M2 chips)
     runs-on: macos-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
@@ -16,30 +17,32 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      - name: Cache Gradle
-        uses: gradle/actions/setup-gradle@v3
+          cache: gradle
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Run unit tests
-        run: ./gradlew clean testDebugUnitTest
+      - name: Run Unit Tests
+        # Runs tests in src/test/java
+        run: ./gradlew testDebugUnitTest
 
-      - name: Run instrumented tests
+      - name: Run Instrumented Tests
+        # Runs tests in src/androidTest/java (like AdminActivityTest)
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
           target: google_apis
-          arch: x86_64
+          # 'arm64-v8a' is required for the macos-latest Apple Silicon runners
+          arch: arm64-v8a 
           profile: Nexus 6
-          script: ./gradlew connectedAndroidTest
           disable-animations: true
           disk-size: 2048M
           ram-size: 2048M
-          emulator-boot-timeout: 300 
+          emulator-boot-timeout: 300
+          # This runs the actual tests on the emulator
+          script: ./gradlew connectedDebugAndroidTest
 
-      - name: Upload test reports
+      - name: Upload Test Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:

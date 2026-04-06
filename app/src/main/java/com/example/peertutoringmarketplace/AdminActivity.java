@@ -34,10 +34,10 @@ import java.util.List;
 
 public class AdminActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    TutorAdapter adapter;
-    List<User> tutorList;
-    TextView textPendingCount;
+    public RecyclerView recyclerView;
+    public TutorAdapter adapter;
+    public List<User> tutorList;
+    public TextView textPendingCount;
     private FirebaseFirestore db;
     private ImageButton btnLogout;
     private ChipGroup filterChipGroup;
