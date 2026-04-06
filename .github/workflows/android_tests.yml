@@ -23,5 +23,27 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build and run unit tests
+      - name: Run unit tests
         run: ./gradlew clean testDebugUnitTest
+
+      - name: Run instrumented tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          target: google_apis
+          arch: x86_64
+          profile: Nexus 6
+          script: ./gradlew connectedAndroidTest
+          disable-animations: true
+          disk-size: 1024M
+          ram-size: 1024M
+          timeout: 30
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            **/build/reports/tests/
+            **/build/outputs/androidTest-results/
