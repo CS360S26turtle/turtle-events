@@ -7,8 +7,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -24,8 +22,7 @@ public class RegisterAccountActivityTest {
 
     @Test
     public void testEmptyFieldsValidation() {
-        onView(withId(R.id.registerButton)).perform(click());
-
+        onView(withId(R.id.registerButton)).perform(scrollTo(), click());
         onView(withId(R.id.emailEditText))
                 .check(matches(hasErrorText("Email is required")));
     }
@@ -36,14 +33,14 @@ public class RegisterAccountActivityTest {
         onView(withId(R.id.passwordEditText)).perform(typeText("123456"), closeSoftKeyboard());
         onView(withId(R.id.confirmPasswordEditText)).perform(typeText("654321"), closeSoftKeyboard());
         onView(withId(R.id.nameEditText)).perform(typeText("John"), closeSoftKeyboard());
-        onView(withId(R.id.registerButton)).perform(click());
+        onView(withId(R.id.registerButton)).perform(scrollTo(), click());
         onView(withId(R.id.confirmPasswordEditText))
                 .check(matches(hasErrorText("Please re-enter the same password")));
     }
 
     @Test
     public void testBackToLoginNavigation() {
-        onView(withId(R.id.backToLoginText)).perform(click());
+        onView(withId(R.id.backToLoginText)).perform(scrollTo(), click());
         onView(withId(R.id.loginButton)).check(matches(isDisplayed()));
     }
 }
