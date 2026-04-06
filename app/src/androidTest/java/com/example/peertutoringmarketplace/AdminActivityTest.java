@@ -26,6 +26,7 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+//The following test is from Gemini, "Generate tests for AdminActivityUI", 2026-04-04
 @RunWith(AndroidJUnit4.class)
 public class AdminActivityTest {
 

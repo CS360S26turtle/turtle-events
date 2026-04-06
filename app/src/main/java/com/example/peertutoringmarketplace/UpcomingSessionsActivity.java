@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,6 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -152,15 +152,9 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
             TextView tvSeats = convertView.findViewById(R.id.tvSlotSeats);
 
             tvTime.setText(formatTime(item.startTime) + " - " + formatTime(item.endTime));
-
-            int count = item.students == null ? 0 : item.students.size();
-            if (count == 0) {
-                tvSeats.setText("No Bookings");
-            } else if (count == 1) {
-                tvSeats.setText("Booked: 1 student");
-            } else {
-                tvSeats.setText("Booked: " + count + " students");
-            }
+            tvSeats.setText(item.bookedStudentNames == null || item.bookedStudentNames.trim().isEmpty()
+                    ? "No Bookings"
+                    : item.bookedStudentNames);
 
             convertView.setBackground(position == selectedPosition
                     ? getResources().getDrawable(R.drawable.bg_slot_item_selected, null)
@@ -473,6 +467,7 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                         item.startTime = startTs.toDate();
                         item.endTime = endTs.toDate();
                         item.students = new ArrayList<>();
+                        item.bookedStudentNames = "No Bookings";
 
                         db.collection("sessions")
                                 .whereEqualTo("timeSlotId", item.timeSlotId)
@@ -487,14 +482,17 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                                         item.students = students == null ? new ArrayList<>() : students;
                                     }
 
-                                    sessionItems.add(item);
-                                    Collections.sort(sessionItems, Comparator.comparing(a -> a.startTime));
-                                    adapter.notifyDataSetChanged();
+                                    loadStudentNamesForItem(item, () -> {
+                                        sessionItems.add(item);
+                                        Collections.sort(sessionItems, Comparator.comparing(a -> a.startTime));
+                                        adapter.notifyDataSetChanged();
 
-                                    processed[0]++;
-                                    checkDone(slotDocs.size(), processed[0], foundAny[0]);
+                                        processed[0]++;
+                                        checkDone(slotDocs.size(), processed[0], foundAny[0]);
+                                    });
                                 })
                                 .addOnFailureListener(e -> {
+                                    item.bookedStudentNames = "No Bookings";
                                     sessionItems.add(item);
                                     Collections.sort(sessionItems, Comparator.comparing(a -> a.startTime));
                                     adapter.notifyDataSetChanged();
@@ -507,6 +505,95 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Failed to load slots", Toast.LENGTH_SHORT).show()
                 );
+    }
+
+    private void loadStudentNamesForItem(@NonNull SessionListItem item, @NonNull Runnable onDone) {
+        if (item.students == null || item.students.isEmpty()) {
+            item.bookedStudentNames = "No Bookings";
+            onDone.run();
+            return;
+        }
+
+        List<String> names = new ArrayList<>();
+        final int total = item.students.size();
+        final int[] processed = {0};
+
+        for (String studentProfileId : item.students) {
+            if (studentProfileId == null || studentProfileId.trim().isEmpty()) {
+                processed[0]++;
+                if (processed[0] == total) {
+                    item.bookedStudentNames = buildStudentLabel(names);
+                    onDone.run();
+                }
+                continue;
+            }
+
+            db.collection("users")
+                    .whereEqualTo("studentID", studentProfileId)
+                    .limit(1)
+                    .get()
+                    .addOnSuccessListener(userSnap -> {
+                        if (!userSnap.isEmpty()) {
+                            DocumentSnapshot userDoc = userSnap.getDocuments().get(0);
+                            String fullName = userDoc.getString("fullName");
+                            if (fullName != null && !fullName.trim().isEmpty()) {
+                                names.add(fullName.trim());
+                            }
+                        } else {
+                            db.collection("users")
+                                    .whereEqualTo("studentId", studentProfileId)
+                                    .limit(1)
+                                    .get()
+                                    .addOnSuccessListener(userSnap2 -> {
+                                        if (!userSnap2.isEmpty()) {
+                                            DocumentSnapshot userDoc2 = userSnap2.getDocuments().get(0);
+                                            String fullName2 = userDoc2.getString("fullName");
+                                            if (fullName2 != null && !fullName2.trim().isEmpty()) {
+                                                names.add(fullName2.trim());
+                                            }
+                                        }
+                                        processed[0]++;
+                                        if (processed[0] == total) {
+                                            item.bookedStudentNames = buildStudentLabel(names);
+                                            onDone.run();
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        processed[0]++;
+                                        if (processed[0] == total) {
+                                            item.bookedStudentNames = buildStudentLabel(names);
+                                            onDone.run();
+                                        }
+                                    });
+                            return;
+                        }
+
+                        processed[0]++;
+                        if (processed[0] == total) {
+                            item.bookedStudentNames = buildStudentLabel(names);
+                            onDone.run();
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        processed[0]++;
+                        if (processed[0] == total) {
+                            item.bookedStudentNames = buildStudentLabel(names);
+                            onDone.run();
+                        }
+                    });
+        }
+    }
+
+    private String buildStudentLabel(@NonNull List<String> names) {
+        if (names.isEmpty()) {
+            return "No Bookings";
+        }
+
+        int count = names.size();
+        String firstLine = "Booked: " + count + (count == 1 ? " student" : " students");
+        String secondLine = (count == 1 ? "Student: " : "Students: ") + TextUtils.join(", ", names);
+
+        return firstLine + "\n" + secondLine;
     }
 
     private void checkDone(int total, int processed, boolean foundAny) {
@@ -537,6 +624,7 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
         String tutorId;
         String type;
         List<String> students;
+        String bookedStudentNames;
         Date startTime;
         Date endTime;
     }

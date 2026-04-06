@@ -17,11 +17,22 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * This class represents the behavior of the screen when a user registers for a new account through entering a valid email and password.
+ * @author Maha Shabbir
+ */
 public class RegisterAccountActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private TextInputEditText emailEditText, passwordEditText, confirmPasswordEditText, nameEditText;
 
+    /**
+     * This creates the listeners for proper button navigation upon activity creation.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +60,10 @@ public class RegisterAccountActivity extends AppCompatActivity {
         registerButton.setOnClickListener(v -> registerHandler());
     }
 
+    /**
+     * This handles the user input through the screen and ensures all data is in the correct format and then saves it in the database. It
+     * displays the appropriate error messages when necessary
+     */
     private void registerHandler() {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();

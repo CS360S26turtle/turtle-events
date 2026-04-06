@@ -103,7 +103,7 @@ public class TutorProfileActivity extends AppCompatActivity {
                         TutorProfile profile = tutorDoc.toObject(TutorProfile.class);
                         if (profile != null) {
                             if (tvBio != null) tvBio.setText(profile.getBio());
-                            if (tvRate != null) tvRate.setText("$" + profile.getHourlyRate());
+                            if (tvRate != null) tvRate.setText("PKR " + profile.getHourlyRate());
                             if (tvTeachingMode != null && profile.getTeachingMode() != null) {
                                 tvTeachingMode.setText(profile.getTeachingMode());
                             }
@@ -226,7 +226,7 @@ public class TutorProfileActivity extends AppCompatActivity {
 
         if (profile != null) {
             if (tvBio != null) tvBio.setText(profile.getBio());
-            if (tvRate != null) tvRate.setText("$" + profile.getHourlyRate());
+            if (tvRate != null) tvRate.setText("PKR " + profile.getHourlyRate());
             if (tvTeachingMode != null && profile.getTeachingMode() != null) {
                 tvTeachingMode.setText(profile.getTeachingMode());
             }

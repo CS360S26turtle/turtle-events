@@ -85,7 +85,9 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
                 TextView tvSeats = convertView.findViewById(R.id.tvSlotSeats);
 
                 tvTime.setText(formatTime(item.startTime) + " - " + formatTime(item.endTime));
-                tvSeats.setText("Tap to select");
+                tvSeats.setText("Tutor: " + (item.tutorName == null || item.tutorName.trim().isEmpty()
+                        ? "Tutor"
+                        : item.tutorName));
 
                 if (position == selectedPosition) {
                     convertView.setBackgroundResource(R.drawable.bg_slot_item_selected);
@@ -189,6 +191,7 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
 
                     for (DocumentSnapshot sessionDoc : docs) {
                         String timeSlotId = sessionDoc.getString("timeSlotId");
+                        String tutorId = sessionDoc.getString("tutorId");
 
                         if (timeSlotId == null) {
                             processed[0]++;
@@ -209,16 +212,24 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
                                             if (c.get(Calendar.YEAR) == selectedYear
                                                     && c.get(Calendar.MONTH) == selectedMonth
                                                     && c.get(Calendar.DAY_OF_MONTH) == selectedDay) {
+
                                                 foundAny[0] = true;
 
                                                 SessionListItem item = new SessionListItem();
                                                 item.sessionId = sessionDoc.getId();
                                                 item.timeSlotId = timeSlotId;
+                                                item.tutorId = tutorId;
                                                 item.startTime = startTs.toDate();
                                                 item.endTime = endTs.toDate();
 
-                                                sessionItems.add(item);
-                                                adapter.notifyDataSetChanged();
+                                                loadTutorNameForItem(item, () -> {
+                                                    sessionItems.add(item);
+                                                    adapter.notifyDataSetChanged();
+
+                                                    processed[0]++;
+                                                    checkDone(docs.size(), processed[0], foundAny[0]);
+                                                });
+                                                return;
                                             }
                                         }
                                     }
@@ -235,6 +246,25 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Failed to load sessions", Toast.LENGTH_SHORT).show()
                 );
+    }
+
+    private void loadTutorNameForItem(@NonNull SessionListItem item, @NonNull Runnable onDone) {
+        if (item.tutorId == null || item.tutorId.trim().isEmpty()) {
+            item.tutorName = "Tutor";
+            onDone.run();
+            return;
+        }
+
+        db.collection("users").document(item.tutorId).get()
+                .addOnSuccessListener(userDoc -> {
+                    String fullName = userDoc.getString("fullName");
+                    item.tutorName = (fullName == null || fullName.trim().isEmpty()) ? "Tutor" : fullName.trim();
+                    onDone.run();
+                })
+                .addOnFailureListener(e -> {
+                    item.tutorName = "Tutor";
+                    onDone.run();
+                });
     }
 
     private void unbookSession(SessionListItem item) {
@@ -305,6 +335,8 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
     private static class SessionListItem {
         String sessionId;
         String timeSlotId;
+        String tutorId;
+        String tutorName;
         Date startTime;
         Date endTime;
     }

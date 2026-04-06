@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+//The following test is from Gemini, "Generate tests for StudentProfileActivity", 2026-04-04
 @RunWith(AndroidJUnit4.class)
 public class StudentProfileActivityTest {
 
