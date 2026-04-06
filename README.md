@@ -146,7 +146,7 @@ Sunday, March 7, 2026
 ### Meeting – Mar 16th, 2026
 
 #### Date
-Monday, February 16, 2026
+Monday, March 16, 2026
 
 #### Attendance
 - Dua
@@ -173,6 +173,40 @@ Monday, February 16, 2026
 
 #### Action Items
 - [ ] 
+- [ ] 
+
+---
+
+### Meeting – Mar 30th, 2026
+
+#### Date
+Monday, March 30, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Discussed progress of current phase
+- Overviewed blockers, challenges, and next steps.
+
+
+
+#### Prepared Questions & Decisions
+
+**No major issues**
+
+#### General Notes
+
+---
+
+#### Action Items
+- Finalize halfway-point features 
 - [ ] 
 
 ---
