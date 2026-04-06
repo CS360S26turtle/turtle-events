@@ -413,7 +413,7 @@ with each other.
 ### Login and Role Selection
 
 <p align="center">
-  <img src="images/login_page_halfway.png" width="80">
+  <img src="images/login_page_halfway.png" width="120">
   <img src="images/forget_password_page_halfway.png" width="120">
   <img src="images/create_account_page_halfway.png" width="120">
   <img src="images/role_page_halfway.png" width="120">
@@ -422,7 +422,7 @@ with each other.
 ### Tutor Flow
 
 <p align="center">
-  <img src="images/update_profile_page_halfway.png" width="80">
+  <img src="images/update_profile_page_halfway.png" width="120">
   <img src="images/tutor_upcoming_session_page_halfway.png" width="120">
   <img src="images/tutor_add_session_halfway.png" width="120">
   <img src="images/add_time_halfway.png" width="120">
@@ -433,7 +433,7 @@ with each other.
 ### Student Flow
 
 <p align="center">
-  <img src="images/student_profile_page_halfway.png" width="80">
+  <img src="images/student_profile_page_halfway.png" width="120">
   <img src="images/search_tutors_halfway.png" width="120">
   <img src="images/search_tutors_after_search_halfway.png" width="120">
   <img src="images/searched_tutor_halfway.png" width="120">
@@ -444,7 +444,7 @@ with each other.
 ### Tutor Verification - Tutor Request Submission
 
 <p align="center">
-  <img src="images/tutor_verification_halfway.png" width="80">
+  <img src="images/tutor_verification_halfway.png" width="120">
   <img src="images/submit_photo_halfway.png" width="120">
   <img src="images/verification_confirmation_halfway.png" width="120">
 </p>
@@ -452,7 +452,14 @@ with each other.
 ### Tutor Verification - Admin View
 
 <p align="center">
-  <img src="images/admin_view_all_halfway.png" width="80">
+  <img src="images/admin_view_all_halfway.png" width="120">
   <img src="images/admins_tutor_view_halfway.png" width="120">
   <img src="images/admin_view_tutors_halfway.png" width="120">
 </p>
+
+## UML Diagram - Halfway
+
+<p align="center">
+  <img src="images/UML Diagram - Halfway.png" width="500">
+</p>
+
