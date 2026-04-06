@@ -75,7 +75,7 @@ public class SearchTutorActivity extends AppCompatActivity {
                                         User user = userDoc.toObject(User.class);
                                         if (user != null && "approved".equalsIgnoreCase(user.getVerificationStatus())) {
                                             user.setUserID(userDoc.getId());
-                                            
+
                                             // 3. Avoid duplicates and add to list
                                             boolean exists = false;
                                             for(User u : tutorList) {

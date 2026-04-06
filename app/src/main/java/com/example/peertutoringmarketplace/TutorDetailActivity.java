@@ -1,3 +1,11 @@
+/**
+ * TutorDetailActivity displays detailed information about a tutor application (email, subjects, transcript)
+ * and allows the admin to approve or reject the request.
+ *
+ * Design: Acts as a controller between Firebase data and the UI.
+ * Known Issue: Multiple async operations may lead to delayed or repeated UI updates.
+ */
+
 package com.example.peertutoringmarketplace;
 
 import android.content.Intent;
@@ -67,7 +75,7 @@ public class TutorDetailActivity extends AppCompatActivity {
                     if (pendingSubjectsString != null) {
                         subjects.setText(pendingSubjectsString);
                     }
-                    
+
                     // Show hidden fields
                     if (labelSubjects != null) labelSubjects.setVisibility(View.VISIBLE);
                     if (subjects != null) subjects.setVisibility(View.VISIBLE);
@@ -86,11 +94,11 @@ public class TutorDetailActivity extends AppCompatActivity {
                 if (uid != null) {
                     List<String> subjectList = new ArrayList<>();
                     if (pendingSubjectsString != null && !pendingSubjectsString.trim().isEmpty()) {
-                        // Split by comma and trim each subject
+                        // Split by comma and trim each subject, converting to lowercase for search relevance
                         String[] parts = pendingSubjectsString.split(",");
                         for (String s : parts) {
                             if (!s.trim().isEmpty()) {
-                                subjectList.add(s.trim());
+                                subjectList.add(s.trim().toLowerCase());
                             }
                         }
                     }
@@ -105,7 +113,7 @@ public class TutorDetailActivity extends AppCompatActivity {
                     db.collection("tutors").document(uid).set(tutorData)
                             .addOnSuccessListener(aVoid -> {
                                 db.collection("users").document(uid)
-                                        .update("tutorID", uid, 
+                                        .update("tutorID", uid,
                                                 "verificationStatus", "approved",
                                                 "role", "tutor") // Ensure role is updated to tutor
                                         .addOnSuccessListener(unused -> {
