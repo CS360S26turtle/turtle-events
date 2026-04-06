@@ -7,8 +7,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -25,29 +23,29 @@ public class LoginActivityTest {
     @Test
     public void testEmptyEmailShowsError() {
         onView(withId(R.id.passwordEditText)).perform(typeText("123456"), closeSoftKeyboard());
-        onView(withId(R.id.loginButton)).perform(click());
+        onView(withId(R.id.loginButton)).perform(scrollTo(), click());
         onView(withId(R.id.emailEditText))
                 .check(matches(hasErrorText("Email is required")));
     }
-    
+
     @Test
     public void testInvalidEmailFormat() {
         onView(withId(R.id.emailEditText)).perform(typeText("invalid"), closeSoftKeyboard());
         onView(withId(R.id.passwordEditText)).perform(typeText("123456"), closeSoftKeyboard());
-        onView(withId(R.id.loginButton)).perform(click());
+        onView(withId(R.id.loginButton)).perform(scrollTo(), click());
         onView(withId(R.id.emailEditText))
                 .check(matches(hasErrorText("Please enter a valid email address")));
     }
 
     @Test
     public void testNavigateToRegister() {
-        onView(withId(R.id.registerText)).perform(click());
+        onView(withId(R.id.registerText)).perform(scrollTo(), click());
         onView(withId(R.id.registerButton)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testNavigateToForgotPassword() {
-        onView(withId(R.id.forgotPasswordText)).perform(click());
+        onView(withId(R.id.forgotPasswordText)).perform(scrollTo(), click());
         onView(withId(R.id.resetButton)).check(matches(isDisplayed()));
     }
 }
