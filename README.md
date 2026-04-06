@@ -407,3 +407,36 @@ with each other.
 | US 16 - Reporting | As a student or tutor, I want to be able to report inappropriate behavior so that the platform maintains safety and accountability. | High | To Do |
 | US 17 - Tutor Verification | As an administrator, I want to verify tutor credentials, so that the platform maintains quality and trust. | High | Done |
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | To Do |
+
+## UI interface - Halfway
+
+### Login and Role Selection
+
+<p align="center">
+  <img src="images/login_page_halfway.png" width="80">
+  <img src="images/forget_password_page_halfway.png" width="120">
+  <img src="images/create_account_page_halfway.png" width="120">
+  <img src="images/role_page_halfway.png" width="120">
+</p>
+
+### Tutor Flow
+
+<p align="center">
+  <img src="images/update_profile_page_halfway.png" width="80">
+  <img src="images/tutor_upcoming_session_page_halfway.png" width="120">
+  <img src="images/tutor_add_session_halfway.png" width="120">
+  <img src="images/add_time_halfway.png" width="120">
+  <img src="images/tutor_my_profile_page_halfway.png" width="120">
+  <img src="images/tutor_hamburger_menu_halfway.png" width="120">
+</p>
+
+### Student Flow
+
+<p align="center">
+  <img src="images/student_profile_page_halfway.png" width="80">
+  <img src="images/search_tutors_halfway.png" width="120">
+  <img src="images/search_tutors_after_search_halfway.png" width="120">
+  <img src="images/searched_tutor_halfway.png" width="120">
+  <img src="images/student_view_tutors_upcoming_halfway.png" width="120">
+  <img src="images/student_hamburger_menu_halfway.png" width="120">
+</p>
