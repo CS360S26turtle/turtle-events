@@ -4,6 +4,16 @@ import android.util.Log;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 
+/**
+ * SessionManager is a singleton class responsible for managing the global state of the application.
+ * It maintains information about the currently logged-in user, their active role, and their 
+ * tutor profile if applicable.
+ * 
+ * <p>The class also handles real-time synchronization with Firebase Firestore by attaching 
+ * snapshot listeners to the user and tutor documents.</p>
+ * 
+ * Design Pattern: Singleton
+ */
 public class SessionManager {
     private static SessionManager instance;
     private User currentUser;
@@ -13,8 +23,16 @@ public class SessionManager {
     private ListenerRegistration userListener;
     private ListenerRegistration tutorListener;
 
+    /**
+     * Private constructor to prevent direct instantiation.
+     */
     private SessionManager() {}
 
+    /**
+     * Returns the single instance of SessionManager.
+     * 
+     * @return The singleton instance.
+     */
     public static synchronized SessionManager getInstance() {
         if (instance == null) {
             instance = new SessionManager();
@@ -22,6 +40,11 @@ public class SessionManager {
         return instance;
     }
 
+    /**
+     * Sets the current user and begins listening for real-time updates from Firestore.
+     * 
+     * @param user The User object representing the logged-in user.
+     */
     public void setCurrentUser(User user) {
         this.currentUser = user;
         if (user != null) {
@@ -34,6 +57,11 @@ public class SessionManager {
         }
     }
 
+    /**
+     * Attaches a real-time listener to the user document in Firestore.
+     * 
+     * @param uid The unique identifier of the user.
+     */
     private void startListening(String uid) {
         if (userListener != null) userListener.remove();
         userListener = FirebaseFirestore.getInstance().collection("users").document(uid)
@@ -55,6 +83,11 @@ public class SessionManager {
                 });
     }
 
+    /**
+     * Attaches a real-time listener to the tutor document in Firestore.
+     * 
+     * @param tutorId The unique identifier of the tutor profile.
+     */
     private void listenToTutor(String tutorId) {
         if (tutorListener != null) tutorListener.remove();
         tutorListener = FirebaseFirestore.getInstance().collection("tutors").document(tutorId)
@@ -68,6 +101,9 @@ public class SessionManager {
                 });
     }
 
+    /**
+     * Removes all active Firestore listeners and clears them.
+     */
     private void stopListening() {
         if (userListener != null) userListener.remove();
         if (tutorListener != null) tutorListener.remove();
@@ -75,22 +111,45 @@ public class SessionManager {
         tutorListener = null;
     }
 
+    /**
+     * Retrieves the current User object.
+     * 
+     * @return The current User or null if no session is active.
+     */
     public User getCurrentUser() {
         return currentUser;
     }
 
+    /**
+     * Returns the unique ID of the currently logged-in user.
+     * 
+     * @return The user UID or null.
+     */
     public String getCurrentUserId() {
         return (currentUser != null) ? currentUser.getUserID() : null;
     }
 
+    /**
+     * Retrieves the current role (e.g., student, tutor, admin).
+     * 
+     * @return The current active role.
+     */
     public String getCurrentRole() {
         return currentRole;
     }
 
+    /**
+     * Updates the current active role.
+     * 
+     * @param role The role name to set.
+     */
     public void setCurrentRole(String role) {
         this.currentRole = role;
     }
 
+    /**
+     * Terminates the current session by stopping listeners and clearing all cached data.
+     */
     public void logout() {
         stopListening();
         currentUser = null;
@@ -98,10 +157,20 @@ public class SessionManager {
         currentTutorProfile = null;
     }
 
+    /**
+     * Sets the tutor profile for the current session.
+     * 
+     * @param profile The TutorProfile object.
+     */
     public void setCurrentTutorProfile(TutorProfile profile) {
         this.currentTutorProfile = profile;
     }
 
+    /**
+     * Retrieves the current tutor profile data.
+     * 
+     * @return The TutorProfile object or null.
+     */
     public TutorProfile getCurrentTutorProfile() {
         return currentTutorProfile;
     }
