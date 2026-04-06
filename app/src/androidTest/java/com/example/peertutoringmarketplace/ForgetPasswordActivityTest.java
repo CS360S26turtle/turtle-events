@@ -22,15 +22,16 @@ public class ForgetPasswordActivityTest {
 
     @Test
     public void testInvalidEmail() {
-        onView(withId(R.id.emailEditText)).perform(typeText("invalid"), closeSoftKeyboard());
-        onView(withId(R.id.resetButton)).perform(scrollTo(), click());
+        onView(withId(R.id.emailEditText)).perform(typeText("invalid"));
+        onView(withId(R.id.resetButton)).perform(click());
+
         onView(withId(R.id.emailEditText))
                 .check(matches(hasErrorText("Please enter a valid email address")));
     }
 
     @Test
     public void testBackToLogin() {
-        onView(withId(R.id.backToLoginText)).perform(scrollTo(), click());
+        onView(withId(R.id.backToLoginText)).perform(click());
         onView(withId(R.id.loginButton)).check(matches(isDisplayed()));
     }
 }
