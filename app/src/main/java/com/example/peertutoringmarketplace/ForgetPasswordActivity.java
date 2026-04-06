@@ -19,11 +19,24 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * This class represents the behavior of the screen when a user clicks "forgot password". It allows user's to reset password through email
+ * to enable sign-in
+ * @author Maha Shabbir
+ */
 public class ForgetPasswordActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private TextInputEditText emailEditText;
 
+
+    /**
+     * This allows interaction between front-end and back-end by accepting an email and sending a reset password request on email.
+     * The user is also present with a back button option which returns to the LoginActivity screen.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

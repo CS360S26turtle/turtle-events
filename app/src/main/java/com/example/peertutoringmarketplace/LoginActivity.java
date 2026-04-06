@@ -17,12 +17,26 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * This class represents the behavior of the screen when a user first opens up the application. It takes in an email and password to sign in.
+ * If either are invalid (invalid email format, non-existent account, wrong password), login is prevented. From this screen, users can navigate
+ * to reset password or create a new account.
+ * @author Maha Shabbir
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private TextInputEditText emailEditText, passwordEditText;
 
+    /**
+     * This describes behavior upon creation of activity with input text boxes and buttons. It implements the navigation between
+     * buttons to different screens.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +76,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This handles user input when logging in. It validates text input and sends the appropriate error messages for invalid input.
+     * It authenticates input with FireBase database.
+     */
     private void loginUser() {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
@@ -90,6 +108,11 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * This starts a session to help with navigating to the screens after login. It handles the necessary logic along with appropriate
+     * error messages and logging.
+     * @param uid
+     */
     private void fetchUserDataAndSetSession(String uid) {
         db.collection("users").document(uid).get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -134,6 +157,10 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * This helps navigate to the correct activity based on role (admin vs other)
+     * @param role
+     */
     private void navigateBasedOnRole(String role) {
         if ("admin".equalsIgnoreCase(role)) {
             startActivity(new Intent(LoginActivity.this, AdminActivity.class));
