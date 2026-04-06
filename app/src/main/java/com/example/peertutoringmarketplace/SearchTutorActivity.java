@@ -55,8 +55,7 @@ public class SearchTutorActivity extends AppCompatActivity {
         tutorList.clear();
         adapter.notifyDataSetChanged();
 
-        // Query tutors collection for subjects containing the search term
-        // Note: Firestore's whereArrayContains is case-sensitive.
+        // 1. Search the 'tutors' collection for the subject
         db.collection("tutors")
                 .whereArrayContains("subjects", subject)
                 .get()
@@ -69,16 +68,18 @@ public class SearchTutorActivity extends AppCompatActivity {
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         String tutorId = doc.getId();
 
-                        // Fetch the user details to ensure they are approved and to get their name/email
+                        // 2. For each tutor found, fetch their details from 'users' to ensure they are approved
                         db.collection("users").document(tutorId).get()
                                 .addOnSuccessListener(userDoc -> {
                                     if (userDoc.exists()) {
                                         User user = userDoc.toObject(User.class);
                                         if (user != null && "approved".equalsIgnoreCase(user.getVerificationStatus())) {
-                                            // Check if user is already in list to avoid duplicates (though unlikely with ID keys)
+                                            user.setUserID(userDoc.getId());
+                                            
+                                            // 3. Avoid duplicates and add to list
                                             boolean exists = false;
                                             for(User u : tutorList) {
-                                                if(u.getUserID().equals(user.getUserID())) {
+                                                if(u.getUserID() != null && u.getUserID().equals(user.getUserID())) {
                                                     exists = true;
                                                     break;
                                                 }

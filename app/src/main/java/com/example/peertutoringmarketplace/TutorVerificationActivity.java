@@ -44,17 +44,18 @@ public class TutorVerificationActivity extends AppCompatActivity {
 
         Map<String, Object> pendingData = new HashMap<>();
         pendingData.put("uid", uid);
-        pendingData.put("subjects", subjects);
+        pendingData.put("subjects", subjects); // Original casing for Admin display
         pendingData.put("transcript", "image_placeholder_url");
 
-        // 1. Add to pendingTutors collection
+        // 1. Add to pendingTutors collection for Admin Panel
         db.collection("pendingTutors").document(uid).set(pendingData)
                 .addOnSuccessListener(aVoid -> {
-                    // 2. Update user status to pending
+                    // 2. Update user status and add lowercase subjects for search integration
                     Map<String, Object> userUpdate = new HashMap<>();
                     userUpdate.put("hasSubmittedTranscript", true);
                     userUpdate.put("verificationStatus", "pending");
-                    
+                    userUpdate.put("appliedSubjects", subjects.toLowerCase()); // Snippet integration
+
                     db.collection("users").document(uid).update(userUpdate)
                             .addOnSuccessListener(unused -> showSuccessAndLogout())
                             .addOnFailureListener(e -> Toast.makeText(this, "Error updating user status", Toast.LENGTH_SHORT).show());

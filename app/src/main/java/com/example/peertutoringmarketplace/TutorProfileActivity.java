@@ -36,6 +36,7 @@ public class TutorProfileActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         viewedTutorId = getIntent().getStringExtra("tutorId");
+        String currentUserId = SessionManager.getInstance().getCurrentUserId();
 
         // 1. Initialize Views
         tvName = findViewById(R.id.tutor_name);
@@ -49,6 +50,7 @@ public class TutorProfileActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         ivMenuHamburger = findViewById(R.id.btn_hamburger);
 
+        // Always setup the hamburger to open the drawer
         if (ivMenuHamburger != null) {
             ivMenuHamburger.setOnClickListener(v -> {
                 if (drawerLayout != null) {
@@ -57,27 +59,32 @@ public class TutorProfileActivity extends AppCompatActivity {
             });
         }
 
-        if (viewedTutorId != null && !viewedTutorId.equals(SessionManager.getInstance().getCurrentUserId())) {
-            // Viewing another tutor's profile (likely as a student)
+        // Setup Navigation Drawer based on CURRENT user's role
+        setupNavigationDrawer();
+
+        if (viewedTutorId != null && !viewedTutorId.equals(currentUserId)) {
+            // Viewing ANOTHER tutor's profile (likely as a student)
             loadTutorProfile(viewedTutorId);
+            
             if (btnBookSession != null) {
                 btnBookSession.setVisibility(View.VISIBLE);
                 btnBookSession.setOnClickListener(v -> {
-                    Intent intent = new Intent(TutorProfileActivity.this, BookSessionActivity.class);
-                    intent.putExtra("tutorId", viewedTutorId);
-                    startActivity(intent);
+                    String role = SessionManager.getInstance().getCurrentRole();
+                    // ONLY allow booking if the current user is a student
+                    if ("student".equalsIgnoreCase(role)) {
+                        Intent intent = new Intent(TutorProfileActivity.this, BookSessionActivity.class);
+                        intent.putExtra("tutorId", viewedTutorId);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(this, "Only students can book sessions", Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
-            // For now, hide hamburger if viewing another's profile to avoid menu confusion
-            if (ivMenuHamburger != null) ivMenuHamburger.setVisibility(View.GONE);
-            if (drawerLayout != null) drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         } else {
-            // Viewing own profile
+            // Viewing OWN profile (as a tutor)
             if (btnBookSession != null) btnBookSession.setVisibility(View.GONE);
-            setupNavigationDrawer();
             updateUIFromSession();
         }
-
     }
 
     private void loadTutorProfile(String tutorId) {
@@ -97,7 +104,9 @@ public class TutorProfileActivity extends AppCompatActivity {
                         if (profile != null) {
                             if (tvBio != null) tvBio.setText(profile.getBio());
                             if (tvRate != null) tvRate.setText("$" + profile.getHourlyRate());
-                            if (tvTeachingMode != null) tvTeachingMode.setText(profile.getTeachingMode());
+                            if (tvTeachingMode != null && profile.getTeachingMode() != null) {
+                                tvTeachingMode.setText(profile.getTeachingMode());
+                            }
                             updateSubjectChips(profile.getSubjects());
                         }
                     }
@@ -109,15 +118,29 @@ public class TutorProfileActivity extends AppCompatActivity {
         FrameLayout menuContainer = findViewById(R.id.menu_container);
         if (menuContainer == null) return;
 
-        // Force Tutor menu for TutorProfileActivity since it's the Tutor's domain
-        View menuView = getLayoutInflater().inflate(R.layout.fragment_tutor_menu, menuContainer, false);
+        String role = SessionManager.getInstance().getCurrentRole();
+        int menuLayoutRes = "tutor".equalsIgnoreCase(role) ? R.layout.fragment_tutor_menu : R.layout.fragment_student_menu;
+
+        View menuView = getLayoutInflater().inflate(menuLayoutRes, menuContainer, false);
         menuContainer.removeAllViews();
         menuContainer.addView(menuView);
 
-        setupTutorMenu(menuView);
+        if ("tutor".equalsIgnoreCase(role)) {
+            setupTutorMenu(menuView);
+        } else {
+            setupStudentMenu(menuView);
+        }
     }
 
     private void setupTutorMenu(View menuView) {
+        LinearLayout menuStudents = menuView.findViewById(R.id.menu_students);
+        if (menuStudents != null) {
+            menuStudents.setOnClickListener(v -> {
+                Toast.makeText(this, "My Students feature coming soon!", Toast.LENGTH_SHORT).show();
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });
+        }
+
         LinearLayout menuProfile = menuView.findViewById(R.id.menu_profile);
         if (menuProfile != null) {
             menuProfile.setOnClickListener(v -> {
@@ -125,6 +148,7 @@ public class TutorProfileActivity extends AppCompatActivity {
                 drawerLayout.closeDrawer(GravityCompat.START);
             });
         }
+
         LinearLayout menuUpcoming = menuView.findViewById(R.id.menu_upcoming);
         if (menuUpcoming != null) {
             menuUpcoming.setOnClickListener(v -> {
@@ -132,6 +156,45 @@ public class TutorProfileActivity extends AppCompatActivity {
                 drawerLayout.closeDrawer(GravityCompat.START);
             });
         }
+
+        LinearLayout menuLogout = menuView.findViewById(R.id.menu_logout);
+        if (menuLogout != null) {
+            menuLogout.setOnClickListener(v -> {
+                com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
+                SessionManager.getInstance().logout();
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            });
+        }
+    }
+
+    private void setupStudentMenu(View menuView) {
+        LinearLayout menuTutors = menuView.findViewById(R.id.menu_tutors);
+        if (menuTutors != null) {
+            menuTutors.setOnClickListener(v -> {
+                startActivity(new Intent(this, SearchTutorActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });
+        }
+
+        LinearLayout menuUpcoming = menuView.findViewById(R.id.menu_upcoming);
+        if (menuUpcoming != null) {
+            menuUpcoming.setOnClickListener(v -> {
+                startActivity(new Intent(this, StudentUpcomingSessionsActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });
+        }
+
+        LinearLayout menuSettings = menuView.findViewById(R.id.menu_settings);
+        if (menuSettings != null) {
+            menuSettings.setOnClickListener(v -> {
+                Toast.makeText(this, "Settings feature coming soon!", Toast.LENGTH_SHORT).show();
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });
+        }
+
         LinearLayout menuLogout = menuView.findViewById(R.id.menu_logout);
         if (menuLogout != null) {
             menuLogout.setOnClickListener(v -> {

@@ -46,15 +46,32 @@ public class TimeSlot {
     /**
      * @param endTime The end time to set.
      */
-    public void setEndTime(Date endTime) { this.endTime = endTime; }
+    public void setEndTime(Date endTime)
+    {
+        this.endTime = endTime;
+    }
 
     /**
      * @return The maximum number of students allowed in this slot.
      */
-    public int getMaxCapacity() { return maxCapacity; }
+    public int getMaxCapacity()
+    {
+        return maxCapacity;
+    }
 
     /**
      * @param maxCapacity The capacity to set.
      */
-    public void setMaxCapacity(int maxCapacity) { this.maxCapacity = maxCapacity; }
+    public void setMaxCapacity(int maxCapacity)
+    {
+        this.maxCapacity = maxCapacity;
+    }
+
+    public String getTutorId() {
+        return tutorId;
+    }
+
+    public void setTutorId(String tutorId) {
+        this.tutorId = tutorId;
+    }
 }

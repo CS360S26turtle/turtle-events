@@ -19,6 +19,7 @@ public class User {
     private String tutorID;
     private String role;
     private String verificationStatus;
+    private List<String> subjects;
     private List<String> sessions;
 
     /**
@@ -119,10 +120,31 @@ public class User {
     /**
      * @return List of session IDs associated with the user.
      */
-    public List<String> getSessions() { return sessions; }
+    public List<String> getSessions()
+    {
+        return sessions;
+    }
 
     /**
      * @param sessions List of session IDs to set.
      */
-    public void setSessions(List<String> sessions) { this.sessions = sessions; }
+    public void setSessions(List<String> sessions)
+    {
+        this.sessions = sessions;
+    }
+
+    /**
+     * @return List of subjects associated with the user.
+     */
+    public List<String> getSubjects() {
+        return subjects;
+    }
+
+    /**
+     * @param subjects List of subjects to set.
+     */
+    public void setSubjects(List<String> subjects) {
+        this.subjects = subjects;
+    }
+
 }

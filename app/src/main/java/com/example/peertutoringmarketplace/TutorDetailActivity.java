@@ -94,11 +94,11 @@ public class TutorDetailActivity extends AppCompatActivity {
                 if (uid != null) {
                     List<String> subjectList = new ArrayList<>();
                     if (pendingSubjectsString != null && !pendingSubjectsString.trim().isEmpty()) {
-                        // Split by comma and trim each subject
+                        // Split by comma and trim each subject, converting to lowercase for search relevance
                         String[] parts = pendingSubjectsString.split(",");
                         for (String s : parts) {
                             if (!s.trim().isEmpty()) {
-                                subjectList.add(s.trim());
+                                subjectList.add(s.trim().toLowerCase());
                             }
                         }
                     }
