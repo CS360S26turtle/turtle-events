@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout
@@ -35,9 +35,9 @@ jobs:
           profile: Nexus 6
           script: ./gradlew connectedAndroidTest
           disable-animations: true
-          disk-size: 1024M
-          ram-size: 1024M
-          timeout: 30
+          disk-size: 2048M
+          ram-size: 2048M
+          emulator-boot-timeout: 300 
 
       - name: Upload test reports
         if: always()
