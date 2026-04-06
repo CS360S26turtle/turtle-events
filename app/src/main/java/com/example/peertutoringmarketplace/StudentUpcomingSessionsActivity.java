@@ -310,9 +310,25 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
         menuContainer.removeAllViews();
         menuContainer.addView(menuView);
 
+        LinearLayout menuTutors = menuView.findViewById(R.id.menu_tutors);
+        if (menuTutors != null) {
+            menuTutors.setOnClickListener(v -> {
+                startActivity(new Intent(this, SearchTutorActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });
+        }
+
         LinearLayout menuUpcoming = menuView.findViewById(R.id.menu_upcoming);
         if (menuUpcoming != null) {
             menuUpcoming.setOnClickListener(v -> drawerLayout.closeDrawer(GravityCompat.START));
+        }
+
+        LinearLayout menuSettings = menuView.findViewById(R.id.menu_settings);
+        if (menuSettings != null) {
+            menuSettings.setOnClickListener(v -> {
+                startActivity(new Intent(this, StudentProfileActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });
         }
 
         LinearLayout menuLogout = menuView.findViewById(R.id.menu_logout);

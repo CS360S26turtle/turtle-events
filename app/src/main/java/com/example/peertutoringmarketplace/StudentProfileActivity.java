@@ -1,3 +1,11 @@
+/**
+ * StudentProfileActivity allows students to view and edit their profile
+ * information, including preferences, goals, and enrolled courses.
+ *
+ * Design: Acts as a controller between Firebase data and the UI.
+ * Known Issue: Need to add further validation; May allow incomplete or inconsistent input.
+ */
+
 package com.example.peertutoringmarketplace;
 
 import android.content.Intent;
@@ -104,7 +112,7 @@ public class StudentProfileActivity extends AppCompatActivity {
                             if (etPreference != null) etPreference.setText(profile.getLearningPreference());
                             if (etAcademicLevel != null) etAcademicLevel.setText(profile.getAcademicLevel());
                             if (etLearningGoals != null) etLearningGoals.setText(profile.getLearningGoals());
-                            
+
                             if (profile.getCourses() != null) {
                                 etCoursesInput.setText(TextUtils.join(", ", profile.getCourses()));
                                 updateCourseChips(profile.getCourses());

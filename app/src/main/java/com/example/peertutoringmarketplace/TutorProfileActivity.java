@@ -190,7 +190,7 @@ public class TutorProfileActivity extends AppCompatActivity {
         LinearLayout menuSettings = menuView.findViewById(R.id.menu_settings);
         if (menuSettings != null) {
             menuSettings.setOnClickListener(v -> {
-                Toast.makeText(this, "Settings feature coming soon!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, StudentProfileActivity.class));
                 drawerLayout.closeDrawer(GravityCompat.START);
             });
         }
