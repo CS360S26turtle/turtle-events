@@ -1,31 +1,35 @@
 # Project Documentation
 
 ## Table of Contents
-- [Team Information](#team-information)
-- [Meeting Minutes](#meeting-minutes)
-  - [Meeting – Feb 21, 2026](#meeting--feb-21-2026)
-  - [Meeting – Mar 1, 2026](#meeting--mar-1-2026)
-  - [Meeting – Mar 7, 2026](#meeting--mar-7-2026)
-  - [Meeting – Mar 16, 2026](#meeting--mar-16-2026)
-  - [Meeting - Mar 30, 2026](#meeting--mar-30-2026)
-  - [Meeting – TBD](#meeting--tbd)
+## Table of Contents
 
-- [UML Diagrams](#uml-diagrams)
-  - [UML Diagrams - Project Halfway](#uml-diagram--halfway)
-- [CRC Diagrams](#crc-diagrams)
-- [StoryBoards](#StoryBoards)
-  - [StoryBoards - Halfway](#ui-interface--halfway)
+* [Team Information](#team-information)
 
-- [Product Backlog](#product-backlog)
-  - [Product Backlog – Project Part 1](#product-backlog--project-part-1)
-  - [Product Backlog – Project Part 2](#product-backlog--project-part-2)
-  - [Product Backlog – Project Part 3](#product-backlog--project-part-3)
+* [Meeting Minutes](#meeting-minutes)
+  * [Meeting – Feb 21, 2026](#meeting--feb-21-2026)
+  * [Meeting – Mar 1, 2026](#meeting--mar-1st-2026)
+  * [Meeting – Mar 7, 2026](#meeting--mar-7th-2026)
+  * [Meeting – Mar 16, 2026](#meeting--mar-16th-2026)
+  * [Meeting – Mar 30, 2026](#meeting--mar-30th-2026)
+  * [Meeting – TBD](#meeting--tbd)
 
-- [Wireframes](#wireframes)
-  - [Wireframes – Project Part 1](#wireframes--project-part-1)
-  - [Wireframes – Project Part 2](#wireframes--project-part-2)
-  - [Wireframes – Project Part 3](#wireframes--project-part-3)
+* [UML Diagrams](#uml-diagrams)
+  * [UML Diagrams - Project Halfway](#uml-diagram---halfway)
 
+* [CRC Diagrams](#crc-diagrams)
+
+* [StoryBoards](#storyboards)
+  * [StoryBoards - Halfway](#ui-interface---halfway)
+
+* [Product Backlog](#product-backlog)
+  * [Product Backlog – Project Part 1](#product-backlog--project-part-1)
+  * [Product Backlog – Project Part 2](#product-backlog--project-part-2)
+  * [Product Backlog – Project Part 3](#product-backlog--project-part-3)
+
+* [Wireframes](#wireframes)
+  * [Wireframes – Project Part 1](#wireframes--project-part-1)
+  * [Wireframes – Project Part 2](#wireframes--project-part-2)
+  * [Wireframes – Project Part 3](#wireframes--project-part-3)
 ---
 
 ## Team Information
