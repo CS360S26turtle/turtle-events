@@ -493,13 +493,14 @@ March 16, 2026
 - Discussed which user stories to cover in the half checkpoint
 - Divided the functionality and user stories among the members
 - Discussed basic class structures to work on
+- Focus on completing user login (make account + forget password) and tutor authentication (US: 1 & 17)
 
 #### Action Items
-- [ Maha ] Start work on Authentication
-- [ Sehrish ] Start work on Tutor system
-- [ Esha ] Start work on Tutor Search
-- [ Sehrish ] Start work on Session Bookings + Calender
-- [ Dua ] Start work on Tutor Verification / Admin functionality
+- [ Maha ] Start work on Authentication (US 1)
+- [ Sehrish ] Start work on Tutor system (US 5)
+- [ Esha ] Start work on Tutor Search (US 10)
+- [ Shanzay ] Start work on Session Bookings + Calender (US 6 + 12)
+- [ Dua ] Start work on Tutor Verification / Admin functionality (US 17)
 
 ---
 
@@ -547,6 +548,7 @@ March 30, 2026
 - Discussed roadblocks - mainly inconsistencies in firebase structure
 - Discussed firebase implementation + completed firebase setup
 - Ensured everyone followed same firebase structure
+- Completed with base code for login and tutor verification
 
 #### Action Items
 - [ All ] Continue work on individual parts, ensure integration and github usage to share documents and ensure we are on the same page
@@ -573,6 +575,6 @@ April 6, 2026
 - Finalized documentation
 
 #### Action Items
-- [ ] None
+- Complete tests and documenation
 
 ---
