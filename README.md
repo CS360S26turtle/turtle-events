@@ -462,8 +462,8 @@ with each other.
 
 <p align="center">
   <img src="images/admin_view_all_halfway.png" width="120">
-  <img src="images/admins_tutor_view_halfway.png" width="120">
   <img src="images/admin_view_tutors_halfway.png" width="120">
+  <img src="images/admins_tutor_view_halfway.png" width="120">
 </p>
 
 ## UML Diagram - Halfway
