@@ -1,28 +1,37 @@
 # Project Documentation
 
 ## Table of Contents
-- [Team Information](#team-information)
-- [Meeting Minutes](#meeting-minutes)
-  - [Meeting – Feb 21, 2026](#meeting--feb-21-2026)
-  - [Meeting – Mar 1, 2026](#meeting--mar-1-2026)
-  - [Meeting – Mar 7, 2026](#meeting--mar-7-2026)
-  - [Meeting – Mar 16, 2026](#meeting--mar-16-2026)
-  - [Meeting – TBD](#meeting--tbd)
+## Table of Contents
 
-- [UML Diagrams](#uml-diagrams)
-- [CRC Diagrams](#crc-diagrams)
-- [StoryBoards](#StoryBoards)
+* [Team Information](#team-information)
 
-- [Product Backlog](#product-backlog)
-  - [Product Backlog – Project Part 1](#product-backlog--project-part-1)
-  - [Product Backlog – Project Part 2](#product-backlog--project-part-2)
-  - [Product Backlog – Project Part 3](#product-backlog--project-part-3)
+* [Meeting Minutes](#meeting-minutes)
+  * [Meeting – Feb 21, 2026](#meeting--feb-21-2026)
+  * [Meeting – Mar 1, 2026](#meeting--mar-1st-2026)
+  * [Meeting – Mar 7, 2026](#meeting--mar-7th-2026)
+  * [Meeting – Mar 16, 2026](#meeting--mar-16th-2026)
+  * [Meeting – Mar 30, 2026](#meeting--mar-30th-2026)
+  * [Meeting – TBD](#meeting--tbd)
 
-- [Wireframes](#wireframes)
-  - [Wireframes – Project Part 1](#wireframes--project-part-1)
-  - [Wireframes – Project Part 2](#wireframes--project-part-2)
-  - [Wireframes – Project Part 3](#wireframes--project-part-3)
+* [UML Diagrams](#uml-diagrams)
+  * [UML Diagrams - Project Halfway](#uml-diagram---halfway)
 
+* [CRC Diagrams](#crc-diagrams)
+
+* [StoryBoards](#storyboards)
+  * [StoryBoards - Halfway](#ui-interface---halfway)
+
+* [Product Backlog](#product-backlog)
+  * [Product Backlog – Project Part 1](#product-backlog--project-part-1)
+  * [Product Backlog – Project Part 2](#product-backlog--project-part-2-halfway)
+  * [Product Backlog – Project Part 3](#product-backlog--project-part-3)
+
+* [Wireframes](#wireframes)
+  * [Wireframes – Project Part 1](#wireframes--project-part-1)
+  * [Wireframes – Project Part 2](#wireframes--project-part-2)
+  * [Wireframes – Project Part 3](#wireframes--project-part-3)
+ 
+* [Sprint Meetings](#sprint-meetings)
 ---
 
 ## Team Information
@@ -387,7 +396,7 @@ with each other.
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | To Do |
 
 
-### Product Backlog – Project Part 2
+### Product Backlog – Project Part 2 (Halfway)
 | ID | User Story | Priority | Status |
 |----|------------|----------|--------|
 | US 01 - User Registration | As a student, I want to create and edit my profile with my courses, academic level, learning goals/style(in-person, online, visual, auditory etc ) so that tutors can understand my needs. | High | Done |
@@ -413,7 +422,7 @@ with each other.
 ### Login and Role Selection
 
 <p align="center">
-  <img src="images/login_page_halfway.png" width="80">
+  <img src="images/login_page_halfway.png" width="120">
   <img src="images/forget_password_page_halfway.png" width="120">
   <img src="images/create_account_page_halfway.png" width="120">
   <img src="images/role_page_halfway.png" width="120">
@@ -422,7 +431,7 @@ with each other.
 ### Tutor Flow
 
 <p align="center">
-  <img src="images/update_profile_page_halfway.png" width="80">
+  <img src="images/update_profile_page_halfway.png" width="120">
   <img src="images/tutor_upcoming_session_page_halfway.png" width="120">
   <img src="images/tutor_add_session_halfway.png" width="120">
   <img src="images/add_time_halfway.png" width="120">
@@ -433,7 +442,7 @@ with each other.
 ### Student Flow
 
 <p align="center">
-  <img src="images/student_profile_page_halfway.png" width="80">
+  <img src="images/student_profile_page_halfway.png" width="120">
   <img src="images/search_tutors_halfway.png" width="120">
   <img src="images/search_tutors_after_search_halfway.png" width="120">
   <img src="images/searched_tutor_halfway.png" width="120">
@@ -444,7 +453,7 @@ with each other.
 ### Tutor Verification - Tutor Request Submission
 
 <p align="center">
-  <img src="images/tutor_verification_halfway.png" width="80">
+  <img src="images/tutor_verification_halfway.png" width="120">
   <img src="images/submit_photo_halfway.png" width="120">
   <img src="images/verification_confirmation_halfway.png" width="120">
 </p>
@@ -452,7 +461,120 @@ with each other.
 ### Tutor Verification - Admin View
 
 <p align="center">
-  <img src="images/admin_view_all_halfway.png" width="80">
+  <img src="images/admin_view_all_halfway.png" width="120">
   <img src="images/admins_tutor_view_halfway.png" width="120">
   <img src="images/admin_view_tutors_halfway.png" width="120">
 </p>
+
+## UML Diagram - Halfway
+
+<p align="center">
+  <img src="images/UML Diagram - Halfway.png" width="500">
+</p>
+
+
+## Sprint Meetings
+
+### Sprint Planning Meeting 1
+
+#### Date
+March 16, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Discussed which user stories to cover in the half checkpoint
+- Divided the functionality and user stories among the members
+- Discussed basic class structures to work on
+- Focus on completing user login (make account + forget password) and tutor authentication (US: 1 & 17)
+
+#### Action Items
+- [ Maha ] Start work on Authentication (US 1)
+- [ Sehrish ] Start work on Tutor system (US 5)
+- [ Esha ] Start work on Tutor Search (US 10)
+- [ Shanzay ] Start work on Session Bookings + Calender (US 6 + 12)
+- [ Dua ] Start work on Tutor Verification / Admin functionality (US 17)
+
+---
+
+### Sprint Review 1 and Planning Meeting 2
+
+#### Date
+March 27, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Discussed major blocks in our implementations
+- Created a draft UML diagram to have consistent view of the system so we can work concurrently
+- Clarified doubts about each other's implementations
+- Discussed the design pattern to follow - singleton used to store session instance
+
+#### Action Items
+- [ All ] Continue work on individual parts, ensure github usage to share documents and ensure we are on the same page
+
+---
+
+### Sprint Review 2 and Planning Meeting 3
+
+#### Date
+March 30, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Everyone shared their progress - main UI interfaces setup and navigation implemented, search to be implemented
+- Discussed roadblocks - mainly inconsistencies in firebase structure
+- Discussed firebase implementation + completed firebase setup
+- Ensured everyone followed same firebase structure
+- Completed with base code for login and tutor verification
+
+#### Action Items
+- [ All ] Continue work on individual parts, ensure integration and github usage to share documents and ensure we are on the same page
+
+---
+
+### Final Sprint Review for halfway
+
+#### Date
+April 6, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Reviewed everyone's progress, all main features implemented
+- Sorted out some minor bugs and tests
+- Finalized documentation
+
+#### Action Items
+- Complete tests and documenation
+
+---

@@ -39,4 +39,6 @@ jobs:
           target: google_apis
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: ./gradlew connectedCheck
+          script: |
+            adb shell settings put secure show_ime_with_hard_keyboard 0
+            ./gradlew connectedCheck
