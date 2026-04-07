@@ -23,13 +23,15 @@
 
 * [Product Backlog](#product-backlog)
   * [Product Backlog – Project Part 1](#product-backlog--project-part-1)
-  * [Product Backlog – Project Part 2](#product-backlog--project-part-2)
+  * [Product Backlog – Project Part 2](#product-backlog--project-part-2-halfway)
   * [Product Backlog – Project Part 3](#product-backlog--project-part-3)
 
 * [Wireframes](#wireframes)
   * [Wireframes – Project Part 1](#wireframes--project-part-1)
   * [Wireframes – Project Part 2](#wireframes--project-part-2)
   * [Wireframes – Project Part 3](#wireframes--project-part-3)
+ 
+* [Sprint Meetings](#sprint-meetings)
 ---
 
 ## Team Information
