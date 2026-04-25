@@ -71,13 +71,13 @@ public class TutorProfileActivity extends AppCompatActivity {
                 btnBookSession.setOnClickListener(v -> {
                     String role = SessionManager.getInstance().getCurrentRole();
                     // ONLY allow booking if the current user is a student
-                    if ("student".equalsIgnoreCase(role)) {
-                        Intent intent = new Intent(TutorProfileActivity.this, BookSessionActivity.class);
-                        intent.putExtra("tutorId", viewedTutorId);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(this, "Only students can book sessions", Toast.LENGTH_SHORT).show();
-                    }
+                    //if ("student".equalsIgnoreCase(role)) {
+                    Intent intent = new Intent(TutorProfileActivity.this, BookSessionActivity.class);
+                    intent.putExtra("tutorId", viewedTutorId);
+                    startActivity(intent);
+//                    } else {
+//                        Toast.makeText(this, "Only students can book sessions", Toast.LENGTH_SHORT).show();
+//                    }
                 });
             }
         } else {

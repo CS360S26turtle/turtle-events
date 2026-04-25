@@ -1,17 +1,18 @@
 package com.example.peertutoringmarketplace;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import com.google.android.material.textfield.TextInputEditText;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.*;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.*;
+
+//The following test is from ChatGPT, "Generate tests for ForgetPassword UI", 2026-04-06
 @RunWith(AndroidJUnit4.class)
 public class ForgetPasswordActivityTest {
 
@@ -21,20 +22,16 @@ public class ForgetPasswordActivityTest {
 
     @Test
     public void testInvalidEmail() {
-        rule.getScenario().onActivity(activity -> {
-            TextInputEditText emailEditText = activity.findViewById(R.id.emailEditText);
-            emailEditText.setText("invalid");
-            activity.findViewById(R.id.resetButton).performClick();
+        onView(withId(R.id.emailEditText)).perform(typeText("invalid"));
+        onView(withId(R.id.resetButton)).perform(click());
 
-            assertEquals("Please enter a valid email address", emailEditText.getError().toString());
-        });
+        onView(withId(R.id.emailEditText))
+                .check(matches(hasErrorText("Please enter a valid email address")));
     }
 
     @Test
     public void testBackToLogin() {
-        rule.getScenario().onActivity(activity -> {
-            activity.findViewById(R.id.backToLoginText).performClick();
-            assertTrue("Activity should be finishing", activity.isFinishing() || activity.isDestroyed());
-        });
+        onView(withId(R.id.backToLoginText)).perform(click());
+        onView(withId(R.id.loginButton)).check(matches(isDisplayed()));
     }
 }

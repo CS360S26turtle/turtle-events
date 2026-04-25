@@ -1,14 +1,18 @@
 package com.example.peertutoringmarketplace;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Intent;
-import android.widget.TextView;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.IdlingPolicies;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,6 +26,7 @@ import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+//The following test is from Gemini
 @RunWith(AndroidJUnit4.class)
 public class TutorProfileActivityTest {
 
@@ -30,19 +35,21 @@ public class TutorProfileActivityTest {
 
     @Before
     public void setUp() throws InterruptedException {
+        IdlingPolicies.setMasterPolicyTimeout(60, TimeUnit.SECONDS);
+        IdlingPolicies.setIdlingResourceTimeout(60, TimeUnit.SECONDS);
+
         db = FirebaseFirestore.getInstance();
         User user = new User(testTutorUid, "tutor@test.com", "Test Tutor", "tutor");
         TutorProfile profile = new TutorProfile();
         profile.setBio("Test Tutor Bio");
         profile.setHourlyRate(30.0);
-        profile.setSubjects(Arrays.asList("math", "physics"));
+        profile.setSubjects(Arrays.asList("Math", "Physics"));
         profile.setTeachingMode("Online");
 
         CountDownLatch setupLatch = new CountDownLatch(2);
         db.collection("users").document(testTutorUid).set(user).addOnCompleteListener(t -> setupLatch.countDown());
         db.collection("tutors").document(testTutorUid).set(profile).addOnCompleteListener(t -> setupLatch.countDown());
         setupLatch.await(10, TimeUnit.SECONDS);
-        
         SessionManager.getInstance().setCurrentUser(user);
         SessionManager.getInstance().setCurrentTutorProfile(profile);
     }
@@ -55,48 +62,38 @@ public class TutorProfileActivityTest {
     }
 
     @Test
-    public void testOwnProfileDisplaysCorrectly() throws InterruptedException {
+    public void testOwnProfileDisplaysCorrectly() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), TutorProfileActivity.class);
 
         try (ActivityScenario<TutorProfileActivity> scenario = ActivityScenario.launch(intent)) {
-            // Wait for data to load into UI
-            waitForDataLoad(scenario);
+            waitFor(3000);
 
-            scenario.onActivity(activity -> {
-                assertEquals("Test Tutor", ((TextView)activity.findViewById(R.id.tutor_name)).getText().toString());
-                assertEquals("Test Tutor Bio", ((TextView)activity.findViewById(R.id.tutor_bio)).getText().toString());
-                assertEquals("PKR 30.0", ((TextView)activity.findViewById(R.id.tutor_rate)).getText().toString());
-                assertEquals("Online", ((TextView)activity.findViewById(R.id.tv_teaching_mode_display)).getText().toString());
-            });
+            onView(withId(R.id.tutor_name)).check(matches(withText("Test Tutor")));
+            onView(withId(R.id.tutor_bio)).check(matches(withText("Test Tutor Bio")));
+            onView(withId(R.id.tutor_rate)).check(matches(withText("PKR 30.0")));
+            onView(withId(R.id.tv_teaching_mode_display)).check(matches(withText("Online")));
+
+            onView(withText("Math")).check(matches(isDisplayed()));
+            onView(withText("Physics")).check(matches(isDisplayed()));
         }
     }
 
     @Test
     public void testNavigationDrawerTutorMenu() {
+        SessionManager.getInstance().setCurrentRole("tutor");
+
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), TutorProfileActivity.class);
         try (ActivityScenario<TutorProfileActivity> scenario = ActivityScenario.launch(intent)) {
-            scenario.onActivity(activity -> {
-                activity.findViewById(R.id.btn_hamburger).performClick();
-                // If the drawer opens, these should be non-null and potentially visible
-                assertNotNull(activity.findViewById(R.id.menu_profile));
-                assertNotNull(activity.findViewById(R.id.menu_upcoming));
-                assertNotNull(activity.findViewById(R.id.menu_logout));
-            });
+            waitFor(3000);
+            onView(withId(R.id.btn_hamburger)).perform(click());
+            onView(withId(R.id.menu_students)).check(matches(isDisplayed()));
+            onView(withId(R.id.menu_profile)).check(matches(isDisplayed()));
+            onView(withId(R.id.menu_upcoming)).check(matches(isDisplayed()));
+            onView(withId(R.id.menu_logout)).check(matches(isDisplayed()));
         }
     }
 
-    private void waitForDataLoad(ActivityScenario<TutorProfileActivity> scenario) throws InterruptedException {
-        long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < 10000) {
-            final boolean[] loaded = {false};
-            scenario.onActivity(activity -> {
-                String name = ((TextView)activity.findViewById(R.id.tutor_name)).getText().toString();
-                if (!name.isEmpty() && !"Tutor Name".equals(name)) {
-                    loaded[0] = true;
-                }
-            });
-            if (loaded[0]) return;
-            Thread.sleep(500);
-        }
+    private void waitFor(long millis) {
+        try { Thread.sleep(millis); } catch (InterruptedException e) { e.printStackTrace(); }
     }
 }

@@ -44,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 public class UpcomingSessionsActivity extends AppCompatActivity {
 
@@ -304,7 +305,8 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                         return;
                     }
 
-                    String newSlotId = "TS" + (max + 1);
+                    // FIX: use UUID — eliminates race condition and cross-tutor ID collision
+                    String newSlotId = "TS-" + UUID.randomUUID().toString();
 
                     Map<String, Object> slot = new HashMap<>();
                     slot.put("tutorId", selectedTutorId);
