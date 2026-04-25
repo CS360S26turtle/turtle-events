@@ -462,8 +462,8 @@ with each other.
 
 <p align="center">
   <img src="images/admin_view_all_halfway.png" width="120">
-  <img src="images/admins_tutor_view_halfway.png" width="120">
   <img src="images/admin_view_tutors_halfway.png" width="120">
+  <img src="images/admins_tutor_view_halfway.png" width="120">
 </p>
 
 ## UML Diagram - Halfway
@@ -472,6 +472,7 @@ with each other.
   <img src="images/UML Diagram - Halfway.png" width="500">
 </p>
 
+Link: https://lucid.app/lucidchart/9cc2bf68-ca08-4504-a752-03784cc5fa5f/edit?viewport_loc=-6520%2C-2145%2C8449%2C4561%2C0_0&invitationId=inv_83110f14-47e6-4924-b7de-9712be12e07d
 
 ## Sprint Meetings
 

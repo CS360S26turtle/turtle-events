@@ -13,6 +13,12 @@ import com.example.peertutoringmarketplace.User;
 
 import java.util.List;
 
+/**
+ * TutorAdapter binds a list of User objects to a RecyclerView for display.
+ * It is shared by both AdminActivity and SearchTutorActivity, routing clicks
+ * to different destinations based on the current session role.
+ * Design: Acts as a View-layer adapter between the User model and RecyclerView UI.
+ */
 public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> {
 
     List<User> tutorList;

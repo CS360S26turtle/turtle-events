@@ -14,6 +14,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SearchTutorActivity provides an interface for students to search for
+ * approved tutors by subject. It performs a two-step Firestore lookup and filters out unapproved accounts.
+ * Design: Acts as a controller between Firebase (data layer) and UI components.
+ */
+
 public class SearchTutorActivity extends AppCompatActivity {
 
     private TextInputEditText etSearchSubject;
