@@ -2,18 +2,19 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
     android:layout_margin="0dp"
-    app:cardBackgroundColor="#F5F5F5"
-    app:cardCornerRadius="24dp"
-    app:cardElevation="8dp">
+    app:cardBackgroundColor="#578974"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="0dp"
+    app:cardUseCompatPadding="false">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:minWidth="260dp">
 
         <LinearLayout
             android:id="@+id/menu_tutors"
@@ -26,21 +27,22 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/btn_star_big_on"
-                app:tint="#578974" />
+                app:tint="#F5F5F5" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="My Tutors"
-                android:textColor="#578974"
+                android:textColor="#F5F5F5"
                 android:textSize="18sp"
                 android:textStyle="bold" />
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@android:drawable/ic_media_play"
-                app:tint="#578974" />
+                app:tint="#F5F5F5" />
         </LinearLayout>
 
         <LinearLayout
@@ -54,21 +56,22 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/btn_star_big_on"
-                app:tint="#578974" />
+                app:tint="#F5F5F5" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="Upcoming Sessions"
-                android:textColor="#578974"
+                android:textColor="#F5F5F5"
                 android:textSize="18sp"
                 android:textStyle="bold" />
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@android:drawable/ic_media_play"
-                app:tint="#578974" />
+                app:tint="#F5F5F5" />
         </LinearLayout>
 
         <LinearLayout
@@ -82,21 +85,22 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/btn_star_big_on"
-                app:tint="#578974" />
+                app:tint="#F5F5F5" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="Chats"
-                android:textColor="#578974"
+                android:textColor="#F5F5F5"
                 android:textSize="18sp"
                 android:textStyle="bold" />
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@android:drawable/ic_media_play"
-                app:tint="#578974" />
+                app:tint="#F5F5F5" />
         </LinearLayout>
 
         <LinearLayout
@@ -110,22 +114,29 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/btn_star_big_on"
-                app:tint="#578974" />
+                app:tint="#F5F5F5" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="My Settings"
-                android:textColor="#578974"
+                android:textColor="#F5F5F5"
                 android:textSize="18sp"
                 android:textStyle="bold" />
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@android:drawable/ic_media_play"
-                app:tint="#578974" />
+                app:tint="#F5F5F5" />
         </LinearLayout>
+
+        <!-- Spacer to push Logout to the bottom -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <LinearLayout
             android:id="@+id/menu_logout"
@@ -135,18 +146,16 @@
             android:padding="16dp"
             android:gravity="center_vertical"
             android:background="?attr/selectableItemBackground">
-
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/ic_lock_power_off"
-                app:tint="#578974" />
-
+                app:tint="#F5F5F5" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Logout"
-                android:textColor="#578974"
+                android:textColor="#F5F5F5"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginStart="16dp" />
