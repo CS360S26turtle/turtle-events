@@ -9,5 +9,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="selected_slot_background">#D9F8E6</color>
+    
+    <color name="cal_card_bg">#CDEACC</color>
+    <color name="cal_header_label">#00332B</color>
+    <color name="cal_days_label">#00332B</color>
+    <color name="cal_abbrev_label">#8A9E8A</color>
+    <color name="cal_selection">#008080</color>
+    <color name="cal_selection_label">#FFFFFF</color>
 
 </resources>

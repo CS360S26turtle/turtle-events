@@ -2,21 +2,28 @@
  * Displays a tutor's upcoming sessions and available slots for the selected date.
  * The activity allows tutors to add new session slots, cancel existing sessions,
  * and view booking details including the names of booked students.
+ *
+ * FIXES applied:
+ *  1. loadGeneration counter prevents duplicate entries from stale async callbacks.
+ *  2. MaterialTimePicker replaces old TimePickerDialog (keyboard input mode by default).
+ *  3. Capacity field added to "Add Session" dialog (1–15, validated).
+ *  4. createSlot now writes maxCapacity to Firestore instead of hardcoding 1.
  */
 
 package com.example.peertutoringmarketplace;
 
 import android.app.AlertDialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,26 +36,35 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+
+import com.kizitonwose.calendar.view.CalendarView;
 
 public class UpcomingSessionsActivity extends AppCompatActivity {
 
     private CalendarView calendarView;
+    private CalendarHelper calendarHelper;
     private ListView listViewSessions;
     private TextView tvEmpty;
     private Button btnCancelSession;
@@ -61,16 +77,23 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
     private SessionAdapter adapter;
 
     private String selectedTutorId;
-    private int selectedYear, selectedMonth, selectedDay;
+    private LocalDate selectedDate;
     private int selectedPosition = -1;
     private DrawerLayout drawerLayout;
+
+    /**
+     * Duplication guard.
+     * Every call to loadSlotsForDate() increments this and captures the value.
+     * Stale async callbacks bail out when their captured value no longer matches.
+     */
+    private int loadGeneration = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upcoming_sessions);
 
-        db = FirebaseFirestore.getInstance();
+        db   = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -78,34 +101,29 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
         btnHamburger.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
         setupNavigationDrawer();
 
-        calendarView = findViewById(R.id.calendarView);
+        calendarView     = findViewById(R.id.calendarView);
         listViewSessions = findViewById(R.id.listViewSessions);
-        tvEmpty = findViewById(R.id.tvEmpty);
+        tvEmpty          = findViewById(R.id.tvEmpty);
         btnCancelSession = findViewById(R.id.btnCancelSession);
-        btnAddSession = findViewById(R.id.btnAddSession);
+        btnAddSession    = findViewById(R.id.btnAddSession);
 
         adapter = new SessionAdapter();
         listViewSessions.setAdapter(adapter);
         listViewSessions.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        Calendar today = Calendar.getInstance();
-        selectedYear = today.get(Calendar.YEAR);
-        selectedMonth = today.get(Calendar.MONTH);
-        selectedDay = today.get(Calendar.DAY_OF_MONTH);
+        selectedDate = LocalDate.now();
+
+        calendarHelper = new CalendarHelper(this, calendarView,
+                findViewById(R.id.calendarHeader), date -> {
+            selectedDate = date;
+            selectedPosition = -1;
+            if (selectedTutorId != null) loadSlotsForDate(selectedTutorId);
+        });
+        calendarHelper.setup();
 
         listViewSessions.setOnItemClickListener((parent, view, position, id) -> {
             selectedPosition = position;
             adapter.notifyDataSetChanged();
-        });
-
-        calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            selectedYear = year;
-            selectedMonth = month;
-            selectedDay = dayOfMonth;
-            selectedPosition = -1;
-            if (selectedTutorId != null) {
-                loadSlotsForDate(selectedTutorId);
-            }
         });
 
         btnCancelSession.setOnClickListener(v -> {
@@ -113,8 +131,14 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please select a session first", Toast.LENGTH_SHORT).show();
                 return;
             }
-
             SessionListItem item = sessionItems.get(selectedPosition);
+
+            // ── FIX: Prevent cancelling past sessions ─────────────────────
+            if (item.startTime.before(new Date())) {
+                Toast.makeText(this, "Cannot cancel a past session", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             String dateStr = new SimpleDateFormat("EEE, MMM d yyyy", Locale.getDefault()).format(item.startTime);
             String timeStr = formatTime(item.startTime) + " - " + formatTime(item.endTime);
 
@@ -126,50 +150,46 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                     .show();
         });
 
-        btnAddSession.setOnClickListener(v -> showAddSessionDialog());
+        btnAddSession.setOnClickListener(v -> {
+            if (selectedDate.isBefore(LocalDate.now())) {
+                Toast.makeText(this, "This date has passed", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            showAddSessionDialog();
+        });
 
         loadCurrentTutorIdAndSessions();
     }
 
+    // ── Adapter ──────────────────────────────────────────────────────────────
+
     private class SessionAdapter extends BaseAdapter {
-        @Override
-        public int getCount() {
-            return sessionItems.size();
-        }
-
-        @Override
-        public Object getItem(int pos) {
-            return sessionItems.get(pos);
-        }
-
-        @Override
-        public long getItemId(int pos) {
-            return pos;
-        }
+        @Override public int getCount()            { return sessionItems.size(); }
+        @Override public Object getItem(int pos)   { return sessionItems.get(pos); }
+        @Override public long getItemId(int pos)   { return pos; }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
+            if (convertView == null)
                 convertView = LayoutInflater.from(UpcomingSessionsActivity.this)
                         .inflate(R.layout.item_session_slot, parent, false);
-            }
 
             SessionListItem item = sessionItems.get(position);
-            TextView tvTime = convertView.findViewById(R.id.tvSlotTime);
+            TextView tvTime  = convertView.findViewById(R.id.tvSlotTime);
             TextView tvSeats = convertView.findViewById(R.id.tvSlotSeats);
 
             tvTime.setText(formatTime(item.startTime) + " - " + formatTime(item.endTime));
             tvSeats.setText(item.bookedStudentNames == null || item.bookedStudentNames.trim().isEmpty()
-                    ? "No Bookings"
-                    : item.bookedStudentNames);
+                    ? "No Bookings" : item.bookedStudentNames);
 
             convertView.setBackground(position == selectedPosition
                     ? getResources().getDrawable(R.drawable.bg_slot_item_selected, null)
                     : getResources().getDrawable(R.drawable.bg_slot_item, null));
-
             return convertView;
         }
     }
+
+    // ── Add-session dialog (MaterialTimePicker + capacity) ───────────────────
 
     private void showAddSessionDialog() {
         LinearLayout layout = new LinearLayout(this);
@@ -177,123 +197,173 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
         layout.setPadding(64, 32, 64, 16);
 
         final int[] startHour = {9};
-        final int[] startMin = {0};
-        final int[] endHour = {10};
-        final int[] endMin = {0};
+        final int[] startMin  = {0};
+        final int[] endHour   = {10};
+        final int[] endMin    = {0};
         final boolean[] startSet = {false};
-        final boolean[] endSet = {false};
+        final boolean[] endSet   = {false};
 
+        // ── Start time picker ────────────────────────────────────────────────
         TextView tvStart = new TextView(this);
         tvStart.setText("Start Time: tap to set");
         tvStart.setTextSize(16);
         tvStart.setPadding(0, 16, 0, 16);
+        tvStart.setOnClickListener(v -> {
+            MaterialTimePicker picker = new MaterialTimePicker.Builder()
+                    .setTimeFormat(TimeFormat.CLOCK_12H)
+                    .setHour(startHour[0])
+                    .setMinute(startMin[0])
+                    .setTitleText("Select start time")
+                    .setInputMode(MaterialTimePicker.INPUT_MODE_KEYBOARD)
+                    .build();
+            picker.addOnPositiveButtonClickListener(view -> {
+                startHour[0] = picker.getHour();
+                startMin[0]  = picker.getMinute();
+                startSet[0]  = true;
+                tvStart.setText("Start Time: " + formatHM(startHour[0], startMin[0]));
+            });
+            picker.show(getSupportFragmentManager(), "start_time_picker");
+        });
 
+        // ── End time picker ──────────────────────────────────────────────────
         TextView tvEnd = new TextView(this);
         tvEnd.setText("End Time: tap to set");
         tvEnd.setTextSize(16);
         tvEnd.setPadding(0, 16, 0, 16);
-
-        tvStart.setOnClickListener(v -> {
-            TimePickerDialog dialog = new TimePickerDialog(
-                    UpcomingSessionsActivity.this,
-                    (view, hourOfDay, minute) -> {
-                        startHour[0] = hourOfDay;
-                        startMin[0] = minute;
-                        startSet[0] = true;
-                        tvStart.setText("Start Time: " + formatHM(hourOfDay, minute));
-                    },
-                    startHour[0],
-                    startMin[0],
-                    false
-            );
-            dialog.show();
-        });
-
         tvEnd.setOnClickListener(v -> {
-            TimePickerDialog dialog = new TimePickerDialog(
-                    UpcomingSessionsActivity.this,
-                    (view, hourOfDay, minute) -> {
-                        endHour[0] = hourOfDay;
-                        endMin[0] = minute;
-                        endSet[0] = true;
-                        tvEnd.setText("End Time: " + formatHM(hourOfDay, minute));
-                    },
-                    endHour[0],
-                    endMin[0],
-                    false
-            );
-            dialog.show();
+            MaterialTimePicker picker = new MaterialTimePicker.Builder()
+                    .setTimeFormat(TimeFormat.CLOCK_12H)
+                    .setHour(endHour[0])
+                    .setMinute(endMin[0])
+                    .setTitleText("Select end time")
+                    .setInputMode(MaterialTimePicker.INPUT_MODE_KEYBOARD)
+                    .build();
+            picker.addOnPositiveButtonClickListener(view -> {
+                endHour[0] = picker.getHour();
+                endMin[0]  = picker.getMinute();
+                endSet[0]  = true;
+                tvEnd.setText("End Time: " + formatHM(endHour[0], endMin[0]));
+            });
+            picker.show(getSupportFragmentManager(), "end_time_picker");
         });
+
+        // ── Capacity field ───────────────────────────────────────────────────
+        TextView tvCapLabel = new TextView(this);
+        tvCapLabel.setText("Max Capacity (1–15):");
+        tvCapLabel.setTextSize(16);
+        tvCapLabel.setPadding(0, 16, 0, 4);
+
+        EditText etCapacity = new EditText(this);
+        etCapacity.setInputType(InputType.TYPE_CLASS_NUMBER);
+        etCapacity.setHint("e.g. 5");
+        etCapacity.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(2) });
 
         layout.addView(tvStart);
         layout.addView(tvEnd);
+        layout.addView(tvCapLabel);
+        layout.addView(etCapacity);
 
-        new AlertDialog.Builder(this)
-                .setTitle("Add Session - " + selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear)
+        // Use setOnShowListener so we can intercept the positive button and
+        // keep the dialog open on validation errors instead of always closing.
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Add Session - "
+                        + selectedDate.getDayOfMonth() + "/"
+                        + selectedDate.getMonthValue() + "/"
+                        + selectedDate.getYear())
                 .setView(layout)
-                .setPositiveButton("Add", (dialog, which) -> {
-                    if (!startSet[0] || !endSet[0]) {
-                        Toast.makeText(this, "Please set both start and end time", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (startHour[0] > endHour[0] ||
-                            (startHour[0] == endHour[0] && startMin[0] >= endMin[0])) {
-                        Toast.makeText(this, "Start time must be before end time", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    createSlot(startHour[0], startMin[0], endHour[0], endMin[0]);
-                })
+                .setPositiveButton("Add", null)   // set to null — handled below
                 .setNegativeButton("Cancel", null)
-                .show();
+                .create();
+
+        dialog.setOnShowListener(di -> {
+            Button btnAdd = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            btnAdd.setOnClickListener(v -> {
+
+                if (!startSet[0] || !endSet[0]) {
+                    Toast.makeText(this, "Please set both start and end time", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Calendar startCheck = Calendar.getInstance();
+                startCheck.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1,
+                        selectedDate.getDayOfMonth(), startHour[0], startMin[0], 0);
+                startCheck.set(Calendar.MILLISECOND, 0);
+
+                Calendar endCheck = Calendar.getInstance();
+                endCheck.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1,
+                        selectedDate.getDayOfMonth(), endHour[0], endMin[0], 0);
+                endCheck.set(Calendar.MILLISECOND, 0);
+
+                if (!startCheck.before(endCheck)) {
+                    Toast.makeText(this, "Start time must be before end time", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // ── FIX 3: Prevent adding slots in the past ───────────────────
+                if (startCheck.before(Calendar.getInstance())) {
+                    Toast.makeText(this, "This date/time has passed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String capStr = etCapacity.getText().toString().trim();
+                if (capStr.isEmpty()) {
+                    Toast.makeText(this, "Please enter a capacity", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                int capacity;
+                try {
+                    capacity = Integer.parseInt(capStr);
+                } catch (NumberFormatException e) {
+                    Toast.makeText(this, "Invalid capacity", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (capacity < 1 || capacity > 15) {
+                    Toast.makeText(this, "Capacity must be between 1 and 15", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                dialog.dismiss();
+                createSlot(startHour[0], startMin[0], endHour[0], endMin[0], capacity);
+            });
+        });
+
+        dialog.show();
     }
 
-    private void createSlot(int sH, int sM, int eH, int eM) {
+    // ── Firestore: create slot ───────────────────────────────────────────────
+
+    private void createSlot(int sH, int sM, int eH, int eM, int capacity) {
         Calendar startCal = Calendar.getInstance();
-        startCal.set(selectedYear, selectedMonth, selectedDay, sH, sM, 0);
+        startCal.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1,
+                selectedDate.getDayOfMonth(), sH, sM, 0);
         startCal.set(Calendar.MILLISECOND, 0);
 
         Calendar endCal = Calendar.getInstance();
-        endCal.set(selectedYear, selectedMonth, selectedDay, eH, eM, 0);
+        endCal.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1,
+                selectedDate.getDayOfMonth(), eH, eM, 0);
         endCal.set(Calendar.MILLISECOND, 0);
 
         Date newStart = startCal.getTime();
-        Date newEnd = endCal.getTime();
+        Date newEnd   = endCal.getTime();
 
         db.collection("slots")
                 .whereEqualTo("tutorId", selectedTutorId)
                 .get()
                 .addOnSuccessListener(snap -> {
                     boolean hasOverlap = false;
-                    int max = 0;
 
                     for (DocumentSnapshot d : snap.getDocuments()) {
-                        String sid = d.getId();
-                        if (sid != null && sid.startsWith("TS")) {
-                            try {
-                                int n = Integer.parseInt(sid.substring(2));
-                                if (n > max) max = n;
-                            } catch (Exception ignored) {
-                            }
-                        }
-
                         Timestamp startTs = d.getTimestamp("startTime");
-                        Timestamp endTs = d.getTimestamp("endTime");
+                        Timestamp endTs   = d.getTimestamp("endTime");
                         if (startTs == null || endTs == null) continue;
 
-                        Date existingStart = startTs.toDate();
-                        Date existingEnd = endTs.toDate();
+                        LocalDate slotDate = startTs.toDate().toInstant()
+                                .atZone(ZoneId.systemDefault()).toLocalDate();
 
-                        Calendar c = Calendar.getInstance();
-                        c.setTime(existingStart);
-
-                        if (c.get(Calendar.YEAR) == selectedYear
-                                && c.get(Calendar.MONTH) == selectedMonth
-                                && c.get(Calendar.DAY_OF_MONTH) == selectedDay) {
-
-                            boolean overlap = newStart.before(existingEnd) && newEnd.after(existingStart);
-                            if (overlap) {
+                        if (slotDate.equals(selectedDate)) {
+                            if (newStart.before(endTs.toDate()) && newEnd.after(startTs.toDate())) {
                                 hasOverlap = true;
                                 break;
                             }
@@ -305,14 +375,13 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                         return;
                     }
 
-                    // FIX: use UUID — eliminates race condition and cross-tutor ID collision
                     String newSlotId = "TS-" + UUID.randomUUID().toString();
 
                     Map<String, Object> slot = new HashMap<>();
-                    slot.put("tutorId", selectedTutorId);
-                    slot.put("startTime", new Timestamp(newStart));
-                    slot.put("endTime", new Timestamp(newEnd));
-                    slot.put("maxCapacity", 1);
+                    slot.put("tutorId",     selectedTutorId);
+                    slot.put("startTime",   new Timestamp(newStart));
+                    slot.put("endTime",     new Timestamp(newEnd));
+                    slot.put("maxCapacity", capacity);          // ← user-chosen capacity
 
                     db.collection("slots").document(newSlotId).set(slot)
                             .addOnSuccessListener(unused -> {
@@ -320,21 +389,20 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                                 loadSlotsForDate(selectedTutorId);
                             })
                             .addOnFailureListener(e ->
-                                    Toast.makeText(this, "Failed to add: " + e.getMessage(), Toast.LENGTH_LONG).show()
-                            );
+                                    Toast.makeText(this, "Failed to add: " + e.getMessage(), Toast.LENGTH_LONG).show());
                 })
                 .addOnFailureListener(e ->
-                        Toast.makeText(this, "Failed to validate slot", Toast.LENGTH_SHORT).show()
-                );
+                        Toast.makeText(this, "Failed to validate slot", Toast.LENGTH_SHORT).show());
     }
+
+    // ── Firestore: cancel / delete ───────────────────────────────────────────
 
     private void cancelSessionAndSlot(SessionListItem item) {
         if (item.sessionId != null && !item.sessionId.isEmpty()) {
             db.collection("sessions").document(item.sessionId).delete()
                     .addOnSuccessListener(unused -> deleteSlotOnly(item.timeSlotId))
                     .addOnFailureListener(e ->
-                            Toast.makeText(this, "Failed to cancel session", Toast.LENGTH_SHORT).show()
-                    );
+                            Toast.makeText(this, "Failed to cancel session", Toast.LENGTH_SHORT).show());
         } else {
             deleteSlotOnly(item.timeSlotId);
         }
@@ -345,7 +413,6 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
             Toast.makeText(this, "Slot not found", Toast.LENGTH_SHORT).show();
             return;
         }
-
         db.collection("slots").document(timeSlotId).delete()
                 .addOnSuccessListener(unused -> {
                     Toast.makeText(this, "Session cancelled", Toast.LENGTH_SHORT).show();
@@ -353,9 +420,10 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                     loadSlotsForDate(selectedTutorId);
                 })
                 .addOnFailureListener(e ->
-                        Toast.makeText(this, "Failed to delete slot", Toast.LENGTH_SHORT).show()
-                );
+                        Toast.makeText(this, "Failed to delete slot", Toast.LENGTH_SHORT).show());
     }
+
+    // ── Navigation drawer ────────────────────────────────────────────────────
 
     private void setupNavigationDrawer() {
         FrameLayout menuContainer = findViewById(R.id.menu_container);
@@ -399,34 +467,34 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
         }
     }
 
+    // ── Firestore: load tutor ID then slots ──────────────────────────────────
+
     private void loadCurrentTutorIdAndSessions() {
-        if (auth.getCurrentUser() == null) {
-            finish();
-            return;
-        }
+        if (auth.getCurrentUser() == null) { finish(); return; }
 
         db.collection("users").document(auth.getCurrentUser().getUid()).get()
                 .addOnSuccessListener(userDoc -> {
                     if (!userDoc.exists()) return;
 
                     selectedTutorId = userDoc.getString("tutorID");
-                    if (selectedTutorId == null || selectedTutorId.isEmpty()) {
+                    if (selectedTutorId == null || selectedTutorId.isEmpty())
                         selectedTutorId = userDoc.getString("tutorId");
-                    }
 
                     if (selectedTutorId == null || selectedTutorId.isEmpty()) {
                         Toast.makeText(this, "Tutor ID not found", Toast.LENGTH_SHORT).show();
                         return;
                     }
-
                     loadSlotsForDate(selectedTutorId);
                 })
                 .addOnFailureListener(e ->
-                        Toast.makeText(this, "Failed to load user data", Toast.LENGTH_SHORT).show()
-                );
+                        Toast.makeText(this, "Failed to load user data", Toast.LENGTH_SHORT).show());
     }
 
+    // ── Firestore: load slots for selected date (with duplication guard) ─────
+
     private void loadSlotsForDate(@NonNull String tutorId) {
+        final int myGeneration = ++loadGeneration;   // ← guard
+
         sessionItems.clear();
         selectedPosition = -1;
         adapter.notifyDataSetChanged();
@@ -437,34 +505,39 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                 .whereEqualTo("tutorId", tutorId)
                 .get()
                 .addOnSuccessListener(slotSnaps -> {
+                    if (myGeneration != loadGeneration) return;  // stale — discard
+
                     List<DocumentSnapshot> slotDocs = slotSnaps.getDocuments();
 
                     if (slotDocs.isEmpty()) {
+                        calendarHelper.setEventDates(new HashSet<>());
                         showEmpty();
                         return;
                     }
 
-                    int[] processed = {0};
+                    int[] processed  = {0};
                     boolean[] foundAny = {false};
+                    Set<LocalDate> eventDates = new HashSet<>();
 
                     for (DocumentSnapshot slotDoc : slotDocs) {
                         Timestamp startTs = slotDoc.getTimestamp("startTime");
-                        Timestamp endTs = slotDoc.getTimestamp("endTime");
+                        Timestamp endTs   = slotDoc.getTimestamp("endTime");
 
                         if (startTs == null || endTs == null) {
                             processed[0]++;
-                            checkDone(slotDocs.size(), processed[0], foundAny[0]);
+                            checkDone(slotDocs.size(), processed[0], foundAny[0], myGeneration);
                             continue;
                         }
 
-                        Calendar c = Calendar.getInstance();
-                        c.setTime(startTs.toDate());
+                        LocalDate slotLocalDate = startTs.toDate().toInstant()
+                                .atZone(ZoneId.systemDefault()).toLocalDate();
 
-                        if (c.get(Calendar.YEAR) != selectedYear
-                                || c.get(Calendar.MONTH) != selectedMonth
-                                || c.get(Calendar.DAY_OF_MONTH) != selectedDay) {
+                        // ── FIX: Show ALL slots (past and future) ────────────
+                        eventDates.add(slotLocalDate);
+
+                        if (!slotLocalDate.equals(selectedDate)) {
                             processed[0]++;
-                            checkDone(slotDocs.size(), processed[0], foundAny[0]);
+                            checkDone(slotDocs.size(), processed[0], foundAny[0], myGeneration);
                             continue;
                         }
 
@@ -472,48 +545,51 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
 
                         SessionListItem item = new SessionListItem();
                         item.timeSlotId = slotDoc.getId();
-                        item.startTime = startTs.toDate();
-                        item.endTime = endTs.toDate();
-                        item.students = new ArrayList<>();
+                        item.startTime  = startTs.toDate();
+                        item.endTime    = endTs.toDate();
+                        item.students   = new ArrayList<>();
                         item.bookedStudentNames = "No Bookings";
 
                         db.collection("sessions")
                                 .whereEqualTo("timeSlotId", item.timeSlotId)
                                 .get()
                                 .addOnSuccessListener(sessionSnap -> {
+                                    if (myGeneration != loadGeneration) return;  // stale
+
                                     if (!sessionSnap.isEmpty()) {
                                         DocumentSnapshot sessionDoc = sessionSnap.getDocuments().get(0);
                                         item.sessionId = sessionDoc.getId();
-                                        item.tutorId = sessionDoc.getString("tutorId");
-                                        item.type = sessionDoc.getString("type");
-                                        List<String> students = (List<String>) sessionDoc.get("studentsId");
-                                        item.students = students == null ? new ArrayList<>() : students;
+                                        item.tutorId   = sessionDoc.getString("tutorId");
+                                        item.type      = sessionDoc.getString("type");
+                                        List<String> sts = (List<String>) sessionDoc.get("studentsId");
+                                        item.students = sts != null ? sts : new ArrayList<>();
                                     }
 
                                     loadStudentNamesForItem(item, () -> {
+                                        if (myGeneration != loadGeneration) return;  // stale
                                         sessionItems.add(item);
                                         Collections.sort(sessionItems, Comparator.comparing(a -> a.startTime));
                                         adapter.notifyDataSetChanged();
-
                                         processed[0]++;
-                                        checkDone(slotDocs.size(), processed[0], foundAny[0]);
+                                        checkDone(slotDocs.size(), processed[0], foundAny[0], myGeneration);
                                     });
                                 })
                                 .addOnFailureListener(e -> {
-                                    item.bookedStudentNames = "No Bookings";
+                                    if (myGeneration != loadGeneration) return;
                                     sessionItems.add(item);
                                     Collections.sort(sessionItems, Comparator.comparing(a -> a.startTime));
                                     adapter.notifyDataSetChanged();
-
                                     processed[0]++;
-                                    checkDone(slotDocs.size(), processed[0], foundAny[0]);
+                                    checkDone(slotDocs.size(), processed[0], foundAny[0], myGeneration);
                                 });
                     }
+                    calendarHelper.setEventDates(eventDates);
                 })
                 .addOnFailureListener(e ->
-                        Toast.makeText(this, "Failed to load slots", Toast.LENGTH_SHORT).show()
-                );
+                        Toast.makeText(this, "Failed to load slots", Toast.LENGTH_SHORT).show());
     }
+
+    // ── Student name resolution ──────────────────────────────────────────────
 
     private void loadStudentNamesForItem(@NonNull SessionListItem item, @NonNull Runnable onDone) {
         if (item.students == null || item.students.isEmpty()) {
@@ -522,69 +598,55 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
             return;
         }
 
-        List<String> names = new ArrayList<>();
-        final int total = item.students.size();
-        final int[] processed = {0};
+        List<String> names  = new ArrayList<>();
+        final int total     = item.students.size();
+        final int[] done    = {0};
 
-        for (String studentProfileId : item.students) {
-            if (studentProfileId == null || studentProfileId.trim().isEmpty()) {
-                processed[0]++;
-                if (processed[0] == total) {
+        for (String sid : item.students) {
+            if (sid == null || sid.trim().isEmpty()) {
+                done[0]++;
+                if (done[0] == total) {
                     item.bookedStudentNames = buildStudentLabel(names);
                     onDone.run();
                 }
                 continue;
             }
 
-            db.collection("users")
-                    .whereEqualTo("studentID", studentProfileId)
-                    .limit(1)
-                    .get()
-                    .addOnSuccessListener(userSnap -> {
-                        if (!userSnap.isEmpty()) {
-                            DocumentSnapshot userDoc = userSnap.getDocuments().get(0);
-                            String fullName = userDoc.getString("fullName");
-                            if (fullName != null && !fullName.trim().isEmpty()) {
-                                names.add(fullName.trim());
+            db.collection("users").whereEqualTo("studentID", sid).limit(1).get()
+                    .addOnSuccessListener(snap -> {
+                        if (!snap.isEmpty()) {
+                            String n = snap.getDocuments().get(0).getString("fullName");
+                            if (n != null && !n.trim().isEmpty()) names.add(n.trim());
+                            done[0]++;
+                            if (done[0] == total) {
+                                item.bookedStudentNames = buildStudentLabel(names);
+                                onDone.run();
                             }
                         } else {
-                            db.collection("users")
-                                    .whereEqualTo("studentId", studentProfileId)
-                                    .limit(1)
-                                    .get()
-                                    .addOnSuccessListener(userSnap2 -> {
-                                        if (!userSnap2.isEmpty()) {
-                                            DocumentSnapshot userDoc2 = userSnap2.getDocuments().get(0);
-                                            String fullName2 = userDoc2.getString("fullName");
-                                            if (fullName2 != null && !fullName2.trim().isEmpty()) {
-                                                names.add(fullName2.trim());
-                                            }
+                            db.collection("users").whereEqualTo("studentId", sid).limit(1).get()
+                                    .addOnSuccessListener(snap2 -> {
+                                        if (!snap2.isEmpty()) {
+                                            String n2 = snap2.getDocuments().get(0).getString("fullName");
+                                            if (n2 != null && !n2.trim().isEmpty()) names.add(n2.trim());
                                         }
-                                        processed[0]++;
-                                        if (processed[0] == total) {
+                                        done[0]++;
+                                        if (done[0] == total) {
                                             item.bookedStudentNames = buildStudentLabel(names);
                                             onDone.run();
                                         }
                                     })
                                     .addOnFailureListener(e -> {
-                                        processed[0]++;
-                                        if (processed[0] == total) {
+                                        done[0]++;
+                                        if (done[0] == total) {
                                             item.bookedStudentNames = buildStudentLabel(names);
                                             onDone.run();
                                         }
                                     });
-                            return;
-                        }
-
-                        processed[0]++;
-                        if (processed[0] == total) {
-                            item.bookedStudentNames = buildStudentLabel(names);
-                            onDone.run();
                         }
                     })
                     .addOnFailureListener(e -> {
-                        processed[0]++;
-                        if (processed[0] == total) {
+                        done[0]++;
+                        if (done[0] == total) {
                             item.bookedStudentNames = buildStudentLabel(names);
                             onDone.run();
                         }
@@ -593,21 +655,17 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
     }
 
     private String buildStudentLabel(@NonNull List<String> names) {
-        if (names.isEmpty()) {
-            return "No Bookings";
-        }
-
+        if (names.isEmpty()) return "No Bookings";
         int count = names.size();
-        String firstLine = "Booked: " + count + (count == 1 ? " student" : " students");
-        String secondLine = (count == 1 ? "Student: " : "Students: ") + TextUtils.join(", ", names);
-
-        return firstLine + "\n" + secondLine;
+        return "Booked: " + count + (count == 1 ? " student" : " students")
+                + "\n" + (count == 1 ? "Student: " : "Students: ") + TextUtils.join(", ", names);
     }
 
-    private void checkDone(int total, int processed, boolean foundAny) {
-        if (processed == total && !foundAny) {
-            showEmpty();
-        }
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
+    private void checkDone(int total, int processed, boolean foundAny, int generation) {
+        if (generation != loadGeneration) return;
+        if (processed == total && !foundAny) showEmpty();
     }
 
     private void showEmpty() {
@@ -627,13 +685,8 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
     }
 
     private static class SessionListItem {
-        String sessionId;
-        String timeSlotId;
-        String tutorId;
-        String type;
+        String sessionId, timeSlotId, tutorId, type, bookedStudentNames;
         List<String> students;
-        String bookedStudentNames;
-        Date startTime;
-        Date endTime;
+        Date startTime, endTime;
     }
 }

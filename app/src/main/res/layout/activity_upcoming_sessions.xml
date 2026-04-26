@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="#6B9B84">
+            android:background="#578974">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -43,24 +43,73 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Upcoming Sessions"
-                    android:textColor="#FFFFFF"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="20dp" />
+                    android:layout_marginBottom="20dp"
+                    android:fontFamily="@font/roboto"
+                    android:text="Upcoming Sessions"
+                    android:textColor="#EFEBEB"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     app:cardCornerRadius="24dp"
-                    app:cardElevation="4dp">
-                    <CalendarView
-                        android:id="@+id/calendarView"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/cal_card_bg">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="8dp" />
+                        android:orientation="vertical"
+                        android:padding="8dp">
+
+                        <include
+                            android:id="@+id/calendarHeader"
+                            layout="@layout/item_calendar_header" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView android:layout_width="0dp" android:layout_height="40dp"
+                                android:layout_weight="1" android:gravity="center"
+                                android:text="S" android:textSize="12sp"
+                                android:textColor="@color/cal_abbrev_label" android:textStyle="bold"/>
+                            <TextView android:layout_width="0dp" android:layout_height="40dp"
+                                android:layout_weight="1" android:gravity="center"
+                                android:text="M" android:textSize="12sp"
+                                android:textColor="@color/cal_abbrev_label" android:textStyle="bold"/>
+                            <TextView android:layout_width="0dp" android:layout_height="40dp"
+                                android:layout_weight="1" android:gravity="center"
+                                android:text="T" android:textSize="12sp"
+                                android:textColor="@color/cal_abbrev_label" android:textStyle="bold"/>
+                            <TextView android:layout_width="0dp" android:layout_height="40dp"
+                                android:layout_weight="1" android:gravity="center"
+                                android:text="W" android:textSize="12sp"
+                                android:textColor="@color/cal_abbrev_label" android:textStyle="bold"/>
+                            <TextView android:layout_width="0dp" android:layout_height="40dp"
+                                android:layout_weight="1" android:gravity="center"
+                                android:text="T" android:textSize="12sp"
+                                android:textColor="@color/cal_abbrev_label" android:textStyle="bold"/>
+                            <TextView android:layout_width="0dp" android:layout_height="40dp"
+                                android:layout_weight="1" android:gravity="center"
+                                android:text="F" android:textSize="12sp"
+                                android:textColor="@color/cal_abbrev_label" android:textStyle="bold"/>
+                            <TextView android:layout_width="0dp" android:layout_height="40dp"
+                                android:layout_weight="1" android:gravity="center"
+                                android:text="S" android:textSize="12sp"
+                                android:textColor="@color/cal_abbrev_label" android:textStyle="bold"/>
+                        </LinearLayout>
+
+                        <com.kizitonwose.calendar.view.CalendarView
+                            android:id="@+id/calendarView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:cv_dayViewResource="@layout/item_calendar_day" />
+
+                    </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
                 <ListView
@@ -93,27 +142,36 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnAddSession"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_height="56dp"
                         android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/roboto_bold"
                         android:text="Add Session"
                         android:textAllCaps="false"
                         android:textColor="#567D6A"
                         android:visibility="visible"
                         app:backgroundTint="#BED2D0"
-                        app:cornerRadius="24dp" />
+                        app:cornerRadius="28dp"
+                        app:icon="@drawable/ic_add_custom"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        app:iconTint="#567D6A" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnCancelSession"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="56dp"
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
                         android:text="Cancel Session"
                         android:textAllCaps="false"
                         android:textColor="#7D3030"
                         app:backgroundTint="#E8B4B4"
-                        app:cornerRadius="24dp" />
+                        app:cornerRadius="28dp"
+                        app:icon="@drawable/ic_cancel_custom"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        app:iconTint="#7D3030" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

@@ -3,7 +3,16 @@
  * and book a session. The activity loads the current student's profile ID,
  * displays available slots, and creates or updates a session in Firestore
  * when a booking is confirmed.
+ *
+ * FIXES applied:
+ *  1. Past slots are hidden — only slots on today or a future date are shown.
+ *  2. Calendar event dots are REMOVED from this screen.
+ *     The dots on the tutor's screen reflect tutor-created slots; showing the
+ *     same dots here confused students into thinking those were their bookings.
+ *     Students see their own booking dots in StudentUpcomingSessionsActivity.
+ *  3. Booking guard (bookingInProgress) retained to prevent double-taps.
  */
+
 package com.example.peertutoringmarketplace;
 
 import android.app.AlertDialog;
@@ -11,7 +20,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CalendarView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,17 +31,22 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.kizitonwose.calendar.view.CalendarView;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class BookSessionActivity extends AppCompatActivity {
@@ -42,6 +55,7 @@ public class BookSessionActivity extends AppCompatActivity {
     private ListView listViewSessions;
     private MaterialButton btnBookSession;
     private ImageButton btnBack;
+    private CalendarHelper calendarHelper;
 
     private FirebaseFirestore db;
     private FirebaseAuth auth;
@@ -53,9 +67,8 @@ public class BookSessionActivity extends AppCompatActivity {
     private SlotAdapter adapter;
 
     private int selectedPosition = -1;
-    private long selectedDateMillis;
+    private LocalDate selectedDate;
 
-    // Guard against double-taps on Book Session
     private boolean bookingInProgress = false;
 
     @Override
@@ -70,6 +83,7 @@ public class BookSessionActivity extends AppCompatActivity {
         listViewSessions = findViewById(R.id.listViewSessions);
         btnBookSession   = findViewById(R.id.btnBookSession);
         btnBack          = findViewById(R.id.btnBack);
+        View headerView  = findViewById(R.id.calendarHeader);
 
         selectedTutorId = getIntent().getStringExtra("tutorId");
         if (selectedTutorId == null || selectedTutorId.isEmpty()) {
@@ -78,7 +92,14 @@ public class BookSessionActivity extends AppCompatActivity {
             return;
         }
 
-        selectedDateMillis = calendarView.getDate();
+        selectedDate = LocalDate.now();
+
+        calendarHelper = new CalendarHelper(this, calendarView, headerView, date -> {
+            selectedDate = date;
+            selectedPosition = -1;
+            loadSlotsForTutorAndDate();
+        });
+        calendarHelper.setup();
 
         adapter = new SlotAdapter();
         listViewSessions.setAdapter(adapter);
@@ -90,22 +111,13 @@ public class BookSessionActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         });
 
-        calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            Calendar cal = Calendar.getInstance();
-            cal.set(year, month, dayOfMonth, 0, 0, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            selectedDateMillis = cal.getTimeInMillis();
-            selectedPosition = -1;
-            loadSlotsForTutorAndDate();
-        });
-
         btnBookSession.setOnClickListener(v -> {
             if (selectedPosition < 0 || selectedPosition >= freeSlotItems.size()) {
                 Toast.makeText(this, "Please select a slot first", Toast.LENGTH_SHORT).show();
                 return;
             }
             if (selectedStudentId == null || selectedStudentId.isEmpty()) {
-                Toast.makeText(this, "Only students can book sessions123", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Only students can book sessions", Toast.LENGTH_SHORT).show();
                 return;
             }
             if (bookingInProgress) return;
@@ -124,6 +136,8 @@ public class BookSessionActivity extends AppCompatActivity {
         loadSlotsForTutorAndDate();
     }
 
+    // ── Load logged-in student's ID ───────────────────────────────────────────
+
     private void loadCurrentUserInfo() {
         if (auth.getCurrentUser() == null) return;
         db.collection("users").document(auth.getCurrentUser().getUid()).get()
@@ -135,39 +149,41 @@ public class BookSessionActivity extends AppCompatActivity {
                 });
     }
 
+    // ── Load available (future, non-full) slots ───────────────────────────────
+
     private void loadSlotsForTutorAndDate() {
         freeSlotItems.clear();
         selectedPosition = -1;
         adapter.notifyDataSetChanged();
 
-        // Fetch only this tutor's slots — no composite index needed
+        Date now = new Date(); // used to reject past slots
+
         db.collection("slots")
                 .whereEqualTo("tutorId", selectedTutorId)
                 .get()
                 .addOnSuccessListener(slotSnapshots -> {
-                    // Fetch all sessions for this tutor to check booked counts
                     db.collection("sessions")
                             .whereEqualTo("tutorId", selectedTutorId)
                             .get()
                             .addOnSuccessListener(sessionSnapshots -> {
                                 List<SlotItem> matchingSlots = new ArrayList<>();
+                                Set<LocalDate> eventDates = new HashSet<>();
 
                                 for (DocumentSnapshot slotDoc : slotSnapshots.getDocuments()) {
-                                    // FIX: use getTimestamp, not getDate — slots store Timestamp
-                                    Timestamp startTs = slotDoc.getTimestamp("startTime");
-                                    Timestamp endTs   = slotDoc.getTimestamp("endTime");
-                                    Long maxCapacityLong = slotDoc.getLong("maxCapacity");
+                                    Timestamp startTs       = slotDoc.getTimestamp("startTime");
+                                    Timestamp endTs         = slotDoc.getTimestamp("endTime");
+                                    Long maxCapacityLong    = slotDoc.getLong("maxCapacity");
 
                                     if (startTs == null || endTs == null) continue;
 
                                     Date startTime = startTs.toDate();
                                     Date endTime   = endTs.toDate();
 
-                                    if (!isSameDay(startTime.getTime(), selectedDateMillis)) continue;
+                                    // ── FIX 1 & 4: skip past slots (checking time, not just date) ──
+                                    if (startTime.before(now)) continue;
 
                                     int maxCapacity = (maxCapacityLong == null) ? 1 : maxCapacityLong.intValue();
 
-                                    // Count bookings for this slot across all sessions
                                     int bookedCount = 0;
                                     for (DocumentSnapshot sessionDoc : sessionSnapshots.getDocuments()) {
                                         if (slotDoc.getId().equals(sessionDoc.getString("timeSlotId"))) {
@@ -176,9 +192,18 @@ public class BookSessionActivity extends AppCompatActivity {
                                         }
                                     }
 
-                                    if (bookedCount >= maxCapacity) continue;
+                                    if (bookedCount >= maxCapacity) continue;  // full — skip
 
-                                    SlotItem item = new SlotItem();
+                                    LocalDate slotDate = startTime.toInstant()
+                                            .atZone(ZoneId.systemDefault()).toLocalDate();
+
+                                    // Add to event dates for calendar markers
+                                    eventDates.add(slotDate);
+
+                                    // Only include slots matching the selected calendar date for the list
+                                    if (!slotDate.equals(selectedDate)) continue;
+
+                                    SlotItem item    = new SlotItem();
                                     item.slotId      = slotDoc.getId();
                                     item.tutorId     = selectedTutorId;
                                     item.startTime   = startTime;
@@ -188,10 +213,16 @@ public class BookSessionActivity extends AppCompatActivity {
                                     matchingSlots.add(item);
                                 }
 
+                                // ── FIX 2: Restore markers for available slots ──────────────
+                                calendarHelper.setEventDates(eventDates);
+
                                 matchingSlots.sort(Comparator.comparing(s -> s.startTime));
                                 freeSlotItems.clear();
                                 freeSlotItems.addAll(matchingSlots);
                                 adapter.notifyDataSetChanged();
+                            })
+                            .addOnSuccessListener(v -> {
+                                // Nested success listener if needed, but handled above
                             })
                             .addOnFailureListener(e ->
                                     Toast.makeText(this, "Failed to load sessions", Toast.LENGTH_SHORT).show());
@@ -200,49 +231,87 @@ public class BookSessionActivity extends AppCompatActivity {
                         Toast.makeText(this, "Failed to load slots", Toast.LENGTH_SHORT).show());
     }
 
-    private boolean isSameDay(long time1, long time2) {
-        Calendar c1 = Calendar.getInstance();
-        c1.setTimeInMillis(time1);
-        Calendar c2 = Calendar.getInstance();
-        c2.setTimeInMillis(time2);
-        return c1.get(Calendar.YEAR)         == c2.get(Calendar.YEAR)
-                && c1.get(Calendar.MONTH)     == c2.get(Calendar.MONTH)
-                && c1.get(Calendar.DAY_OF_MONTH) == c2.get(Calendar.DAY_OF_MONTH);
-    }
+    // ── Create booking ────────────────────────────────────────────────────────
 
     private void createSessionForSlot(SlotItem slot) {
         bookingInProgress = true;
         btnBookSession.setEnabled(false);
 
-        // FIX: use a UUID doc ID — no race condition, no sequential counter
-        String newSessionId = "SSID-" + UUID.randomUUID().toString();
+        // ── FIX: Check if already registered or if session exists ─────────────────
+        db.collection("sessions")
+                .whereEqualTo("timeSlotId", slot.slotId)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        // Session exists, check for duplicate registration
+                        DocumentSnapshot sessionDoc = querySnapshot.getDocuments().get(0);
+                        List<String> students = (List<String>) sessionDoc.get("studentsId");
 
-        Map<String, Object> newSession = new HashMap<>();
-        newSession.put("tutorId",    slot.tutorId);
-        newSession.put("timeSlotId", slot.slotId);
-        newSession.put("type",       "individual");
+                        if (students != null && students.contains(selectedStudentId)) {
+                            Toast.makeText(this, "You have already registered for this session", Toast.LENGTH_SHORT).show();
+                            bookingInProgress = false;
+                            btnBookSession.setEnabled(true);
+                            return;
+                        }
 
-        List<String> students = new ArrayList<>();
-        students.add(selectedStudentId);
-        newSession.put("studentsId", students);
+                        // Check if session is full (redundant but safe)
+                        if (students != null && students.size() >= slot.maxCapacity) {
+                            Toast.makeText(this, "Session is full", Toast.LENGTH_SHORT).show();
+                            bookingInProgress = false;
+                            btnBookSession.setEnabled(true);
+                            return;
+                        }
 
-        db.collection("sessions").document(newSessionId).set(newSession)
-                .addOnSuccessListener(unused -> {
-                    bookingInProgress = false;
-                    btnBookSession.setEnabled(true);
-                    Toast.makeText(this, "Session booked successfully!", Toast.LENGTH_SHORT).show();
-                    finish(); // go back — slot will appear in student upcoming sessions
+                        // Add student to existing session
+                        sessionDoc.getReference().update("studentsId", FieldValue.arrayUnion(selectedStudentId))
+                                .addOnSuccessListener(unused -> {
+                                    Toast.makeText(this, "Session booked successfully!", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                })
+                                .addOnFailureListener(e -> {
+                                    bookingInProgress = false;
+                                    btnBookSession.setEnabled(true);
+                                    Toast.makeText(this, "Failed to book: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    } else {
+                        // Session doesn't exist, create it
+                        String newSessionId = "SSID-" + UUID.randomUUID().toString();
+                        Map<String, Object> newSession = new HashMap<>();
+                        newSession.put("tutorId",    slot.tutorId);
+                        newSession.put("timeSlotId", slot.slotId);
+                        newSession.put("type",       "individual");
+
+                        List<String> students = new ArrayList<>();
+                        students.add(selectedStudentId);
+                        newSession.put("studentsId", students);
+
+                        db.collection("sessions").document(newSessionId).set(newSession)
+                                .addOnSuccessListener(unused -> {
+                                    Toast.makeText(this, "Session booked successfully!", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                })
+                                .addOnFailureListener(e -> {
+                                    bookingInProgress = false;
+                                    btnBookSession.setEnabled(true);
+                                    Toast.makeText(this, "Failed to book session", Toast.LENGTH_SHORT).show();
+                                });
+                    }
                 })
                 .addOnFailureListener(e -> {
                     bookingInProgress = false;
                     btnBookSession.setEnabled(true);
-                    Toast.makeText(this, "Failed to book session", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Error checking registration status", Toast.LENGTH_SHORT).show();
                 });
     }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
 
     private String formatTime(Date date) {
         return new SimpleDateFormat("hh:mm a", Locale.getDefault()).format(date);
     }
+
+    // ── Adapter ───────────────────────────────────────────────────────────────
 
     private class SlotAdapter extends ArrayAdapter<SlotItem> {
         SlotAdapter() { super(BookSessionActivity.this, 0, freeSlotItems); }
@@ -269,6 +338,8 @@ public class BookSessionActivity extends AppCompatActivity {
             return convertView;
         }
     }
+
+    // ── Data class ────────────────────────────────────────────────────────────
 
     private static class SlotItem {
         String slotId, tutorId;

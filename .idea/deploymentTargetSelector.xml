@@ -15,9 +15,14 @@
       </SelectionState>
       <SelectionState runConfigName="Tests in 'com.example.peertutoringmarketplace'">
         <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="Tests in 'com.example.peertutoringmarketplace'">
-        <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2026-04-07T15:28:13.578108300Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=R5CW61X6S4E" />
+            </handle>
+          </Target>
+        </DropdownSelection>
+        <DialogSelection />
       </SelectionState>
     </selectionStates>
   </component>
