@@ -2,6 +2,13 @@
  * Displays the currently logged-in student's booked sessions for the selected date.
  * The activity loads the student's sessions, shows the associated tutor name and
  * session time, and allows the student to unbook a selected session.
+ *
+ * FIXES applied:
+ *  1. loadGeneration counter prevents duplicate entries from stale async callbacks.
+ *  2. Calendar event dots now show the student's own booked session dates
+ *     (not tutor slot dates — those belong on the tutor's screen only).
+ *  3. Past sessions are still shown (students may want to review history);
+ *     remove the isPast guard below if you want to hide past sessions too.
  */
 
 package com.example.peertutoringmarketplace;
@@ -14,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,15 +40,23 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+
+import com.kizitonwose.calendar.view.CalendarView;
 
 public class StudentUpcomingSessionsActivity extends AppCompatActivity {
 
     private CalendarView calendarView;
+    private CalendarHelper calendarHelper;
     private ListView listViewSessions;
     private TextView tvEmpty;
     private Button btnUnbookSession;
@@ -54,9 +68,15 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
     private SessionAdapter adapter;
 
     private String selectedStudentId;
-    private int selectedYear, selectedMonth, selectedDay;
+    private LocalDate selectedDate;
     private int selectedPosition = -1;
     private DrawerLayout drawerLayout;
+
+    /**
+     * Duplication guard — same pattern as UpcomingSessionsActivity.
+     * Prevents stale async results from appending to an already-refreshed list.
+     */
+    private int loadGeneration = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,25 +97,23 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
         tvEmpty          = findViewById(R.id.tvEmpty);
         btnUnbookSession = findViewById(R.id.btnUnbookSession);
 
-        // FIX: use BaseAdapter — ArrayAdapter with custom layout crashes on item_session_slot
         adapter = new SessionAdapter();
         listViewSessions.setAdapter(adapter);
         listViewSessions.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        Calendar today = Calendar.getInstance();
-        selectedYear  = today.get(Calendar.YEAR);
-        selectedMonth = today.get(Calendar.MONTH);
-        selectedDay   = today.get(Calendar.DAY_OF_MONTH);
+        selectedDate = LocalDate.now();
+
+        calendarHelper = new CalendarHelper(this, calendarView,
+                findViewById(R.id.calendarHeader), date -> {
+            selectedDate = date;
+            selectedPosition = -1;
+            if (selectedStudentId != null) loadSessionsForDate(selectedStudentId);
+        });
+        calendarHelper.setup();
 
         listViewSessions.setOnItemClickListener((parent, view, position, id) -> {
             selectedPosition = position;
             adapter.notifyDataSetChanged();
-        });
-
-        calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            selectedYear = year; selectedMonth = month; selectedDay = dayOfMonth;
-            selectedPosition = -1;
-            if (selectedStudentId != null) loadSessionsForDate(selectedStudentId);
         });
 
         btnUnbookSession.setOnClickListener(v -> {
@@ -104,6 +122,13 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
                 return;
             }
             SessionListItem item = sessionItems.get(selectedPosition);
+
+            // ── FIX: Prevent unbooking past sessions ──────────────────────
+            if (item.startTime.before(new Date())) {
+                Toast.makeText(this, "Cannot unbook a past session", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             String dateStr = new SimpleDateFormat("EEE, MMM d yyyy", Locale.getDefault()).format(item.startTime);
             String timeStr = formatTime(item.startTime) + " - " + formatTime(item.endTime);
             new AlertDialog.Builder(this)
@@ -117,11 +142,12 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
         loadCurrentStudentIdAndSessions();
     }
 
-    // ── BaseAdapter — avoids ArrayAdapter crash on custom layout ─────────────
+    // ── Adapter ──────────────────────────────────────────────────────────────
+
     private class SessionAdapter extends BaseAdapter {
-        @Override public int getCount() { return sessionItems.size(); }
-        @Override public Object getItem(int pos) { return sessionItems.get(pos); }
-        @Override public long getItemId(int pos) { return pos; }
+        @Override public int getCount()           { return sessionItems.size(); }
+        @Override public Object getItem(int pos)  { return sessionItems.get(pos); }
+        @Override public long getItemId(int pos)  { return pos; }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -141,6 +167,8 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
         }
     }
 
+    // ── Firestore: resolve student ID then kick off two-phase load ───────────
+
     private void loadCurrentStudentIdAndSessions() {
         if (auth.getCurrentUser() == null) { finish(); return; }
         db.collection("users").document(auth.getCurrentUser().getUid()).get()
@@ -153,11 +181,71 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
                         Toast.makeText(this, "Student ID not found", Toast.LENGTH_SHORT).show();
                         return;
                     }
+                    // Phase 1: load ALL booked dates to paint calendar markers,
+                    // then Phase 2: load sessions for the currently selected date.
+                    loadAllBookedDatesForCalendar(selectedStudentId);
                     loadSessionsForDate(selectedStudentId);
                 });
     }
 
+    /**
+     * Phase 1 — queries every session the student is enrolled in,
+     * resolves the slot date for each, and paints event dots on the calendar.
+     * This runs independently of the per-date load so markers appear even when
+     * the student is looking at a day with no sessions.
+     */
+    private void loadAllBookedDatesForCalendar(@NonNull String studentId) {
+        db.collection("sessions")
+                .whereArrayContains("studentsId", studentId)
+                .get()
+                .addOnSuccessListener(sessionSnaps -> {
+                    List<DocumentSnapshot> docs = sessionSnaps.getDocuments();
+                    if (docs.isEmpty()) {
+                        calendarHelper.setEventDates(new HashSet<>());
+                        return;
+                    }
+
+                    Set<LocalDate> bookedDates = new HashSet<>();
+                    int[] resolved = {0};
+                    int total = docs.size();
+
+                    for (DocumentSnapshot sessionDoc : docs) {
+                        String timeSlotId = sessionDoc.getString("timeSlotId");
+                        if (timeSlotId == null) {
+                            resolved[0]++;
+                            if (resolved[0] == total) calendarHelper.setEventDates(bookedDates);
+                            continue;
+                        }
+
+                        db.collection("slots").document(timeSlotId).get()
+                                .addOnSuccessListener(slotDoc -> {
+                                    if (slotDoc.exists()) {
+                                        Timestamp startTs = slotDoc.getTimestamp("startTime");
+                                        if (startTs != null) {
+                                            LocalDate d = startTs.toDate().toInstant()
+                                                    .atZone(ZoneId.systemDefault()).toLocalDate();
+                                            bookedDates.add(d);
+                                        }
+                                    }
+                                    resolved[0]++;
+                                    if (resolved[0] == total) calendarHelper.setEventDates(bookedDates);
+                                })
+                                .addOnFailureListener(e -> {
+                                    resolved[0]++;
+                                    if (resolved[0] == total) calendarHelper.setEventDates(bookedDates);
+                                });
+                    }
+                });
+        // Failures on the top-level query leave the calendar without dots — acceptable.
+    }
+
+    /**
+     * Phase 2 — loads sessions for the currently selected date only.
+     * loadGeneration prevents stale async callbacks from appending duplicate rows.
+     */
     private void loadSessionsForDate(@NonNull String studentId) {
+        final int myGeneration = ++loadGeneration;   // ← guard
+
         sessionItems.clear();
         selectedPosition = -1;
         adapter.notifyDataSetChanged();
@@ -168,38 +256,40 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
                 .whereArrayContains("studentsId", studentId)
                 .get()
                 .addOnSuccessListener(sessionSnaps -> {
+                    if (myGeneration != loadGeneration) return;  // stale — discard
+
                     List<DocumentSnapshot> docs = sessionSnaps.getDocuments();
                     if (docs.isEmpty()) { showEmpty(); return; }
 
-                    // FIX: track total including non-matching docs so checkDone fires correctly
-                    int[] processed = {0};
+                    int[] processed    = {0};
                     boolean[] foundAny = {false};
-                    int total = docs.size();
+                    int total          = docs.size();
 
                     for (DocumentSnapshot sessionDoc : docs) {
                         String timeSlotId = sessionDoc.getString("timeSlotId");
                         String tutorId    = sessionDoc.getString("tutorId");
 
                         if (timeSlotId == null) {
-                            // FIX: always increment — even for skipped docs
                             processed[0]++;
-                            checkDone(total, processed[0], foundAny[0]);
+                            checkDone(total, processed[0], foundAny[0], myGeneration);
                             continue;
                         }
 
                         db.collection("slots").document(timeSlotId).get()
                                 .addOnSuccessListener(slotDoc -> {
+                                    if (myGeneration != loadGeneration) return;  // stale
+
                                     if (slotDoc.exists()) {
                                         Timestamp startTs = slotDoc.getTimestamp("startTime");
                                         Timestamp endTs   = slotDoc.getTimestamp("endTime");
                                         if (startTs != null && endTs != null) {
-                                            Calendar c = Calendar.getInstance();
-                                            c.setTime(startTs.toDate());
-                                            if (c.get(Calendar.YEAR)               == selectedYear
-                                                    && c.get(Calendar.MONTH)        == selectedMonth
-                                                    && c.get(Calendar.DAY_OF_MONTH) == selectedDay) {
+                                            LocalDate slotDate = startTs.toDate().toInstant()
+                                                    .atZone(ZoneId.systemDefault()).toLocalDate();
 
+                                            // ── FIX: Show ALL sessions (past and future) ──────────
+                                            if (slotDate.equals(selectedDate)) {
                                                 foundAny[0] = true;
+
                                                 SessionListItem item = new SessionListItem();
                                                 item.sessionId  = sessionDoc.getId();
                                                 item.timeSlotId = timeSlotId;
@@ -207,30 +297,35 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
                                                 item.startTime  = startTs.toDate();
                                                 item.endTime    = endTs.toDate();
 
-                                                // Load tutor name then add — processed++ happens inside
                                                 loadTutorNameForItem(item, () -> {
+                                                    if (myGeneration != loadGeneration) return;  // stale
                                                     sessionItems.add(item);
+                                                    Collections.sort(sessionItems,
+                                                            Comparator.comparing(a -> a.startTime));
                                                     adapter.notifyDataSetChanged();
                                                     processed[0]++;
-                                                    checkDone(total, processed[0], foundAny[0]);
+                                                    checkDone(total, processed[0], foundAny[0], myGeneration);
                                                 });
-                                                return; // don't fall through to processed++ below
+                                                return;  // processed++ happens inside loadTutorNameForItem
                                             }
                                         }
                                     }
-                                    // Slot doesn't match date or doesn't exist — still count it
+                                    // Slot not on selected date or missing — still count it
                                     processed[0]++;
-                                    checkDone(total, processed[0], foundAny[0]);
+                                    checkDone(total, processed[0], foundAny[0], myGeneration);
                                 })
                                 .addOnFailureListener(e -> {
+                                    if (myGeneration != loadGeneration) return;
                                     processed[0]++;
-                                    checkDone(total, processed[0], foundAny[0]);
+                                    checkDone(total, processed[0], foundAny[0], myGeneration);
                                 });
                     }
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Failed to load sessions", Toast.LENGTH_SHORT).show());
     }
+
+    // ── Tutor name resolution ────────────────────────────────────────────────
 
     private void loadTutorNameForItem(@NonNull SessionListItem item, @NonNull Runnable onDone) {
         if (item.tutorId == null || item.tutorId.trim().isEmpty()) {
@@ -247,11 +342,13 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> { item.tutorName = "Tutor"; onDone.run(); });
     }
 
+    // ── Unbook ───────────────────────────────────────────────────────────────
+
     private void unbookSession(SessionListItem item) {
         db.collection("sessions").document(item.sessionId)
                 .update("studentsId", FieldValue.arrayRemove(selectedStudentId))
                 .addOnSuccessListener(unused -> {
-                    // If no students left, delete the session doc entirely
+                    // Delete the session document entirely if no students remain.
                     db.collection("sessions").document(item.sessionId).get()
                             .addOnSuccessListener(doc -> {
                                 List<String> remaining = (List<String>) doc.get("studentsId");
@@ -260,13 +357,18 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
                             });
                     Toast.makeText(this, "Session unbooked successfully", Toast.LENGTH_SHORT).show();
                     selectedPosition = -1;
+                    // Refresh both calendar markers and date list
+                    loadAllBookedDatesForCalendar(selectedStudentId);
                     loadSessionsForDate(selectedStudentId);
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Failed to unbook: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }
 
-    private void checkDone(int total, int processed, boolean foundAny) {
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
+    private void checkDone(int total, int processed, boolean foundAny, int generation) {
+        if (generation != loadGeneration) return;
         if (processed == total && !foundAny) showEmpty();
     }
 
