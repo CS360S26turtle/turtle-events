@@ -14,6 +14,7 @@ package com.example.peertutoringmarketplace;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -112,7 +113,9 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
         listViewSessions.setAdapter(adapter);
         listViewSessions.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        selectedDate = LocalDate.now();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            selectedDate = LocalDate.now();
+        }
 
         calendarHelper = new CalendarHelper(this, calendarView,
                 findViewById(R.id.calendarHeader), date -> {
@@ -152,9 +155,11 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
         });
 
         btnAddSession.setOnClickListener(v -> {
-            if (selectedDate.isBefore(LocalDate.now())) {
-                Toast.makeText(this, "This date has passed", Toast.LENGTH_SHORT).show();
-                return;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (selectedDate.isBefore(LocalDate.now())) {
+                    Toast.makeText(this, "This date has passed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
             showAddSessionDialog();
         });
@@ -254,15 +259,20 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
 
         // Use setOnShowListener so we can intercept the positive button and
         // keep the dialog open on validation errors instead of always closing.
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Add Session - "
-                        + selectedDate.getDayOfMonth() + "/"
-                        + selectedDate.getMonthValue() + "/"
-                        + selectedDate.getYear())
-                .setView(layout)
-                .setPositiveButton("Add", null)   // set to null — handled below
-                .setNegativeButton("Cancel", null)
-                .create();
+        AlertDialog dialog;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            dialog = new AlertDialog.Builder(this)
+                    .setTitle("Add Session - "
+                            + selectedDate.getDayOfMonth() + "/"
+                            + selectedDate.getMonthValue() + "/"
+                            + selectedDate.getYear())
+                    .setView(layout)
+                    .setPositiveButton("Add", null)   // set to null — handled below
+                    .setNegativeButton("Cancel", null)
+                    .create();
+        } else {
+            dialog = null;
+        }
 
         dialog.setOnShowListener(di -> {
             Button btnAdd = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -274,13 +284,17 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                 }
 
                 Calendar startCheck = Calendar.getInstance();
-                startCheck.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1,
-                        selectedDate.getDayOfMonth(), startHour[0], startMin[0], 0);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startCheck.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1,
+                            selectedDate.getDayOfMonth(), startHour[0], startMin[0], 0);
+                }
                 startCheck.set(Calendar.MILLISECOND, 0);
 
                 Calendar endCheck = Calendar.getInstance();
-                endCheck.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1,
-                        selectedDate.getDayOfMonth(), endHour[0], endMin[0], 0);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    endCheck.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1,
+                            selectedDate.getDayOfMonth(), endHour[0], endMin[0], 0);
+                }
                 endCheck.set(Calendar.MILLISECOND, 0);
 
                 if (!startCheck.before(endCheck)) {
@@ -325,13 +339,17 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
 
     private void createSlot(int sH, int sM, int eH, int eM, int capacity) {
         Calendar startCal = Calendar.getInstance();
-        startCal.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1,
-                selectedDate.getDayOfMonth(), sH, sM, 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startCal.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1,
+                    selectedDate.getDayOfMonth(), sH, sM, 0);
+        }
         startCal.set(Calendar.MILLISECOND, 0);
 
         Calendar endCal = Calendar.getInstance();
-        endCal.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1,
-                selectedDate.getDayOfMonth(), eH, eM, 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            endCal.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1,
+                    selectedDate.getDayOfMonth(), eH, eM, 0);
+        }
         endCal.set(Calendar.MILLISECOND, 0);
 
         Date newStart = startCal.getTime();
@@ -348,8 +366,11 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                         Timestamp endTs   = d.getTimestamp("endTime");
                         if (startTs == null || endTs == null) continue;
 
-                        LocalDate slotDate = startTs.toDate().toInstant()
-                                .atZone(ZoneId.systemDefault()).toLocalDate();
+                        LocalDate slotDate = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            slotDate = startTs.toDate().toInstant()
+                                    .atZone(ZoneId.systemDefault()).toLocalDate();
+                        }
 
                         if (slotDate.equals(selectedDate)) {
                             if (newStart.before(endTs.toDate()) && newEnd.after(startTs.toDate())) {
@@ -520,8 +541,11 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                             continue;
                         }
 
-                        LocalDate slotLocalDate = startTs.toDate().toInstant()
-                                .atZone(ZoneId.systemDefault()).toLocalDate();
+                        LocalDate slotLocalDate = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            slotLocalDate = startTs.toDate().toInstant()
+                                    .atZone(ZoneId.systemDefault()).toLocalDate();
+                        }
 
                         // ── FIX: Show ALL slots (past and future) ────────────
                         eventDates.add(slotLocalDate);

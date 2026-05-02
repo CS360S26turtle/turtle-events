@@ -1,7 +1,10 @@
 # Project Documentation
 
 ## Table of Contents
+<<<<<<< HEAD
 ## Table of Contents
+=======
+>>>>>>> 1d3b2e4e56053ef9f2150d085fc5063029f54cff
 
 * [Team Information](#team-information)
 
@@ -394,6 +397,10 @@ with each other.
 | US 16 - Reporting | As a student or tutor, I want to be able to report inappropriate behavior so that the platform maintains safety and accountability. | High | To Do |
 | US 17 - Tutor Verification | As an administrator, I want to verify tutor credentials, so that the platform maintains quality and trust. | High | To Do |
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | To Do |
+<<<<<<< HEAD
+=======
+| US 19 - Forget Password Option | As a user, I want to be able to reset my password in case I forget my password through sending a request with an email. | Low | To Do|
+>>>>>>> 1d3b2e4e56053ef9f2150d085fc5063029f54cff
 
 
 ### Product Backlog – Project Part 2 (Halfway)
@@ -416,6 +423,11 @@ with each other.
 | US 16 - Reporting | As a student or tutor, I want to be able to report inappropriate behavior so that the platform maintains safety and accountability. | High | To Do |
 | US 17 - Tutor Verification | As an administrator, I want to verify tutor credentials, so that the platform maintains quality and trust. | High | Done |
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | To Do |
+<<<<<<< HEAD
+=======
+| US 19 - Forget Password Option | As a user, I want to be able to reset my password in case I forget my password through sending a request with an email. | Low | Done|
+
+>>>>>>> 1d3b2e4e56053ef9f2150d085fc5063029f54cff
 
 ## UI interface - Halfway
 

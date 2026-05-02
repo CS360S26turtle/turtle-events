@@ -59,7 +59,7 @@ public class AdminActivity extends AppCompatActivity {
         filterChipGroup = findViewById(R.id.filterChipGroup);
 
         tutorList = new ArrayList<>();
-        adapter = new TutorAdapter(tutorList);
+        adapter = new TutorAdapter(tutorList,false);
 
         if (recyclerView != null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));

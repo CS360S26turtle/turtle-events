@@ -67,7 +67,6 @@ public class TutorMenuFragment extends Fragment {
                 getActivity().finish();
             }
         });
-
         btnLogout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             SessionManager.getInstance().logout();

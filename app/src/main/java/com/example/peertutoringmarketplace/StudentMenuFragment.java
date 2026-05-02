@@ -27,8 +27,12 @@ public class StudentMenuFragment extends Fragment {
         LinearLayout btnSettings = view.findViewById(R.id.menu_settings);
         LinearLayout btnLogout = view.findViewById(R.id.menu_logout);
 
-        btnTutors.setOnClickListener(v ->
-                Toast.makeText(getActivity(), "My Tutors", Toast.LENGTH_SHORT).show());
+
+        btnTutors.setOnClickListener(v ->{
+            if (getActivity() != null) {
+                getActivity().startActivity(new Intent(getActivity(), MyTutorsActivity.class));
+            }
+        });
 
         btnUpcoming.setOnClickListener(v -> {
             if (getActivity() != null) {

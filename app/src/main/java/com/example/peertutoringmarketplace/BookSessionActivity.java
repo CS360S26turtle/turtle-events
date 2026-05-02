@@ -16,6 +16,7 @@
 package com.example.peertutoringmarketplace;
 
 import android.app.AlertDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +93,12 @@ public class BookSessionActivity extends AppCompatActivity {
             return;
         }
 
-        selectedDate = LocalDate.now();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            selectedDate = LocalDate.now();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            selectedDate = LocalDate.now();
+        }
 
         calendarHelper = new CalendarHelper(this, calendarView, headerView, date -> {
             selectedDate = date;
@@ -194,8 +200,11 @@ public class BookSessionActivity extends AppCompatActivity {
 
                                     if (bookedCount >= maxCapacity) continue;  // full — skip
 
-                                    LocalDate slotDate = startTime.toInstant()
-                                            .atZone(ZoneId.systemDefault()).toLocalDate();
+                                    LocalDate slotDate = null;
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        slotDate = startTime.toInstant()
+                                                .atZone(ZoneId.systemDefault()).toLocalDate();
+                                    }
 
                                     // Add to event dates for calendar markers
                                     eventDates.add(slotDate);

@@ -22,9 +22,12 @@ import java.util.List;
 public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> {
 
     List<User> tutorList;
+    // ADD THIS: A boolean to track if we are in the "My Tutors" screen
+    private boolean isMyTutorsContext;
 
-    public TutorAdapter(List<User> tutorList) {
+    public TutorAdapter(List<User> tutorList, boolean isMyTutorsContext) {
         this.tutorList = tutorList;
+        this.isMyTutorsContext = isMyTutorsContext;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -52,7 +55,6 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
         holder.email.setText(user.getFullName() != null ? user.getFullName() : user.getEmail());
         holder.status.setText(user.getRole() + " - " + user.getVerificationStatus());
 
-        // Set dynamic initials
         String name = user.getFullName();
         if (name == null || name.isEmpty()) name = user.getEmail();
         if (name != null && !name.isEmpty()) {
@@ -70,9 +72,9 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
                 intent.putExtra("uid", user.getUserID());
                 v.getContext().startActivity(intent);
             } else {
-                // Student searching for a tutor
                 Intent intent = new Intent(v.getContext(), TutorProfileActivity.class);
                 intent.putExtra("tutorId", user.getUserID());
+                intent.putExtra("FROM_MY_TUTORS", isMyTutorsContext);
                 v.getContext().startActivity(intent);
             }
         });

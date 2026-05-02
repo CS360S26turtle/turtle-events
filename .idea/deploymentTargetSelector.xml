@@ -13,6 +13,8 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
+<<<<<<< HEAD
+=======
       <SelectionState runConfigName="Tests in 'com.example.peertutoringmarketplace'">
         <option name="selectionMode" value="DROPDOWN" />
         <DropdownSelection timestamp="2026-04-07T15:28:13.578108300Z">
@@ -36,6 +38,7 @@
       <SelectionState runConfigName="RegisterAccountActivityTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+>>>>>>> 1d3b2e4e56053ef9f2150d085fc5063029f54cff
     </selectionStates>
   </component>
 </project>

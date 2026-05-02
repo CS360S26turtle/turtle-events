@@ -15,6 +15,7 @@ package com.example.peertutoringmarketplace;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -101,7 +102,9 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
         listViewSessions.setAdapter(adapter);
         listViewSessions.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        selectedDate = LocalDate.now();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            selectedDate = LocalDate.now();
+        }
 
         calendarHelper = new CalendarHelper(this, calendarView,
                 findViewById(R.id.calendarHeader), date -> {
@@ -222,8 +225,11 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
                                     if (slotDoc.exists()) {
                                         Timestamp startTs = slotDoc.getTimestamp("startTime");
                                         if (startTs != null) {
-                                            LocalDate d = startTs.toDate().toInstant()
-                                                    .atZone(ZoneId.systemDefault()).toLocalDate();
+                                            LocalDate d = null;
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                d = startTs.toDate().toInstant()
+                                                        .atZone(ZoneId.systemDefault()).toLocalDate();
+                                            }
                                             bookedDates.add(d);
                                         }
                                     }
@@ -283,8 +289,11 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
                                         Timestamp startTs = slotDoc.getTimestamp("startTime");
                                         Timestamp endTs   = slotDoc.getTimestamp("endTime");
                                         if (startTs != null && endTs != null) {
-                                            LocalDate slotDate = startTs.toDate().toInstant()
-                                                    .atZone(ZoneId.systemDefault()).toLocalDate();
+                                            LocalDate slotDate = null;
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                slotDate = startTs.toDate().toInstant()
+                                                        .atZone(ZoneId.systemDefault()).toLocalDate();
+                                            }
 
                                             // ── FIX: Show ALL sessions (past and future) ──────────
                                             if (slotDate.equals(selectedDate)) {
@@ -386,11 +395,13 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
         menuContainer.removeAllViews();
         menuContainer.addView(menuView);
 
-        LinearLayout menuTutors = menuView.findViewById(R.id.menu_tutors);
-        if (menuTutors != null) menuTutors.setOnClickListener(v -> {
-            startActivity(new Intent(this, SearchTutorActivity.class));
-            drawerLayout.closeDrawer(GravityCompat.START);
-        });
+        LinearLayout menuMyTutors = menuView.findViewById(R.id.menu_tutors);
+        if (menuMyTutors != null) {
+            menuMyTutors.setOnClickListener(v -> {
+                startActivity(new Intent(this, MyTutorsActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });
+        }
 
         LinearLayout menuUpcoming = menuView.findViewById(R.id.menu_upcoming);
         if (menuUpcoming != null)

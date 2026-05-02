@@ -43,7 +43,7 @@ public class SearchTutorActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         tutorList = new ArrayList<>();
-        adapter = new TutorAdapter(tutorList);
+        adapter = new TutorAdapter(tutorList,false);
         rvResults.setLayoutManager(new LinearLayoutManager(this));
         rvResults.setAdapter(adapter);
 
