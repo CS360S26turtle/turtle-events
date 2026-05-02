@@ -1,10 +1,7 @@
 # Project Documentation
 
 ## Table of Contents
-<<<<<<< HEAD
-## Table of Contents
 =======
->>>>>>> 1d3b2e4e56053ef9f2150d085fc5063029f54cff
 
 * [Team Information](#team-information)
 
