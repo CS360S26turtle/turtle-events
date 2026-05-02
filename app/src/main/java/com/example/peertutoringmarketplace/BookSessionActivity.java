@@ -96,6 +96,9 @@ public class BookSessionActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             selectedDate = LocalDate.now();
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            selectedDate = LocalDate.now();
+        }
 
         calendarHelper = new CalendarHelper(this, calendarView, headerView, date -> {
             selectedDate = date;

@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -41,6 +43,30 @@ public class TutorMenuFragment extends Fragment {
                 startActivity(intent);
         });
 
+        // Inside TutorMenuFragment.java onCreateView
+        LinearLayout btnSwitchRole = view.findViewById(R.id.menu_switch_role);
+
+        btnSwitchRole.setOnClickListener(v -> {
+            // 1. Get the context from the view itself
+            android.content.Context context = v.getContext();
+
+            // 2. Update the role immediately
+            SessionManager.getInstance().setCurrentRole("student");
+
+            // 3. Create the intent
+            Intent intent = new Intent(context, StudentProfileActivity.class);
+
+            // 4. Use these specific flags to clear the old role's screens
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            // 5. Start activity using the context we just got
+            context.startActivity(intent);
+
+            // 6. Close the current activity
+            if (getActivity() != null) {
+                getActivity().finish();
+            }
+        });
         btnLogout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             SessionManager.getInstance().logout();

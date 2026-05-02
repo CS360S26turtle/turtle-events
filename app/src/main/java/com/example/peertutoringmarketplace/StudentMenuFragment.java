@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -44,6 +46,24 @@ public class StudentMenuFragment extends Fragment {
         btnSettings.setOnClickListener(v -> {
             if (getActivity() != null) {
                 getActivity().startActivity(new Intent(getActivity(), StudentProfileActivity.class));
+            }
+        });
+
+        LinearLayout btnSwitchRole = view.findViewById(R.id.menu_switch_role);
+
+        btnSwitchRole.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                DrawerLayout drawer = getActivity().findViewById(R.id.drawer_layout);
+                if (drawer != null) {
+                    drawer.closeDrawer(GravityCompat.START);
+                    drawer.postDelayed(() -> {
+                        SessionManager.getInstance().setCurrentRole("tutor");
+                        Intent intent = new Intent(getActivity(), TutorProfileActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        if (getActivity() != null) getActivity().finish();
+                    }, 250);
+                }
             }
         });
 

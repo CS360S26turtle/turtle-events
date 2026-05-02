@@ -25,7 +25,6 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
     // ADD THIS: A boolean to track if we are in the "My Tutors" screen
     private boolean isMyTutorsContext;
 
-    // UPDATE CONSTRUCTOR: Accept the boolean flag
     public TutorAdapter(List<User> tutorList, boolean isMyTutorsContext) {
         this.tutorList = tutorList;
         this.isMyTutorsContext = isMyTutorsContext;
@@ -75,10 +74,7 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
             } else {
                 Intent intent = new Intent(v.getContext(), TutorProfileActivity.class);
                 intent.putExtra("tutorId", user.getUserID());
-
-                // FIXED: Use the variable instead of hardcoding 'true'
                 intent.putExtra("FROM_MY_TUTORS", isMyTutorsContext);
-
                 v.getContext().startActivity(intent);
             }
         });
