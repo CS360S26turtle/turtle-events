@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginBottom="12dp"
+    android:padding="16dp"
+    android:background="@drawable/bg_slot_item">
+
+    <TextView
+        android:id="@+id/tvSlotTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="02:00 PM - 03:00 PM"
+        android:textColor="#2F4F3E"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvSlotSeats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="Remaining Seats: 2/3"
+        android:textColor="#5F7D6D"
+        android:textSize="14sp" />
+</LinearLayout>
