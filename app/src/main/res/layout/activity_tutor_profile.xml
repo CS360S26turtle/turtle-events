@@ -159,6 +159,17 @@
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_report_tutor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="28dp"
+                android:layout_marginBottom="8dp"
+                android:text="Report Tutor"
+                android:textColor="#FF5252"
+                android:visibility="gone"
+                style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_book_session"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"

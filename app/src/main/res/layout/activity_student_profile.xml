@@ -243,10 +243,20 @@
                     </com.google.android.material.chip.ChipGroup>
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_report_student"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Report Student"
+                        android:textColor="#FF5252"
+                        android:visibility="gone"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_save_student_profile"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="8dp"
                         android:text="Save Profile Changes"
                         android:textColor="#578974"
                         android:textStyle="bold"
