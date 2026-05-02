@@ -41,6 +41,7 @@ import com.google.android.material.timepicker.TimeFormat;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
@@ -209,20 +210,14 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
         tvStart.setTextSize(16);
         tvStart.setPadding(0, 16, 0, 16);
         tvStart.setOnClickListener(v -> {
-            MaterialTimePicker picker = new MaterialTimePicker.Builder()
-                    .setTimeFormat(TimeFormat.CLOCK_12H)
-                    .setHour(startHour[0])
-                    .setMinute(startMin[0])
-                    .setTitleText("Select start time")
-                    .setInputMode(MaterialTimePicker.INPUT_MODE_KEYBOARD)
-                    .build();
-            picker.addOnPositiveButtonClickListener(view -> {
-                startHour[0] = picker.getHour();
-                startMin[0]  = picker.getMinute();
-                startSet[0]  = true;
-                tvStart.setText("Start Time: " + formatHM(startHour[0], startMin[0]));
-            });
-            picker.show(getSupportFragmentManager(), "start_time_picker");
+            android.app.TimePickerDialog picker = new android.app.TimePickerDialog(this,
+                    (view, hourOfDay, minute) -> {
+                        startHour[0] = hourOfDay;
+                        startMin[0]  = minute;
+                        startSet[0]  = true;
+                        tvStart.setText("Start Time: " + formatHM(startHour[0], startMin[0]));
+                    }, startHour[0], startMin[0], false); // 'false' makes it 12-hour format
+            picker.show();
         });
 
         // ── End time picker ──────────────────────────────────────────────────
@@ -231,20 +226,14 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
         tvEnd.setTextSize(16);
         tvEnd.setPadding(0, 16, 0, 16);
         tvEnd.setOnClickListener(v -> {
-            MaterialTimePicker picker = new MaterialTimePicker.Builder()
-                    .setTimeFormat(TimeFormat.CLOCK_12H)
-                    .setHour(endHour[0])
-                    .setMinute(endMin[0])
-                    .setTitleText("Select end time")
-                    .setInputMode(MaterialTimePicker.INPUT_MODE_KEYBOARD)
-                    .build();
-            picker.addOnPositiveButtonClickListener(view -> {
-                endHour[0] = picker.getHour();
-                endMin[0]  = picker.getMinute();
-                endSet[0]  = true;
-                tvEnd.setText("End Time: " + formatHM(endHour[0], endMin[0]));
-            });
-            picker.show(getSupportFragmentManager(), "end_time_picker");
+            android.app.TimePickerDialog picker = new android.app.TimePickerDialog(this,
+                    (view, hourOfDay, minute) -> {
+                        endHour[0] = hourOfDay;
+                        endMin[0]  = minute;
+                        endSet[0]  = true;
+                        tvEnd.setText("End Time: " + formatHM(endHour[0], endMin[0]));
+                    }, endHour[0], endMin[0], false);
+            picker.show();
         });
 
         // ── Capacity field ───────────────────────────────────────────────────
@@ -385,6 +374,8 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
 
                     db.collection("slots").document(newSlotId).set(slot)
                             .addOnSuccessListener(unused -> {
+                                db.collection("tutors").document(selectedTutorId)
+                                        .update("badges", FieldValue.arrayUnion("first_booking"));
                                 Toast.makeText(this, "Session added successfully!", Toast.LENGTH_SHORT).show();
                                 loadSlotsForDate(selectedTutorId);
                             })

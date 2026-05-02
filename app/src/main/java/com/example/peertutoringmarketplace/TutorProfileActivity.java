@@ -28,6 +28,7 @@ public class TutorProfileActivity extends AppCompatActivity {
     private MaterialButton btnBookSession;
     private FirebaseFirestore db;
     private String viewedTutorId;
+    private LinearLayout badgesContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class TutorProfileActivity extends AppCompatActivity {
         chipGroupSubjects = findViewById(R.id.chip_group_subjects);
         tvTeachingMode = findViewById(R.id.tv_teaching_mode_display);
         btnBookSession = findViewById(R.id.btn_book_session);
+        badgesContainer = findViewById(R.id.badges_container);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         ivMenuHamburger = findViewById(R.id.btn_hamburger);
@@ -108,6 +110,7 @@ public class TutorProfileActivity extends AppCompatActivity {
                                 tvTeachingMode.setText(profile.getTeachingMode());
                             }
                             updateSubjectChips(profile.getSubjects());
+                            displayBadges(profile.getBadges());
                         }
                     }
                 })
@@ -231,6 +234,7 @@ public class TutorProfileActivity extends AppCompatActivity {
                 tvTeachingMode.setText(profile.getTeachingMode());
             }
             updateSubjectChips(profile.getSubjects());
+            displayBadges(profile.getBadges());
         }
     }
 
@@ -241,6 +245,41 @@ public class TutorProfileActivity extends AppCompatActivity {
             Chip chip = new Chip(this);
             chip.setText(subject);
             chipGroupSubjects.addView(chip);
+        }
+    }
+
+    private void displayBadges(List<String> achievementIds) {
+        if (badgesContainer == null) return;
+        badgesContainer.removeAllViews();
+
+        if (achievementIds == null || achievementIds.isEmpty()) return;
+
+        for (String id : achievementIds) {
+            // Convert the String ID from Firestore into a Badge Object
+            Badge badgeData = Badge.getBadgeById(id);
+
+            if (badgeData != null) {
+                ImageView badgeView = new ImageView(this);
+
+                // Layout Settings
+                int size = (int) (42 * getResources().getDisplayMetrics().density);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
+                params.setMargins(0, 0, 20, 0);
+                badgeView.setLayoutParams(params);
+                badgeView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+                // Set the Image from the Object
+                badgeView.setImageResource(badgeData.getIconResId());
+
+                // Click listener using data from the Object
+                badgeView.setOnClickListener(v -> {
+                    // You can show a more detailed Toast or even a Dialog
+                    String message = badgeData.getDisplayName() + ": " + badgeData.getDescription();
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                });
+
+                badgesContainer.addView(badgeView);
+            }
         }
     }
 }

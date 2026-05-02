@@ -113,6 +113,26 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:layout_gravity="start"
+                    android:text="BADGES"
+                    android:textStyle="bold"
+                    android:textColor="#EFEBEB"
+                    android:textSize="14sp"
+                    android:letterSpacing="0.05"/>
+
+                <LinearLayout
+                    android:id="@+id/badges_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_gravity="start"
                     android:text="TEACHING MODE"
                     android:textStyle="bold"
                     android:textColor="#EFEBEB"
@@ -146,7 +166,8 @@
                     android:text="SUBJECTS"
                     android:textStyle="bold"
                     android:textColor="#EFEBEB"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp"
+                    android:letterSpacing="0.05"/>
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/chip_group_subjects"

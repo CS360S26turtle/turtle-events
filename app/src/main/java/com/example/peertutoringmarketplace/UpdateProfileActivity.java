@@ -16,6 +16,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -142,73 +143,80 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     btnSave.setEnabled(true);
                 });
     }
+private void saveProfile() {
+    final String bio = etBio.getText().toString().trim();
+    final String mode = tvTeachingMode.getText().toString();
+    String subjectsString = etSubjects.getText().toString().trim();
 
-    private void saveProfile() {
-        final String bio = etBio.getText().toString().trim();
-        final String mode = tvTeachingMode.getText().toString();
-        String subjectsString = etSubjects.getText().toString().trim();
+    final List<String> subjectList = new ArrayList<>();
+    if (!subjectsString.isEmpty()) {
+        String[] parts = subjectsString.split("[,;\\n]");
+        for (String s : parts) {
+            if (!s.trim().isEmpty()) {
+                subjectList.add(s.trim().toLowerCase());
+            }
+        }
+    }
 
-        final List<String> subjectList = new ArrayList<>();
-        if (!subjectsString.isEmpty()) {
-            String[] parts = subjectsString.split("[,;\\n]");
-            for (String s : parts) {
-                if (!s.trim().isEmpty()) {
-                    subjectList.add(s.trim().toLowerCase());
-                }
+    if (subjectList.isEmpty()) {
+        Toast.makeText(this, "Please enter at least one subject", Toast.LENGTH_LONG).show();
+        return;
+    }
+
+    final double hourlyRate;
+    try {
+        String rateStr = etRate.getText().toString().trim();
+        hourlyRate = rateStr.isEmpty() ? 0.0 : Double.parseDouble(rateStr);
+    } catch (NumberFormatException e) {
+        Toast.makeText(this, "Enter a valid hourly rate", Toast.LENGTH_SHORT).show();
+        return;
+    }
+
+    Map<String, Object> updates = new HashMap<>();
+    updates.put("bio", bio);
+    updates.put("hourlyRate", hourlyRate);
+    updates.put("subjects", subjectList);
+    updates.put("teachingMode", mode);
+
+    db.collection("tutors").document(userId)
+            .update(updates)
+            .addOnSuccessListener(aVoid -> {
+                // Logic for existing users
+                applyBadgeAndFinish(bio, hourlyRate, subjectList, mode, "Profile Updated Successfully!");
+            })
+            .addOnFailureListener(e -> {
+                // Logic for NEW users (first time save)
+                db.collection("tutors").document(userId).set(updates)
+                        .addOnSuccessListener(v -> {
+                            applyBadgeAndFinish(bio, hourlyRate, subjectList, mode, "Profile Created Successfully!");
+                        })
+                        .addOnFailureListener(e2 -> Toast.makeText(this, "Error saving profile", Toast.LENGTH_SHORT).show());
+            });
+}
+
+    private void applyBadgeAndFinish(String bio, double hourlyRate, List<String> subjects, String mode, String message) {
+        SessionManager session = SessionManager.getInstance();
+        TutorProfile profile = session.getCurrentTutorProfile();
+        if (profile == null) profile = new TutorProfile();
+
+        profile.setBio(bio);
+        profile.setHourlyRate(hourlyRate);
+        profile.setSubjects(subjects);
+        profile.setTeachingMode(mode);
+
+        if (!bio.isEmpty() || hourlyRate > 0 || !subjects.isEmpty()) {
+            db.collection("tutors").document(userId)
+                    .update("badges", FieldValue.arrayUnion("profile_setup"));
+
+            List<String> currentBadges = profile.getBadges();
+            if (!currentBadges.contains("profile_setup")) {
+                currentBadges.add("profile_setup");
+                profile.setBadges(currentBadges);
             }
         }
 
-        // Validate that subjects are not empty before saving
-        if (subjectList.isEmpty()) {
-            Toast.makeText(this, "Please enter at least one subject (e.g. Math, Physics)", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        final double hourlyRate;
-        try {
-            String rateStr = etRate.getText().toString().trim();
-            if (!rateStr.isEmpty()) {
-                hourlyRate = Double.parseDouble(rateStr);
-            } else {
-                hourlyRate = 0.0;
-            }
-        } catch (NumberFormatException e) {
-            Toast.makeText(this, "Enter a valid hourly rate", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Map<String, Object> updates = new HashMap<>();
-        updates.put("bio", bio);
-        updates.put("hourlyRate", hourlyRate);
-        updates.put("subjects", subjectList);
-        updates.put("teachingMode", mode);
-
-        // Using .update() ensures we only touch these specific fields
-        db.collection("tutors").document(userId)
-                .update(updates)
-                .addOnSuccessListener(aVoid -> {
-                    // Update Local Session
-                    SessionManager session = SessionManager.getInstance();
-                    TutorProfile profile = session.getCurrentTutorProfile();
-                    if (profile == null) profile = new TutorProfile();
-
-                    profile.setBio(bio);
-                    profile.setHourlyRate(hourlyRate);
-                    profile.setSubjects(subjectList);
-                    profile.setTeachingMode(mode);
-                    session.setCurrentTutorProfile(profile);
-
-                    Toast.makeText(this, "Profile Updated Successfully!", Toast.LENGTH_SHORT).show();
-                    finish();
-                })
-                .addOnFailureListener(e -> {
-                    // If document doesn't exist yet, fallback to .set()
-                    db.collection("tutors").document(userId).set(updates)
-                            .addOnSuccessListener(v -> {
-                                Toast.makeText(this, "Profile Created Successfully!", Toast.LENGTH_SHORT).show();
-                                finish();
-                            })
-                            .addOnFailureListener(e2 -> Toast.makeText(this, "Error saving profile", Toast.LENGTH_SHORT).show());
-                });
+        session.setCurrentTutorProfile(profile);
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

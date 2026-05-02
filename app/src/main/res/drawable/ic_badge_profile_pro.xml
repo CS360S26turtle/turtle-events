@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Generated through Google AI Studio-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <path
+        android:fillColor="#3F51B5"
+        android:pathData="M7.5,12 L5.5,23 L8,21.5 L10.5,23 L11.5,12 Z M12.5,12 L13.5,23 L16,21.5 L18.5,23 L16.5,12 Z" />
+
+    <path
+        android:fillColor="#CFD8DC"
+        android:pathData="M12,12m-8,0a8,8 0,1 1,16,0a8,8 0,1 1,-16,0" />
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M12,15.4l-3.76,2.27l1,-4.28l-3.32,-2.88l4.38,-0.38L12,6.1l1.71,4.04l4.38,0.38l-3.32,2.88l1,4.28z" />
+
+</vector>
