@@ -1,6 +1,7 @@
 plugins {
     id("com.google.gms.google-services")
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -32,6 +33,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
     
     configurations.all {
@@ -46,7 +48,14 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
-    
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.activity.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.material3)
+
     // Test dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
@@ -61,8 +70,12 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.ui.test.junit4)
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
     // Kizitonwose Calendar View
     implementation("com.kizitonwose.calendar:view:2.5.4")
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
 }
