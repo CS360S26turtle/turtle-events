@@ -110,6 +110,8 @@ public class TutorDetailActivity extends AppCompatActivity {
                     tutorData.put("teachingMode", "");
                     tutorData.put("profileImage", "");
 
+                    tutorData.put("badges", Arrays.asList("verified"));
+
                     db.collection("tutors").document(uid).set(tutorData)
                             .addOnSuccessListener(aVoid -> {
                                 db.collection("users").document(uid)

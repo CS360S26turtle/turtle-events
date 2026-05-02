@@ -12,10 +12,20 @@ public class TutorProfile {
     private List<String> subjects;
     private String teachingMode;
     private String profileImage;
+    private List<String> badges;
 
     // Default constructor for Firebase
     public TutorProfile() {
         this.subjects = new ArrayList<>();
+        this.badges = new ArrayList<>();
+    }
+
+    public List<String> getBadges() {
+        return (badges != null) ? badges : new ArrayList<>();
+    }
+
+    public void setBadges(List<String> badges) {
+        this.badges = badges;
     }
 
     public void setBio(String bio) { this.bio = bio; }
