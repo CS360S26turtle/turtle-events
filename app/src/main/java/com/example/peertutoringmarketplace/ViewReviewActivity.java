@@ -8,6 +8,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import java.util.ArrayList;
 import java.util.List;
+/**
+ * File : ViewReviewActivity.java
+ * Purpose: Allows users to see all reviews associated with a specific tutor.
+ * Outstanding Issues: Currently lacks a "No reviews found" empty state placeholder.
+ */
 
 public class ViewReviewActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -30,7 +35,10 @@ public class ViewReviewActivity extends AppCompatActivity {
 
         fetchReviews(tutorId);
     }
-
+     /**
+     * Queries Firestore for all reviews where tutorId matches the provided parameter.
+     * Updates the RecyclerView adapter upon successful retrieval.
+     */
     private void fetchReviews(String tutorId) {
         FirebaseFirestore.getInstance().collection("reviews")
                 .whereEqualTo("tutorId", tutorId)
