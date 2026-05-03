@@ -477,7 +477,14 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                 finish();
             });
         }
+        LinearLayout menuStudents = menuView.findViewById(R.id.menu_students);
+        if (menuStudents != null) {
+            menuStudents.setOnClickListener(v -> {
+                startActivity(new Intent(this, MyStudentsActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });}
     }
+
 
     // ── Firestore: load tutor ID then slots ──────────────────────────────────
 

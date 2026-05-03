@@ -661,6 +661,8 @@ public class TutorProfileActivity extends AppCompatActivity {
         menuView.findViewById(R.id.menu_logout).setOnClickListener(v -> performLogout());
         menuView.findViewById(R.id.menu_profile).setOnClickListener(v -> startActivity(new Intent(this, UpdateProfileActivity.class)));
         menuView.findViewById(R.id.menu_upcoming).setOnClickListener(v -> startActivity(new Intent(this, UpcomingSessionsActivity.class)));
+        View menuStudents = menuView.findViewById(R.id.menu_students);
+        if (menuStudents != null) menuStudents.setOnClickListener(v -> startActivity(new Intent(this, MyStudentsActivity.class)));
     }
 
     private void setupStudentMenu(View menuView) {
