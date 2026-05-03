@@ -565,40 +565,66 @@ Link: https://lucid.app/lucidchart/9cc2bf68-ca08-4504-a752-03784cc5fa5f/edit?vie
 ### Tutor Flow
 
 <p align="center">
+  <img src="images/TutorMenuFinal.png" width="120">
   <img src="images/TutorProfileFinal.png" width="120">
-  <img src="images/tutor_upcoming_session_page_halfway.png" width="120">
-  <img src="images/tutor_add_session_halfway.png" width="120">
-  <img src="images/add_time_halfway.png" width="120">
-  <img src="images/tutor_my_profile_page_halfway.png" width="120">
-  <img src="images/tutor_hamburger_menu_halfway.png" width="120">
+  <img src="images/TutorUpcomingSessionFinal.png" width="120">
+  <img src="images/AddSessionFinal.png" width="120">
+  <img src="images/SessionAddedFinal.png" width="120">
+  <img src="images/LeaderboardFinal.png" width="120">
+  <img src="images/MyStudentsFinal.png" width="120">
+</p>
+
+### My Students Flow
+
+<p align="center">
+  <img src="images/MyStudentsFinal.png" width="120">
+  <img src="images/MyStudentsOptionsFinal.png" width="120">
+  <img src="images/AddResource1Final.png" width="120">
+  <img src="images/AddResource2Final.png" width="120">
+  <img src="images/TutorStudyResourcesFinal.png" width="120">
+  <img src="images/SessionNoteFinal.png" width="120">
+  <img src="images/AddSessionNote1Final.png" width="120">
+  <img src="images/AddSessionNote2Final.png" width="120">
+  <img src="images/TutorAddedSessionNoteFinal.png" width="120">
+  
 </p>
 
 ### Student Flow
 
 <p align="center">
-  <img src="images/student_profile_page_halfway.png" width="120">
-  <img src="images/search_tutors_halfway.png" width="120">
-  <img src="images/search_tutors_after_search_halfway.png" width="120">
-  <img src="images/searched_tutor_halfway.png" width="120">
-  <img src="images/student_view_tutors_upcoming_halfway.png" width="120">
-  <img src="images/student_hamburger_menu_halfway.png" width="120">
+  <img src="images/StudentMenuFinal.png" width="120">
+  <img src="images/StudentProfileFinal.png" width="120">
+  <img src="images/SearchTutorFinal.png" width="120">
+  <img src="images/TutorViewAfterSearchFinal.png" width="120">
+  <img src="images/BookSessionFinal.png" width="120">
+  <img src="images/SessionBookedFinal.png" width="120">
+  <img src="images/StudentUpcomingSessionFinal.png" width="120">
+  <img src="images/LeaderboardFinal.png" width="120">
+  <img src="images/MyTutorsFinal.png" width="120">
+</p>
+
+### My Tutors Flow
+
+<p align="center">
+  <img src="images/MyTutorsFinal.png" width="120">
+  <img src="images/MyTutorsOptionsFinal.png" width="120">
+  <img src="images/MyTutorProfile1Final.png" width="120">
+  <img src="images/RateTutor1Final.png" width="120">
+  <img src="images/RateTutor2Final.png" width="120">
+  <img src="images/RegisterReport1Final.png" width="120">
+  <img src="images/RegisterReport2Final.png" width="120">
+  <img src="images/StudentStudyResourceFinal.png" width="120">
+  <img src="images/StudentStudyResourceDetailFinal.png" width="120">
 </p>
 
 ### Admin View
 
 <p align="center">
-  <img src="images/tutor_verification_halfway.png" width="120">
-  <img src="images/submit_photo_halfway.png" width="120">
-  <img src="images/verification_confirmation_halfway.png" width="120">
+  <img src="images/AdminViewRequestsFinal.png" width="120">
+  <img src="images/AdminViewReportsFinal.png" width="120">
+  <img src="images/AdminTutorDetailFinal.png" width="120">
+  <img src="images/AdminReportDetailFinal.png" width="120">
 </p>
-
-### Report Registration
-
-### My Students Flow
-
-### My Tutors Flow
-
-
 
 ## Sprint Meetings
 
