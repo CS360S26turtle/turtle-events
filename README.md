@@ -431,7 +431,7 @@ with each other.
 
 | ID | User Story | Priority | Status |
 |----|------------|----------|--------|
-| US 01 - User Registration | As a student, I want to create and edit my profile with my courses, academic level, learning goals/style(in-person, online, visual, auditory etc ) so that tutors can understand my needs. | High | To Do |
+| US 01 - Student Profile | As a student, I want to create and edit my profile with my courses, academic level, learning goals/style(in-person, online, visual, auditory etc ) so that tutors can understand my needs. | High | To Do |
 | US 02 - Session Reminders | As a student or tutor, I want to receive an automatic reminder before my scheduled session so that I don’t forget it. | High | To Do |
 | US 03 - Session Notes | As a tutor, I want to add private notes after a session so I can see agendas achieved for the particular session and track progress for future sessions. | Medium | To Do |
 | US 04 - Tutor Session Slots | As a tutor, I want to create separate time slots for individual and group tutoring sessions and set a maximum capacity for group sessions so that I can manage my schedule effectively and avoid overbooking or conflicts. | High | To Do |
@@ -449,12 +449,12 @@ with each other.
 | US 17 - Tutor Verification | As an administrator, I want to verify tutor credentials, so that the platform maintains quality and trust. | High | To Do |
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | To Do |
 | US 19 - Forget Password Option | As a user, I want to be able to reset my password in case I forget my password through sending a request with an email. | Low | To Do|
-
+| US 20 - Role Switching | As a user, I want to switch between tutor and student roles within the app so that I can both offer tutoring and book sessions. | Medium | Done|
 
 ### Product Backlog – Project Part 2 (Halfway)
 | ID | User Story | Priority | Status |
 |----|------------|----------|--------|
-| US 01 - User Registration | As a student, I want to create and edit my profile with my courses, academic level, learning goals/style(in-person, online, visual, auditory etc ) so that tutors can understand my needs. | High | Done |
+| US 01 - Student Profile | As a student, I want to create and edit my profile with my courses, academic level, learning goals/style(in-person, online, visual, auditory etc ) so that tutors can understand my needs. | High | Done |
 | US 02 - Session Reminders | As a student or tutor, I want to receive an automatic reminder before my scheduled session so that I don’t forget it. | High | To Do |
 | US 03 - Session Notes | As a tutor, I want to add private notes after a session so I can see agendas achieved for the particular session and track progress for future sessions. | Medium | To Do |
 | US 04 - Tutor Session Slots | As a tutor, I want to create separate time slots for individual and group tutoring sessions and set a maximum capacity for group sessions so that I can manage my schedule effectively and avoid overbooking or conflicts. | High | Done |
@@ -472,11 +472,12 @@ with each other.
 | US 17 - Tutor Verification | As an administrator, I want to verify tutor credentials, so that the platform maintains quality and trust. | High | Done |
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | To Do |
 | US 19 - Forget Password Option | As a user, I want to be able to reset my password in case I forget my password through sending a request with an email. | Low | Done|
+| US 20 - Role Switching | As a user, I want to switch between tutor and student roles within the app so that I can both offer tutoring and book sessions. | Medium | Done|
 
 ### Product Backlog – Project Part 3 (Final Checkpoint)
 | ID | User Story | Priority | Status |
 |----|------------|----------|--------|
-| US 01 - User Registration | As a student, I want to create and edit my profile with my courses, academic level, learning goals/style(in-person, online, visual, auditory etc ) so that tutors can understand my needs. | High | Done |
+| US 01 - Student Profile | As a student, I want to create and edit my profile with my courses, academic level, learning goals/style(in-person, online, visual, auditory etc ) so that tutors can understand my needs. | High | Done |
 | US 02 - Session Reminders | As a student or tutor, I want to receive an automatic reminder before my scheduled session so that I don’t forget it. | High | Done |
 | US 03 - Session Notes | As a tutor, I want to add private notes after a session so I can see agendas achieved for the particular session and track progress for future sessions. | Medium | Done |
 | US 04 - Tutor Session Slots | As a tutor, I want to create separate time slots for individual and group tutoring sessions and set a maximum capacity for group sessions so that I can manage my schedule effectively and avoid overbooking or conflicts. | High | Done |
@@ -494,6 +495,7 @@ with each other.
 | US 17 - Tutor Verification | As an administrator, I want to verify tutor credentials, so that the platform maintains quality and trust. | High | Done |
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | Done |
 | US 19 - Forget Password Option | As a user, I want to be able to reset my password in case I forget my password through sending a request with an email. | Low | Done|
+| US 20 - Role Switching | As a user, I want to switch between tutor and student roles within the app so that I can both offer tutoring and book sessions. | Medium | Done|
 
 
 
