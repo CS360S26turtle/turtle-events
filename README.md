@@ -700,7 +700,7 @@ April 15, 2026
 
 ---
 
-### Sprint Review 3 and Planning Meeting 5
+### Sprint Review 4 and Planning Meeting 5
 
 #### Date
 April 22, 2026
@@ -726,7 +726,7 @@ April 22, 2026
 
 ---
 
-### Sprint Review 3 and Planning Meeting 6
+### Sprint Review 5 and Planning Meeting 6
 
 #### Date
 April 29, 2026
@@ -749,7 +749,7 @@ April 29, 2026
 
 ---
 
-### Final Sprint Review for halfway
+### Final Sprint Review
 
 #### Date
 May 3rd, 2026
