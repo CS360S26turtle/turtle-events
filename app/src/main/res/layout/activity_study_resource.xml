@@ -90,7 +90,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="No resources yet.\nTap + to add a link, PDF reference, or note."
+                android:text="No resources yet."
                 android:textColor="#C8D6CF"
                 android:textSize="15sp"
                 android:textAlignment="center"
