@@ -136,6 +136,12 @@
                 app:tint="#F5F5F5" />
         </LinearLayout>
 
+        <!-- Spacer to push switch role and logout to the bottom -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
         <LinearLayout
             android:id="@+id/menu_switch_role"
             android:layout_width="match_parent"
@@ -160,12 +166,6 @@
                 android:textStyle="bold"
                 android:layout_marginStart="16dp" />
         </LinearLayout>
-
-        <!-- Use layout_weight="1" on an empty view if you want Logout at the bottom -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
 
         <LinearLayout
             android:id="@+id/menu_logout"
