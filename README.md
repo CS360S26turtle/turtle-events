@@ -420,7 +420,7 @@ with each other.
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | To Do |
 | US 19 - Forget Password Option | As a user, I want to be able to reset my password in case I forget my password through sending a request with an email. | Low | Done|
 
-### Product Backlog – Project Part 2 (Final Checkpoint)
+### Product Backlog – Project Part 3 (Final Checkpoint)
 | ID | User Story | Priority | Status |
 |----|------------|----------|--------|
 | US 01 - User Registration | As a student, I want to create and edit my profile with my courses, academic level, learning goals/style(in-person, online, visual, auditory etc ) so that tutors can understand my needs. | High | Done |
