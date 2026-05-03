@@ -3,7 +3,6 @@ package com.example.peertutoringmarketplace;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +50,6 @@ public class StudyResourceActivity extends AppCompatActivity {
     private ResourceAdapter adapter;
 
     private FirebaseFirestore db;
-    private FirebaseAuth      auth;
 
     private String currentTutorId;
     private String targetStudentId;
@@ -64,15 +62,18 @@ public class StudyResourceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_study_resource);
 
         db   = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
 
-        // 1. Capture Intent data (IDs passed might be Auth UIDs or Role IDs)
+        // 1. Capture Intent data
         targetStudentId   = getIntent().getStringExtra(EXTRA_STUDENT_ID);
         targetStudentName = getIntent().getStringExtra(EXTRA_STUDENT_NAME);
         currentTutorId    = getIntent().getStringExtra(EXTRA_TUTOR_ID);
         isViewOnly        = getIntent().getBooleanExtra(EXTRA_IS_VIEW_ONLY, false);
 
-        if (auth.getCurrentUser() == null) { finish(); return; }
+        // Verify session state
+        if (SessionManager.getInstance().getCurrentUserId() == null) { 
+            finish(); 
+            return; 
+        }
 
         drawerLayout    = findViewById(R.id.drawer_layout);
         listResources   = findViewById(R.id.list_resources);
@@ -104,35 +105,28 @@ public class StudyResourceActivity extends AppCompatActivity {
             fabAdd.setOnClickListener(v -> showAddResourceDialog());
         }
 
-        // 2. Resolve both IDs to ensure we are using the correct database keys
         resolveIdentitiesAndLoad();
     }
 
     private void resolveIdentitiesAndLoad() {
-        String loggedInUid = auth.getCurrentUser().getUid();
+        String loggedInUid = SessionManager.getInstance().getCurrentUserId();
+        if (loggedInUid == null) return;
 
-        // Resolve the logged-in user's role ID
         db.collection("users").document(loggedInUid).get()
                 .addOnSuccessListener(userDoc -> {
                     if (!userDoc.exists()) return;
 
                     if (isViewOnly) {
-                        // User is Student. Resolve their own Student Role ID.
                         String sid = userDoc.getString("studentID");
                         if (sid == null || sid.isEmpty()) sid = userDoc.getString("studentId");
                         if (sid == null || sid.isEmpty()) sid = loggedInUid;
                         targetStudentId = sid;
-                        
-                        // We need the tutor's ROLE ID. Resolve it using the UID passed from the sheet.
                         resolveTutorRoleId(currentTutorId); 
                     } else {
-                        // User is Tutor. Resolve their own Tutor Role ID.
                         String tid = userDoc.getString("tutorID");
                         if (tid == null || tid.isEmpty()) tid = userDoc.getString("tutorId");
                         if (tid == null || tid.isEmpty()) tid = loggedInUid;
                         currentTutorId = tid;
-                        
-                        // targetStudentId is already provided as Role ID from MyStudentsActivity
                         loadResources();
                     }
                 });
@@ -149,7 +143,6 @@ public class StudyResourceActivity extends AppCompatActivity {
                             roleId = doc.getString("tutorId");
                         if (roleId == null || roleId.isEmpty())
                             roleId = tutorAuthId;
-                        
                         currentTutorId = roleId;
                     }
                     loadResources();
@@ -283,14 +276,16 @@ public class StudyResourceActivity extends AppCompatActivity {
     }
 
     private void updateEmptyState() {
-        if (resources.isEmpty()) { listResources.setVisibility(View.GONE); tvEmpty.setVisibility(View.VISIBLE); }
-        else { tvEmpty.setVisibility(View.GONE); listResources.setVisibility(View.VISIBLE); }
+        if (resources.isEmpty()) { if (listResources != null) listResources.setVisibility(View.GONE); if (tvEmpty != null) tvEmpty.setVisibility(View.VISIBLE); }
+        else { if (tvEmpty != null) tvEmpty.setVisibility(View.GONE); if (listResources != null) listResources.setVisibility(View.VISIBLE); }
     }
 
     private void setupNavigationDrawer() {
         FrameLayout menuContainer = findViewById(R.id.menu_container);
         if (menuContainer == null) return;
-        View menuView = getLayoutInflater().inflate(SessionManager.getInstance().getCurrentRole().equalsIgnoreCase("tutor") ? R.layout.fragment_tutor_menu : R.layout.fragment_student_menu, menuContainer, false);
+        String role = SessionManager.getInstance().getCurrentRole();
+        if (role == null) return;
+        View menuView = getLayoutInflater().inflate(role.equalsIgnoreCase("tutor") ? R.layout.fragment_tutor_menu : R.layout.fragment_student_menu, menuContainer, false);
         menuContainer.removeAllViews();
         menuContainer.addView(menuView);
     }
@@ -301,5 +296,10 @@ public class StudyResourceActivity extends AppCompatActivity {
         m.put("type", r.getType()); m.put("title", r.getTitle());
         m.put("content", r.getContent()); m.put("createdAt", r.getCreatedAt());
         return m;
+    }
+
+    // Helper to resolve ScrollView issues in dynamic dialogs
+    private class ScanScrollView extends ScrollView {
+        public ScanScrollView(android.content.Context context) { super(context); }
     }
 }
