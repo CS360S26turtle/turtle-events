@@ -11,7 +11,8 @@
   * [Meeting – Mar 7, 2026](#meeting--mar-7th-2026)
   * [Meeting – Mar 16, 2026](#meeting--mar-16th-2026)
   * [Meeting – Mar 30, 2026](#meeting--mar-30th-2026)
-  * [Meeting – TBD](#meeting--tbd)
+  * [Meeting – April 6, 2026](#meeting--april-6-2026)
+  * [Meeting – April 15, 2026](#meeting--april-15-2026)
 
 * [UML Diagrams](#uml-diagrams)
   * [UML Diagrams - Project Halfway](#uml-diagram---halfway)
@@ -206,7 +207,6 @@ Monday, March 30, 2026
 - Overviewed blockers, challenges, and next steps.
 
 
-
 #### Prepared Questions & Decisions
 
 **No major issues**
@@ -217,7 +217,60 @@ Monday, March 30, 2026
 
 #### Action Items
 - Finalize halfway-point features 
-- [ ] 
+
+---
+
+### Meeting – April 6th, 2026
+
+#### Date
+Monday, April 6, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Got all halfway checkpoint work reviewed - github, documentation & app flow
+- Asked for any reccomendation before submission
+
+#### Prepared Questions & Decisions
+
+**No major issues**
+
+#### General Notes
+
+---
+
+### Meeting – April 6th, 2026
+
+#### Date
+Monday, April 15, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Halway checkpoint evaluation meeting
+- Discussed final checkpoint requirements
+
+#### Prepared Questions & Decisions
+
+**No major issues**
+
+#### General Notes
+
+---
 
 ---
 
