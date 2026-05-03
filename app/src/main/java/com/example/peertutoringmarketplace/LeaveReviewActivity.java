@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 /**
- * LeaveReviewActivity.java
+ * File : LeaveReviewActivity.java
  * Purpose: Provides a UI for students to input ratings and comments for a tutor.
  */
 
