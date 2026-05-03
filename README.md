@@ -489,16 +489,18 @@ with each other.
 | US 09 - Tutor Review | As a student, I want to be able to leave rating and reviews for tutors and read existing reviews so that I, and other students, can pick more suitable tutors. | Medium | Done |
 | US 10 - Tutor Search | As a student, I want to search for tutors by subject and course code and filter the results by rating so that I can quickly find the most suitable tutor. | High | Done |
 | US 12 - Session Cancelation | As a tutor, I want to be able to reschedule or cancel sessions if a student is unresponsive or if I have other commitments so that I can manage my time efficiently. | High | Done |
-| US 13 - Recommendation System | As a student, I want to be algorithmically matched with a suitable tutor based on my requirements so that I can find a tutor without having to search manually. | High | Done |
+| US 13 - Recommendation System | As a student, I want to be algorithmically matched with a suitable tutor based on my requirements so that I can find a tutor without having to search manually. | High | Removed |
 | US 14 - Study Notes | As a tutor, I want an interface to manage study resources (links, PDFs, notes) for each student so that I can organize lessons and provide personalized materials efficiently. | High | Done |
-| US 15 - Chat Feature | As a student or tutor, I want to be able to chat with the other party so that I can communicate whenever needed. | Medium | Done |
+| US 15 - Chat Feature | As a student or tutor, I want to be able to chat with the other party so that I can communicate whenever needed. | Medium | Removed |
 | US 16 - Reporting | As a student or tutor, I want to be able to report inappropriate behavior so that the platform maintains safety and accountability. | High | Done |
 | US 17 - Tutor Verification | As an administrator, I want to verify tutor credentials, so that the platform maintains quality and trust. | High | Done |
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | Done |
-| US 19 - Forget Password Option | As a user, I want to be able to reset my password in case I forget my password through sending a request with an email. | Low | Done|
-| US 20 - Role Switching | As a user, I want to switch between tutor and student roles within the app so that I can both offer tutoring and book sessions. | Medium | Done|
-| US 21 - User Registration | As a user, I want to create an account and log in to the system, then choose whether I want to act as a student or tutor, while allowing admin access for verification, so that I can use the platform according to my role and ensure trust and security.| High | Done|
-
+| US 19 - Forget Password Option | As a user, I want to be able to reset my password in case I forget my password through sending a request with an email. | Low | Done |
+| US 20 - Role Switching | As a user, I want to switch between tutor and student roles within the app so that I can both offer tutoring and book sessions. | Medium | Done |
+| US 21 - User Registration | As a user, I want to create an account and log in to the system, then choose whether I want to act as a student or tutor, while allowing admin access for verification, so that I can use the platform according to my role and ensure trust and security.| High | Done |
+| US 22 - My Students | As a tutor, I want to view a list of all students who have booked sessions with me so that I can manage my student relationships and assign them resources in one place. | Medium | Done |
+| US 23 - My Tutors | As a student, I want to view a list of all tutors I have booked sessions with so that I can quickly access their profiles and shared resources. | High | Done |
+| US 24 - Access Shared Study Resources | As a student, I want to view study resources my tutor has shared specifically with me so that I can access my personalized learning materials in one place. | High | Done |
 
 
 ## UI interface - Halfway
