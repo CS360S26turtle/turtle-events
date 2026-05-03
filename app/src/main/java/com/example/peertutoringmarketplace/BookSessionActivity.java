@@ -275,6 +275,7 @@ public class BookSessionActivity extends AppCompatActivity {
                         // Add student to existing session
                         sessionDoc.getReference().update("studentsId", FieldValue.arrayUnion(selectedStudentId))
                                 .addOnSuccessListener(unused -> {
+                                    ReminderScheduler.scheduleSessionReminder(this, sessionDoc.getId(), slot.startTime);
                                     Toast.makeText(this, "Session booked successfully!", Toast.LENGTH_SHORT).show();
                                     finish();
                                 })
@@ -297,6 +298,7 @@ public class BookSessionActivity extends AppCompatActivity {
 
                         db.collection("sessions").document(newSessionId).set(newSession)
                                 .addOnSuccessListener(unused -> {
+                                    ReminderScheduler.scheduleSessionReminder(this, newSessionId, slot.startTime);
                                     Toast.makeText(this, "Session booked successfully!", Toast.LENGTH_SHORT).show();
                                     finish();
                                 })

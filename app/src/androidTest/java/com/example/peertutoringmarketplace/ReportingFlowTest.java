@@ -39,14 +39,14 @@ public class ReportingFlowTest {
     @Before
     public void setUp() {
         db = FirebaseFirestore.getInstance();
-        
+
         // 1. Setup Test Data
         User tutor = new User(testTutorId, "report_tutor@test.com", "Reported Tutor", "tutor");
         db.collection("users").document(testTutorId).set(tutor);
-        
+
         User student = new User(testStudentId, "reporter@test.com", "Reporter Student", "student");
         student.setStudentID(testStudentId);
-        
+
         // 2. Mock Session
         SessionManager.getInstance().setCurrentUser(student);
         SessionManager.getInstance().setCurrentRole("student");
@@ -71,15 +71,15 @@ public class ReportingFlowTest {
         // --- PART 1: Submit Report ---
         Intent profileIntent = new Intent(ApplicationProvider.getApplicationContext(), TutorProfileActivity.class);
         profileIntent.putExtra("tutorId", testTutorId);
-        
+
         try (ActivityScenario<TutorProfileActivity> scenario = ActivityScenario.launch(profileIntent)) {
-            Thread.sleep(3000); 
+            Thread.sleep(3000);
             onView(withId(R.id.btn_report_tutor)).perform(click());
-            
+
             // Interaction with Dialog
             onView(withHint("Enter reason for reporting...")).perform(typeText(reportReason));
             onView(withText("Submit")).perform(click());
-            Thread.sleep(2000); 
+            Thread.sleep(2000);
         }
 
         // --- PART 2: Admin Resolution ---
@@ -92,14 +92,14 @@ public class ReportingFlowTest {
             Thread.sleep(3000);
             onView(withId(R.id.chipReports)).perform(click());
             Thread.sleep(4000); // Wait for data fetch
-            
+
             // Match by Full Name as displayed in TutorAdapter
             onView(withText(containsString("Reported Tutor"))).check(matches(isDisplayed())).perform(click());
-            
+
             Thread.sleep(3000);
             onView(withId(R.id.reportsContainer)).check(matches(isDisplayed()));
             onView(withText(containsString(reportReason))).check(matches(isDisplayed()));
-            
+
             onView(withId(R.id.RESOLVE_REPORT_BUTTON)).perform(click());
             Thread.sleep(2000);
         }
