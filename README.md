@@ -421,11 +421,8 @@ with each other.
 | US 16 - Reporting | As a student or tutor, I want to be able to report inappropriate behavior so that the platform maintains safety and accountability. | High | To Do |
 | US 17 - Tutor Verification | As an administrator, I want to verify tutor credentials, so that the platform maintains quality and trust. | High | Done |
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | To Do |
-<<<<<<< HEAD
-=======
 | US 19 - Forget Password Option | As a user, I want to be able to reset my password in case I forget my password through sending a request with an email. | Low | Done|
 
->>>>>>> 1d3b2e4e56053ef9f2150d085fc5063029f54cff
 
 ## UI interface - Halfway
 
@@ -589,3 +586,113 @@ April 6, 2026
 - Complete tests and documenation
 
 ---
+
+---
+
+### Sprint Planning Meeting 4 (Post-Halfway)
+
+#### Date
+April 15, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Reflected on halfway submission and feedback from the TA
+- Identified remaining user stories to be completed for final checkpoint
+- Divided all remaining user stories amongst eachother
+
+#### Action Items
+- [ Maha ] Achievement & Leaderboard (US 7 + 8)
+- [ Sehrish ] Tutor Reviews & Chat Feature (US 15)
+- [ Esha ] Study Notes & Session Notes (US 14 + 03)
+- [ Shanzay ] Group Study Sessions & Session Reminders (US 2 + 11)
+- [ Dua ] Reporting & Malicious Activity Monitoring (US 18 + 16)
+
+---
+
+---
+
+### Sprint Review 3 and Planning Meeting 5
+
+#### Date
+April 22, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Reviewed progress on remaining features
+- Badges and reviews user stories done
+- Reporting system structure final
+
+#### Action Items
+-  [ All ] Start working on alloted user stories, ensure integration and github usage.
+
+---
+
+---
+
+### Sprint Review 3 and Planning Meeting 6
+
+#### Date
+April 29, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- Majority of features implemented
+- Identifying bugs and started integrated everything together
+
+#### Action Items
+-  [ All ] Start working on alloted user stories, ensure integration and github usage.
+
+---
+
+### Final Sprint Review for halfway
+
+#### Date
+May 3rd, 2026
+
+#### Attendance
+- Dua
+- Sehrish
+- Maha
+- Esha
+- Shanzay
+
+---
+
+#### Key Takeaways
+- All major user stories implemented
+- Conducted end-to-end testing (student, tutor, admin flows)
+- Improved UI consistency and responsiveness
+- Finalized documentation and deliverables
+
+#### Action Items
+-  [ All ] Demo
+-  [ All ] Submit final documentation
+
+---
+
+
+
