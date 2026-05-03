@@ -450,6 +450,7 @@ with each other.
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | To Do |
 | US 19 - Forget Password Option | As a user, I want to be able to reset my password in case I forget my password through sending a request with an email. | Low | To Do|
 | US 20 - Role Switching | As a user, I want to switch between tutor and student roles within the app so that I can both offer tutoring and book sessions. | Medium | Done|
+| US 21 - User Registration | As a user, I want to create an account and log in to the system, then choose whether I want to act as a student or tutor, while allowing admin access for verification, so that I can use the platform according to my role and ensure trust and security.| High | Done|
 
 ### Product Backlog – Project Part 2 (Halfway)
 | ID | User Story | Priority | Status |
@@ -473,6 +474,7 @@ with each other.
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | To Do |
 | US 19 - Forget Password Option | As a user, I want to be able to reset my password in case I forget my password through sending a request with an email. | Low | Done|
 | US 20 - Role Switching | As a user, I want to switch between tutor and student roles within the app so that I can both offer tutoring and book sessions. | Medium | Done|
+| US 21 - User Registration | As a user, I want to create an account and log in to the system, then choose whether I want to act as a student or tutor, while allowing admin access for verification, so that I can use the platform according to my role and ensure trust and security.| High | Done|
 
 ### Product Backlog – Project Part 3 (Final Checkpoint)
 | ID | User Story | Priority | Status |
@@ -496,6 +498,7 @@ with each other.
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | Done |
 | US 19 - Forget Password Option | As a user, I want to be able to reset my password in case I forget my password through sending a request with an email. | Low | Done|
 | US 20 - Role Switching | As a user, I want to switch between tutor and student roles within the app so that I can both offer tutoring and book sessions. | Medium | Done|
+| US 21 - User Registration | As a user, I want to create an account and log in to the system, then choose whether I want to act as a student or tutor, while allowing admin access for verification, so that I can use the platform according to my role and ensure trust and security.| High | Done|
 
 
 
