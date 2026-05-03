@@ -565,65 +565,65 @@ Link: https://lucid.app/lucidchart/9cc2bf68-ca08-4504-a752-03784cc5fa5f/edit?vie
 ### Tutor Flow
 
 <p align="center">
-  <img src="images/TutorMenuFinal.png" width="120">
-  <img src="images/TutorProfileFinal.png" width="120">
-  <img src="images/TutorUpcomingSessionFinal.png" width="120">
-  <img src="images/AddSessionFinal.png" width="120">
-  <img src="images/SessionAddedFinal.png" width="120">
-  <img src="images/LeaderboardFinal.png" width="120">
-  <img src="images/MyStudentsFinal.png" width="120">
+  <img src="images/TutorMenuFinal.jpeg" width="120">
+  <img src="images/TutorProfileFinal.jpeg" width="120">
+  <img src="images/TutorUpcomingSessionFinal.jpeg" width="120">
+  <img src="images/AddSessionFinal.jpeg" width="120">
+  <img src="images/SessionAddedFinal.jpeg" width="120">
+  <img src="images/LeaderboardFinal.jpeg" width="120">
+  <img src="images/MyStudentsFinal.jpeg" width="120">
 </p>
 
 ### My Students Flow
 
 <p align="center">
-  <img src="images/MyStudentsFinal.png" width="120">
-  <img src="images/MyStudentsOptionsFinal.png" width="120">
-  <img src="images/AddResource1Final.png" width="120">
-  <img src="images/AddResource2Final.png" width="120">
-  <img src="images/TutorStudyResourcesFinal.png" width="120">
-  <img src="images/SessionNoteFinal.png" width="120">
-  <img src="images/AddSessionNote1Final.png" width="120">
-  <img src="images/AddSessionNote2Final.png" width="120">
-  <img src="images/TutorAddedSessionNoteFinal.png" width="120">
+  <img src="images/MyStudentsFinal.jpeg" width="120">
+  <img src="images/MyStudentsOptionsFinal.jpeg" width="120">
+  <img src="images/AddResource1Final.jpeg" width="120">
+  <img src="images/AddResource2Final.jpeg" width="120">
+  <img src="images/TutorStudyResourcesFinal.jpeg" width="120">
+  <img src="images/SessionNoteFinal.jpeg" width="120">
+  <img src="images/AddSessionNote1Final.jpeg" width="120">
+  <img src="images/AddSessionNote2Final.jpeg" width="120">
+  <img src="images/TutorAddedSessionNoteFinal.jpeg" width="120">
   
 </p>
 
 ### Student Flow
 
 <p align="center">
-  <img src="images/StudentMenuFinal.png" width="120">
-  <img src="images/StudentProfileFinal.png" width="120">
-  <img src="images/SearchTutorFinal.png" width="120">
-  <img src="images/TutorViewAfterSearchFinal.png" width="120">
-  <img src="images/BookSessionFinal.png" width="120">
-  <img src="images/SessionBookedFinal.png" width="120">
-  <img src="images/StudentUpcomingSessionFinal.png" width="120">
-  <img src="images/LeaderboardFinal.png" width="120">
-  <img src="images/MyTutorsFinal.png" width="120">
+  <img src="images/StudentMenuFinal.jpeg" width="120">
+  <img src="images/StudentProfileFinal.jpeg" width="120">
+  <img src="images/SearchTutorFinal.jpeg" width="120">
+  <img src="images/TutorViewAfterSearchFinal.jpeg" width="120">
+  <img src="images/BookSessionFinal.jpeg" width="120">
+  <img src="images/SessionBookedFinal.jpeg" width="120">
+  <img src="images/StudentUpcomingSessionFinal.jpeg" width="120">
+  <img src="images/LeaderboardFinal.jpeg" width="120">
+  <img src="images/MyTutorsFinal.jpeg" width="120">
 </p>
 
 ### My Tutors Flow
 
 <p align="center">
-  <img src="images/MyTutorsFinal.png" width="120">
-  <img src="images/MyTutorsOptionsFinal.png" width="120">
-  <img src="images/MyTutorProfile1Final.png" width="120">
-  <img src="images/RateTutor1Final.png" width="120">
-  <img src="images/RateTutor2Final.png" width="120">
-  <img src="images/RegisterReport1Final.png" width="120">
-  <img src="images/RegisterReport2Final.png" width="120">
-  <img src="images/StudentStudyResourceFinal.png" width="120">
-  <img src="images/StudentStudyResourceDetailFinal.png" width="120">
+  <img src="images/MyTutorsFinal.jpeg" width="120">
+  <img src="images/MyTutorsOptionsFinal.jpeg" width="120">
+  <img src="images/MyTutorProfile1Final.jpeg" width="120">
+  <img src="images/RateTutor1Final.jpeg" width="120">
+  <img src="images/RateTutor2Final.jpeg" width="120">
+  <img src="images/RegisterReport1Final.jpeg" width="120">
+  <img src="images/RegisterReport2Final.jpeg" width="120">
+  <img src="images/StudentStudyResourceFinal.jpeg" width="120">
+  <img src="images/StudentStudyResourceDetailFinal.jpeg" width="120">
 </p>
 
 ### Admin View
 
 <p align="center">
-  <img src="images/AdminViewRequestsFinal.png" width="120">
-  <img src="images/AdminViewReportsFinal.png" width="120">
-  <img src="images/AdminTutorDetailFinal.png" width="120">
-  <img src="images/AdminReportDetailFinal.png" width="120">
+  <img src="images/AdminViewRequestsFinal.jpeg" width="120">
+  <img src="images/AdminViewReportsFinal.jpeg" width="120">
+  <img src="images/AdminTutorDetailFinal.jpeg" width="120">
+  <img src="images/AdminReportDetailFinal.jpeg" width="120">
 </p>
 
 ## Sprint Meetings
