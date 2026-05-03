@@ -1,16 +1,3 @@
-/**
- * Displays the currently logged-in student's booked sessions for the selected date.
- * The activity loads the student's sessions, shows the associated tutor name and
- * session time, and allows the student to unbook a selected session.
- *
- * FIXES applied:
- *  1. loadGeneration counter prevents duplicate entries from stale async callbacks.
- *  2. Calendar event dots now show the student's own booked session dates
- *     (not tutor slot dates — those belong on the tutor's screen only).
- *  3. Past sessions are still shown (students may want to review history);
- *     remove the isPast guard below if you want to hide past sessions too.
- */
-
 package com.example.peertutoringmarketplace;
 
 import android.app.AlertDialog;
@@ -54,6 +41,11 @@ import java.util.Set;
 
 import com.kizitonwose.calendar.view.CalendarView;
 
+/**
+ * Displays the currently logged-in student's booked sessions for the selected date.
+ * The activity loads the student's sessions, shows the associated tutor name and
+ * session time, and allows the student to unbook a selected session.
+ */
 public class StudentUpcomingSessionsActivity extends AppCompatActivity {
 
     private CalendarView calendarView;
@@ -126,7 +118,6 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
             }
             SessionListItem item = sessionItems.get(selectedPosition);
 
-            // ── FIX: Prevent unbooking past sessions ──────────────────────
             if (item.startTime.before(new Date())) {
                 Toast.makeText(this, "Cannot unbook a past session", Toast.LENGTH_SHORT).show();
                 return;
@@ -184,8 +175,8 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
                         Toast.makeText(this, "Student ID not found", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    // Phase 1: load ALL booked dates to paint calendar markers,
-                    // then Phase 2: load sessions for the currently selected date.
+                    // load ALL booked dates to paint calendar markers,
+                    // then load sessions for the currently selected date.
                     loadAllBookedDatesForCalendar(selectedStudentId);
                     loadSessionsForDate(selectedStudentId);
                 });
@@ -295,7 +286,6 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
                                                         .atZone(ZoneId.systemDefault()).toLocalDate();
                                             }
 
-                                            // ── FIX: Show ALL sessions (past and future) ──────────
                                             if (slotDate.equals(selectedDate)) {
                                                 foundAny[0] = true;
 
@@ -418,6 +408,21 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
             FirebaseAuth.getInstance().signOut();
             SessionManager.getInstance().logout();
             Intent intent = new Intent(this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        });
+
+        LinearLayout menuLeaderboard = menuView.findViewById(R.id.menu_leaderboard);
+        if (menuLeaderboard != null) menuLeaderboard.setOnClickListener(v -> {
+            startActivity(new Intent(this, LeaderboardActivity.class));
+            drawerLayout.closeDrawer(GravityCompat.START);
+        });
+
+        LinearLayout menuSwitchRole = menuView.findViewById(R.id.menu_switch_role);
+        if (menuSwitchRole != null) menuSwitchRole.setOnClickListener(v -> {
+            SessionManager.getInstance().setCurrentRole("tutor");
+            Intent intent = new Intent(this, TutorProfileActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();

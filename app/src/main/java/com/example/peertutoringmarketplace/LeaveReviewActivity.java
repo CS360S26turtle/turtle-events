@@ -26,7 +26,6 @@ public class LeaveReviewActivity extends AppCompatActivity {
         etComment = findViewById(R.id.et_review_comment);
         btnBack = findViewById(R.id.btn_back);
 
-        // FIXED: Only call finish() when the button is actually clicked
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
         }

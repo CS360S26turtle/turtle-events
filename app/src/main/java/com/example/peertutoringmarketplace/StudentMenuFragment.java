@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
@@ -23,48 +22,46 @@ public class StudentMenuFragment extends Fragment {
 
         LinearLayout btnTutors = view.findViewById(R.id.menu_tutors);
         LinearLayout btnUpcoming = view.findViewById(R.id.menu_upcoming);
-        LinearLayout btnChat = view.findViewById(R.id.menu_chat);
+
         LinearLayout btnSettings = view.findViewById(R.id.menu_settings);
+        LinearLayout btnLeaderboard = view.findViewById(R.id.menu_leaderboard);
+        LinearLayout btnSwitchRole = view.findViewById(R.id.menu_switch_role);
         LinearLayout btnLogout = view.findViewById(R.id.menu_logout);
 
+        btnSwitchRole.setOnClickListener(v -> {
+            SessionManager.getInstance().setCurrentRole("tutor");
+            closeDrawer();
+            Intent intent = new Intent(getActivity(), TutorProfileActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            if (getActivity() != null) getActivity().finish();
+        });
 
-        btnTutors.setOnClickListener(v ->{
-            if (getActivity() != null) {
-                getActivity().startActivity(new Intent(getActivity(), MyTutorsActivity.class));
+        btnLeaderboard.setOnClickListener(v -> {
+            if (getActivity() instanceof LeaderboardActivity) {
+                closeDrawer();
+                return;
             }
+            closeDrawer();
+            startActivity(new Intent(getActivity(), LeaderboardActivity.class));
+        });
+
+        btnTutors.setOnClickListener(v -> {
+            closeDrawer();
+            if (getActivity() != null)
+                getActivity().startActivity(new Intent(getActivity(), MyTutorsActivity.class));
         });
 
         btnUpcoming.setOnClickListener(v -> {
-            if (getActivity() != null) {
+            closeDrawer();
+            if (getActivity() != null)
                 getActivity().startActivity(new Intent(getActivity(), StudentUpcomingSessionsActivity.class));
-            }
         });
-
-        btnChat.setOnClickListener(v ->
-                Toast.makeText(getActivity(), "Opening Chat...", Toast.LENGTH_SHORT).show());
 
         btnSettings.setOnClickListener(v -> {
-            if (getActivity() != null) {
+            closeDrawer();
+            if (getActivity() != null)
                 getActivity().startActivity(new Intent(getActivity(), StudentProfileActivity.class));
-            }
-        });
-
-        LinearLayout btnSwitchRole = view.findViewById(R.id.menu_switch_role);
-
-        btnSwitchRole.setOnClickListener(v -> {
-            if (getActivity() != null) {
-                DrawerLayout drawer = getActivity().findViewById(R.id.drawer_layout);
-                if (drawer != null) {
-                    drawer.closeDrawer(GravityCompat.START);
-                    drawer.postDelayed(() -> {
-                        SessionManager.getInstance().setCurrentRole("tutor");
-                        Intent intent = new Intent(getActivity(), TutorProfileActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        if (getActivity() != null) getActivity().finish();
-                    }, 250);
-                }
-            }
         });
 
         if (btnLogout != null) {
@@ -81,5 +78,14 @@ public class StudentMenuFragment extends Fragment {
         }
 
         return view;
+    }
+
+    private void closeDrawer() {
+        if (getActivity() != null) {
+            DrawerLayout drawer = getActivity().findViewById(R.id.drawer_layout);
+            if (drawer != null) {
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        }
     }
 }

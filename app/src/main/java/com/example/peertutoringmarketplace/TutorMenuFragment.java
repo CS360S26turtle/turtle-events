@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
@@ -23,9 +24,14 @@ public class TutorMenuFragment extends Fragment {
 
         LinearLayout btnStudents = view.findViewById(R.id.menu_students);
         LinearLayout btnUpcoming = view.findViewById(R.id.menu_upcoming);
-        LinearLayout btnChat = view.findViewById(R.id.menu_chat);
         LinearLayout btnUpdateProfile = view.findViewById(R.id.menu_profile);
         LinearLayout btnLogout = view.findViewById(R.id.menu_logout);
+
+        LinearLayout btnLeaderboard = view.findViewById(R.id.menu_leaderboard);
+        btnLeaderboard.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), LeaderboardActivity.class);
+            startActivity(intent);
+        });
 
         btnStudents.setOnClickListener(v ->
                 Toast.makeText(getActivity(), "My Students", Toast.LENGTH_SHORT).show());
@@ -35,12 +41,9 @@ public class TutorMenuFragment extends Fragment {
             startActivity(intent);
         });
 
-        btnChat.setOnClickListener(v ->
-                    Toast.makeText(getActivity(), "Opening Chat...", Toast.LENGTH_SHORT).show());
-
         btnUpdateProfile.setOnClickListener(v -> {
-                Intent intent = new Intent(getActivity(), UpdateProfileActivity.class);
-                startActivity(intent);
+            Intent intent = new Intent(getActivity(), UpdateProfileActivity.class);
+            startActivity(intent);
         });
 
         // Inside TutorMenuFragment.java onCreateView
