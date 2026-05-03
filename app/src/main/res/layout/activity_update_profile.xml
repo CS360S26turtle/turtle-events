@@ -83,7 +83,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Hourly Rate (PKR/hr)"
+                        android:hint="Hourly Rate ($/hr)"
                         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                         app:boxBackgroundColor="#FFFFFF"
                         app:boxCornerRadiusTopStart="28dp"

@@ -1,6 +1,10 @@
 /**
  * AdminActivity provides an interface for admins to view and manage
- * user accounts pending verification and system reports.
+ * user accounts pending verification in the peer tutoring application.
+ * It supports filtering by user roles and handles admin logout.
+ *
+ * Design: Acts as a controller between Firebase (data layer) and UI components.
+ * Known Issue: Multiple async calls may cause repeated UI updates.
  */
 
 package com.example.peertutoringmarketplace;
@@ -20,7 +24,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -32,10 +35,10 @@ import java.util.List;
 
 public class AdminActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    TutorAdapter adapter;
-    List<User> tutorList;
-    TextView textPendingCount;
+    public RecyclerView recyclerView;
+    public TutorAdapter adapter;
+    public List<User> tutorList;
+    public TextView textPendingCount;
     private FirebaseFirestore db;
     private ImageButton btnLogout;
     private ChipGroup filterChipGroup;
@@ -55,17 +58,8 @@ public class AdminActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
         filterChipGroup = findViewById(R.id.filterChipGroup);
 
-        // Add Reports Chip programmatically if not in XML
-        if (filterChipGroup != null && findViewById(R.id.chipReports) == null) {
-            Chip chipReports = new Chip(this);
-            chipReports.setId(R.id.chipReports);
-            chipReports.setText("Reports");
-            chipReports.setCheckable(true);
-            filterChipGroup.addView(chipReports);
-        }
-
         tutorList = new ArrayList<>();
-        adapter = new TutorAdapter(tutorList);
+        adapter = new TutorAdapter(tutorList,false);
 
         if (recyclerView != null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -91,10 +85,8 @@ public class AdminActivity extends AppCompatActivity {
                     currentFilter = "tutor";
                 } else if (checkedId == R.id.chipStudents) {
                     currentFilter = "student";
-                } else if (checkedId == R.id.chipReports) {
-                    currentFilter = "reports";
                 }
-                fetchData();
+                fetchPendingAccounts();
             });
         }
 
@@ -111,90 +103,53 @@ public class AdminActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fetchData();
+        fetchPendingAccounts();
     }
 
-    private void fetchData() {
+    private void fetchPendingAccounts() {
         tutorList.clear();
-        updateUI();
+        updateUI(); // Reset UI immediately when clearing to keep items and count in sync
 
-        if ("reports".equals(currentFilter)) {
-            fetchReports();
-        } else if ("tutor".equals(currentFilter)) {
-            fetchPendingTutors();
+        if ("tutor".equals(currentFilter)) {
+            db.collection("pendingTutors").get().addOnSuccessListener(queryDocumentSnapshots -> {
+                for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                    String uid = doc.getString("uid");
+                    if (uid != null) {
+                        fetchUserByUid(uid);
+                    }
+                }
+                updateUI();
+            });
         } else {
-            fetchPendingUsers();
+            db.collection("users")
+                    .whereEqualTo("verificationStatus", "pending")
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                            User user = doc.toObject(User.class);
+                            if (user != null) {
+                                if ("admin".equalsIgnoreCase(user.getRole())) continue;
+                                user.setUserID(doc.getId());
+
+                                if ("all".equals(currentFilter)) {
+                                    tutorList.add(user);
+                                } else if ("student".equals(currentFilter) && user.getStudentID() != null) {
+                                    tutorList.add(user);
+                                }
+                            }
+                        }
+                        updateUI();
+                    });
         }
     }
 
-    private void fetchReports() {
-        db.collection("reports")
-                .whereEqualTo("status", "PENDING")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                        String againstId = doc.getString("againstId");
-                        if (againstId != null) {
-                            fetchUserByUid(againstId, true);
-                        }
-                    }
-                });
-    }
-
-    private void fetchPendingTutors() {
-        db.collection("pendingTutors").get().addOnSuccessListener(queryDocumentSnapshots -> {
-            for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                String uid = doc.getString("uid");
-                if (uid != null) {
-                    fetchUserByUid(uid, false);
-                }
-            }
-        });
-    }
-
-    private void fetchPendingUsers() {
-        db.collection("users")
-                .whereEqualTo("verificationStatus", "pending")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                        User user = doc.toObject(User.class);
-                        if (user != null) {
-                            if ("admin".equalsIgnoreCase(user.getRole())) continue;
-                            user.setUserID(doc.getId());
-
-                            if ("all".equals(currentFilter)) {
-                                tutorList.add(user);
-                            } else if ("student".equals(currentFilter) && user.getStudentID() != null) {
-                                tutorList.add(user);
-                            }
-                        }
-                    }
-                    updateUI();
-                });
-    }
-
-    private void fetchUserByUid(String uid, boolean isReport) {
+    private void fetchUserByUid(String uid) {
         db.collection("users").document(uid).get().addOnSuccessListener(doc -> {
             User user = doc.toObject(User.class);
             if (user != null) {
-                user.setUserID(doc.getId());
-                // For reports, we show even if not pending verification
-                if (isReport) {
-                    // Avoid duplicates
-                    boolean exists = false;
-                    for (User u : tutorList) {
-                        if (uid.equals(u.getUserID())) {
-                            exists = true;
-                            break;
-                        }
-                    }
-                    if (!exists) {
-                        tutorList.add(user);
-                        updateUI();
-                    }
-                } else if ("pending".equalsIgnoreCase(user.getVerificationStatus()) &&
+                if ("pending".equalsIgnoreCase(user.getVerificationStatus()) &&
                         !"admin".equalsIgnoreCase(user.getRole())) {
+                    user.setUserID(doc.getId());
                     tutorList.add(user);
                     updateUI();
                 }

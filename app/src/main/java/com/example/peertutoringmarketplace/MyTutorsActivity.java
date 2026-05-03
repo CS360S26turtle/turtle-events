@@ -1,0 +1,99 @@
+package com.example.peertutoringmarketplace;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class MyTutorsActivity extends AppCompatActivity {
+
+    private RecyclerView rvMyTutors;
+    private TextView tvEmptyState;
+    private TutorAdapter adapter;
+    // CHANGE 1: Use List<User> to match TutorAdapter's requirement
+    private List<User> tutorList = new ArrayList<>();
+    private FirebaseFirestore db;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_my_tutors);
+
+        db = FirebaseFirestore.getInstance();
+        rvMyTutors = findViewById(R.id.rv_my_tutors);
+        tvEmptyState = findViewById(R.id.tv_empty_state);
+        ImageButton btnBack = findViewById(R.id.btn_back);
+
+        btnBack.setOnClickListener(v -> finish());
+
+        rvMyTutors.setLayoutManager(new LinearLayoutManager(this));
+
+        // CHANGE 2: Call constructor with only the list (matches your TutorAdapter code)
+        adapter = new TutorAdapter(tutorList,true);
+        rvMyTutors.setAdapter(adapter);
+
+        loadBookedTutors();
+    }
+
+    private void loadBookedTutors() {
+        // FIX: Get the correct ID from the session
+        String currentStudentId = SessionManager.getInstance().getCurrentUser().getStudentID();
+
+        if (currentStudentId == null) {
+            Toast.makeText(this, "Student ID not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        db.collection("sessions")
+                .whereArrayContains("studentsId", currentStudentId) // Must match session doc field
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    Set<String> tutorIds = new HashSet<>();
+                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                        String tid = doc.getString("tutorId");
+                        if (tid != null) tutorIds.add(tid);
+                    }
+
+                    if (tutorIds.isEmpty()) {
+                        tvEmptyState.setVisibility(View.VISIBLE);
+                        rvMyTutors.setVisibility(View.GONE);
+                    } else {
+                        tvEmptyState.setVisibility(View.GONE);
+                        rvMyTutors.setVisibility(View.VISIBLE);
+                        fetchUserProfiles(new ArrayList<>(tutorIds));
+                    }
+                })
+                .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    private void fetchUserProfiles(List<String> ids) {
+        tutorList.clear();
+        for (String id : ids) {
+            // Your Firestore shows tutor profiles might be in the "tutors" collection
+            // with the same document ID as the user.
+            db.collection("users").document(id).get()
+                    .addOnSuccessListener(doc -> {
+                        if (doc.exists()) {
+                            User user = doc.toObject(User.class);
+                            if (user != null) {
+                                tutorList.add(user);
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+        }
+    }
+}

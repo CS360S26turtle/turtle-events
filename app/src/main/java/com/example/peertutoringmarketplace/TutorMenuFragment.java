@@ -27,8 +27,10 @@ public class TutorMenuFragment extends Fragment {
         LinearLayout btnUpdateProfile = view.findViewById(R.id.menu_profile);
         LinearLayout btnLogout = view.findViewById(R.id.menu_logout);
 
-        btnStudents.setOnClickListener(v ->
-                Toast.makeText(getActivity(), "My Students", Toast.LENGTH_SHORT).show());
+        btnStudents.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), MyStudentsActivity.class);
+            startActivity(intent);
+        });
 
         btnUpcoming.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), UpcomingSessionsActivity.class);
@@ -67,7 +69,6 @@ public class TutorMenuFragment extends Fragment {
                 getActivity().finish();
             }
         });
-
         btnLogout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             SessionManager.getInstance().logout();
