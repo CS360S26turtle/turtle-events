@@ -3,11 +3,13 @@ package com.example.peertutoringmarketplace;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -31,6 +33,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.List;
+import java.util.UUID;
 
 public class TutorProfileActivity extends AppCompatActivity {
 
@@ -38,7 +41,7 @@ public class TutorProfileActivity extends AppCompatActivity {
     private ImageView ivProfile, ivMenuHamburger;
     private ChipGroup chipGroupSubjects;
     private DrawerLayout drawerLayout;
-    private MaterialButton btnMainAction;
+    private MaterialButton btnMainAction, btnReport;
     private FirebaseFirestore db;
     private String viewedTutorId;
     private View cardViewReviews;
@@ -49,32 +52,33 @@ public class TutorProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_profile);
 
-        // 1. Setup Firebase and IDs
+        // Setup Firebase and IDs
         db = FirebaseFirestore.getInstance();
         viewedTutorId = getIntent().getStringExtra("tutorId");
         String currentUserId = SessionManager.getInstance().getCurrentUserId();
         boolean fromMyTutors = getIntent().getBooleanExtra("FROM_MY_TUTORS", false);
 
-        // 2. Initialize Views
+        // Initialize Views
         tvName = findViewById(R.id.tutor_name);
         tvBio = findViewById(R.id.tutor_bio);
         tvRate = findViewById(R.id.tutor_rate);
         ivProfile = findViewById(R.id.profile_image);
         chipGroupSubjects = findViewById(R.id.chip_group_subjects);
         tvTeachingMode = findViewById(R.id.tv_teaching_mode_display);
-        btnMainAction = findViewById(R.id.btn_book_session); // This is your main button
+        btnMainAction = findViewById(R.id.btn_book_session);
+        btnReport = findViewById(R.id.btn_report_tutor);
         cardViewReviews = findViewById(R.id.card_view_reviews);
         badgesContainer = findViewById(R.id.badges_container);
         drawerLayout = findViewById(R.id.drawer_layout);
         ivMenuHamburger = findViewById(R.id.btn_hamburger);
 
-        // 3. Setup Navigation
+        // Setup Navigation
         if (ivMenuHamburger != null) {
             ivMenuHamburger.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
         }
         setupNavigationDrawer();
 
-        // 4. Setup Reviews Click Listener
+        // Setup Reviews Click Listener
         if (cardViewReviews != null) {
             cardViewReviews.setOnClickListener(v -> {
                 String idToView = (viewedTutorId != null && !viewedTutorId.isEmpty()) ? viewedTutorId : currentUserId;
@@ -86,17 +90,17 @@ public class TutorProfileActivity extends AppCompatActivity {
             });
         }
 
-        // 5. Logic: Determine Profile Mode (Own Profile vs Viewing Another)
+        // Logic: Determine Profile Mode (Own Profile vs Viewing Another)
         if (viewedTutorId != null && !viewedTutorId.equals(currentUserId)) {
             // VIEWING ANOTHER TUTOR
             loadTutorProfile(viewedTutorId);
 
             if (fromMyTutors) {
-                // Mode: Reviewing a Tutor after a session
+                // "Leave a Review" mode
                 btnMainAction.setVisibility(View.GONE);
                 checkIfReviewExists(currentUserId, viewedTutorId);
             } else {
-                // Mode: General Booking
+                // "Book a Session" mode
                 btnMainAction.setVisibility(View.VISIBLE);
                 btnMainAction.setText("Book a Session");
                 btnMainAction.setOnClickListener(v -> {
@@ -105,11 +109,42 @@ public class TutorProfileActivity extends AppCompatActivity {
                     startActivity(intent);
                 });
             }
+
+            // Reporting Logic
+            if (btnReport != null) {
+                btnReport.setVisibility(View.VISIBLE);
+                btnReport.setOnClickListener(v -> showReportDialog(viewedTutorId));
+            }
         } else {
             // VIEWING OWN PROFILE
             if (btnMainAction != null) btnMainAction.setVisibility(View.GONE);
+            if (btnReport != null) btnReport.setVisibility(View.GONE);
             updateUIFromSession();
         }
+    }
+
+    private void showReportDialog(String targetUserId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Report User");
+        final EditText input = new EditText(this);
+        input.setHint("Enter reason for reporting...");
+        builder.setView(input);
+        builder.setPositiveButton("Submit", (dialog, which) -> {
+            String reason = input.getText().toString().trim();
+            if (!reason.isEmpty()) submitReport(targetUserId, reason);
+            else Toast.makeText(this, "Reason required", Toast.LENGTH_SHORT).show();
+        });
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
+    }
+
+    private void submitReport(String againstId, String reason) {
+        String reportId = UUID.randomUUID().toString();
+        String registererId = SessionManager.getInstance().getCurrentUserId();
+        Report report = new Report(reportId, reason, registererId, againstId);
+        db.collection("reports").document(reportId).set(report)
+                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Reported to Admin", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(this, "Error reporting", Toast.LENGTH_SHORT).show());
     }
 
     private void checkIfReviewExists(String studentId, String tutorId) {
@@ -210,6 +245,8 @@ public class TutorProfileActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.START);
             startActivity(new Intent(this, UpdateProfileActivity.class));
         });
+        View menuStudents = menuView.findViewById(R.id.menu_students);
+        if (menuStudents != null) menuStudents.setOnClickListener(v -> startActivity(new Intent(this, MyStudentsActivity.class)));
         menuView.findViewById(R.id.menu_upcoming).setOnClickListener(v -> startActivity(new Intent(this, UpcomingSessionsActivity.class)));
         menuView.findViewById(R.id.menu_leaderboard).setOnClickListener(v -> startActivity(new Intent(this, LeaderboardActivity.class)));
         menuView.findViewById(R.id.menu_switch_role).setOnClickListener(v -> {
@@ -223,7 +260,19 @@ public class TutorProfileActivity extends AppCompatActivity {
 
     private void setupStudentMenu(View menuView) {
         menuView.findViewById(R.id.menu_logout).setOnClickListener(v -> performLogout());
-        menuView.findViewById(R.id.menu_tutors).setOnClickListener(v -> startActivity(new Intent(this, MyTutorsActivity.class)));
+
+        // Find a Tutor reroutes to search page
+        View btnFind = menuView.findViewById(R.id.menu_find_tutor);
+        if (btnFind != null) {
+            btnFind.setOnClickListener(v -> startActivity(new Intent(this, SearchTutorActivity.class)));
+        }
+
+        // My Tutors shows a placeholder Toast
+        View btnTutors = menuView.findViewById(R.id.menu_tutors);
+        if (btnTutors != null) {
+            btnTutors.setOnClickListener(v -> Toast.makeText(this, "My Tutors feature coming soon!", Toast.LENGTH_SHORT).show());
+        }
+
         menuView.findViewById(R.id.menu_upcoming).setOnClickListener(v -> startActivity(new Intent(this, StudentUpcomingSessionsActivity.class)));
         menuView.findViewById(R.id.menu_settings).setOnClickListener(v -> startActivity(new Intent(this, StudentProfileActivity.class)));
         menuView.findViewById(R.id.menu_leaderboard).setOnClickListener(v -> startActivity(new Intent(this, LeaderboardActivity.class)));

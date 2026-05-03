@@ -69,10 +69,14 @@
         <activity
             android:name=".BookSessionActivity"
             android:exported="false" />
-        <activity
-            android:name=".StudentUpcomingSessionsActivity"
+        <activity android:name=".StudentUpcomingSessionsActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".MyStudentsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudyResourceActivity"
+            android:exported="false" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

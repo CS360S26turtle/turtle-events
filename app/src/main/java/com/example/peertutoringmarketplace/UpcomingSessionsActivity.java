@@ -432,14 +432,14 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
         menuContainer.removeAllViews();
         menuContainer.addView(menuView);
 
-        TextView tvUpcomingText = menuView.findViewById(R.id.tv_menu_upcoming_text);
-        if (tvUpcomingText != null) tvUpcomingText.setText("My Profile");
+        TextView tvProfileText = menuView.findViewById(R.id.tv_menu_profile_text);
+        if (tvProfileText != null) tvProfileText.setText("My Profile");
 
         LinearLayout menuUpdateProfile = menuView.findViewById(R.id.menu_profile);
         if (menuUpdateProfile != null) {
             menuUpdateProfile.setOnClickListener(v -> {
-                startActivity(new Intent(this, UpdateProfileActivity.class));
                 drawerLayout.closeDrawer(GravityCompat.START);
+                startActivity(new Intent(this, UpdateProfileActivity.class));
             });
         }
 
@@ -479,7 +479,14 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+        LinearLayout menuStudents = menuView.findViewById(R.id.menu_students);
+        if (menuStudents != null) {
+            menuStudents.setOnClickListener(v -> {
+                startActivity(new Intent(this, MyStudentsActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });}
     }
+
 
     // ── Firestore: load tutor ID then slots ──────────────────────────────────
 
