@@ -38,7 +38,7 @@ public class AdminActivityTest {
         // Increase timeouts for CI environments like GitHub Actions
         IdlingPolicies.setMasterPolicyTimeout(60, TimeUnit.SECONDS);
         IdlingPolicies.setIdlingResourceTimeout(60, TimeUnit.SECONDS);
-        
+
         Intents.init();
         // IMPORTANT: Set session role to admin to ensure TutorAdapter navigates to Detail screen
         User adminUser = new User("test_admin", "admin@test.com", "Admin User", "admin");
@@ -87,7 +87,7 @@ public class AdminActivityTest {
         // Click Reports filter (Tutor Requests is default)
         onView(withId(R.id.chipReports)).perform(click());
         waitFor(3000); // Wait for filter to apply and Firebase to respond
-        
+
         activityRule.getScenario().onActivity(activity -> {
             String countText = activity.textPendingCount.getText().toString();
             assertTrue("Count should be a number", countText.matches("\\d+"));
@@ -121,10 +121,10 @@ public class AdminActivityTest {
     public void testLogout() {
         waitFor(1000);
         onView(withId(R.id.btnLogout)).perform(click());
-        
+
         // Verify navigation to LoginActivity
         intended(hasComponent(LoginActivity.class.getName()));
-        
+
         // Verify session is cleared
         assertTrue("Session should be null after logout", SessionManager.getInstance().getCurrentUser() == null);
     }

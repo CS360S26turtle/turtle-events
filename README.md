@@ -1,10 +1,6 @@
 # Project Documentation
 
 ## Table of Contents
-<<<<<<< HEAD
-## Table of Contents
-=======
->>>>>>> 1d3b2e4e56053ef9f2150d085fc5063029f54cff
 
 * [Team Information](#team-information)
 
@@ -561,6 +557,8 @@ with each other.
 </p>
 
 Link: https://lucid.app/lucidchart/9cc2bf68-ca08-4504-a752-03784cc5fa5f/edit?viewport_loc=-6520%2C-2145%2C8449%2C4561%2C0_0&invitationId=inv_83110f14-47e6-4924-b7de-9712be12e07d
+
+## UI interface - Final Checkpoint 
 
 ## Sprint Meetings
 

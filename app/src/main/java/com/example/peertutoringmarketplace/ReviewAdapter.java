@@ -9,6 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
+/**
+ * File : ReviewAdapter.java
+ * Purpose: Binds the list of Review objects to the RecyclerView in ViewReviewActivity.
+ */
+
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
     private List<Review> reviews;
 

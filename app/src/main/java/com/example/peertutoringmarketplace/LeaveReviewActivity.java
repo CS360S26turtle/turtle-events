@@ -9,6 +9,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+/**
+ * File : LeaveReviewActivity.java
+ * Purpose: Provides a UI for students to input ratings and comments for a tutor.
+ */
 
 public class LeaveReviewActivity extends AppCompatActivity {
     private RatingBar ratingBar;
@@ -26,7 +30,6 @@ public class LeaveReviewActivity extends AppCompatActivity {
         etComment = findViewById(R.id.et_review_comment);
         btnBack = findViewById(R.id.btn_back);
 
-        // FIXED: Only call finish() when the button is actually clicked
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
         }
@@ -34,6 +37,10 @@ public class LeaveReviewActivity extends AppCompatActivity {
         findViewById(R.id.btn_submit_review).setOnClickListener(v -> submitReview());
     }
 
+    /**
+     * Validates input, constructs a new Review object, and persists it to Firestore.
+     * Closes the activity with RESULT_OK upon success to notify the calling activity.
+     */
     private void submitReview() {
         float rating = ratingBar.getRating();
         String comment = etComment.getText().toString().trim();

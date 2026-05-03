@@ -1,15 +1,3 @@
-/**
- * Displays a tutor's upcoming sessions and available slots for the selected date.
- * The activity allows tutors to add new session slots, cancel existing sessions,
- * and view booking details including the names of booked students.
- *
- * FIXES applied:
- *  1. loadGeneration counter prevents duplicate entries from stale async callbacks.
- *  2. MaterialTimePicker replaces old TimePickerDialog (keyboard input mode by default).
- *  3. Capacity field added to "Add Session" dialog (1–15, validated).
- *  4. createSlot now writes maxCapacity to Firestore instead of hardcoding 1.
- */
-
 package com.example.peertutoringmarketplace;
 
 import android.app.AlertDialog;
@@ -63,6 +51,11 @@ import java.util.UUID;
 
 import com.kizitonwose.calendar.view.CalendarView;
 
+/**
+ * Displays a tutor's upcoming sessions and available slots for the selected date.
+ * The activity allows tutors to add new session slots, cancel existing sessions,
+ * and view booking details including the names of booked students.
+ */
 public class UpcomingSessionsActivity extends AppCompatActivity {
 
     private CalendarView calendarView;
@@ -83,11 +76,6 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
     private int selectedPosition = -1;
     private DrawerLayout drawerLayout;
 
-    /**
-     * Duplication guard.
-     * Every call to loadSlotsForDate() increments this and captures the value.
-     * Stale async callbacks bail out when their captured value no longer matches.
-     */
     private int loadGeneration = 0;
 
     @Override
@@ -137,7 +125,6 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
             }
             SessionListItem item = sessionItems.get(selectedPosition);
 
-            // ── FIX: Prevent cancelling past sessions ─────────────────────
             if (item.startTime.before(new Date())) {
                 Toast.makeText(this, "Cannot cancel a past session", Toast.LENGTH_SHORT).show();
                 return;
@@ -445,14 +432,14 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
         menuContainer.removeAllViews();
         menuContainer.addView(menuView);
 
-        TextView tvUpcomingText = menuView.findViewById(R.id.tv_menu_upcoming_text);
-        if (tvUpcomingText != null) tvUpcomingText.setText("My Profile");
+        TextView tvProfileText = menuView.findViewById(R.id.tv_menu_profile_text);
+        if (tvProfileText != null) tvProfileText.setText("My Profile");
 
         LinearLayout menuUpdateProfile = menuView.findViewById(R.id.menu_profile);
         if (menuUpdateProfile != null) {
             menuUpdateProfile.setOnClickListener(v -> {
-                startActivity(new Intent(this, UpdateProfileActivity.class));
                 drawerLayout.closeDrawer(GravityCompat.START);
+                startActivity(new Intent(this, UpdateProfileActivity.class));
             });
         }
 
@@ -477,6 +464,21 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                 finish();
             });
         }
+
+        LinearLayout menuLeaderboard = menuView.findViewById(R.id.menu_leaderboard);
+        if (menuLeaderboard != null) menuLeaderboard.setOnClickListener(v -> {
+            startActivity(new Intent(this, LeaderboardActivity.class));
+            drawerLayout.closeDrawer(GravityCompat.START);
+        });
+
+        LinearLayout menuSwitchRole = menuView.findViewById(R.id.menu_switch_role);
+        if (menuSwitchRole != null) menuSwitchRole.setOnClickListener(v -> {
+            SessionManager.getInstance().setCurrentRole("student");
+            Intent intent = new Intent(this, StudentProfileActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        });
         LinearLayout menuStudents = menuView.findViewById(R.id.menu_students);
         if (menuStudents != null) {
             menuStudents.setOnClickListener(v -> {
@@ -512,7 +514,7 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
     // ── Firestore: load slots for selected date (with duplication guard) ─────
 
     private void loadSlotsForDate(@NonNull String tutorId) {
-        final int myGeneration = ++loadGeneration;   // ← guard
+        final int myGeneration = ++loadGeneration;
 
         sessionItems.clear();
         selectedPosition = -1;
@@ -524,7 +526,7 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                 .whereEqualTo("tutorId", tutorId)
                 .get()
                 .addOnSuccessListener(slotSnaps -> {
-                    if (myGeneration != loadGeneration) return;  // stale — discard
+                    if (myGeneration != loadGeneration) return;
 
                     List<DocumentSnapshot> slotDocs = slotSnaps.getDocuments();
 
@@ -554,7 +556,6 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                                     .atZone(ZoneId.systemDefault()).toLocalDate();
                         }
 
-                        // ── FIX: Show ALL slots (past and future) ────────────
                         eventDates.add(slotLocalDate);
 
                         if (!slotLocalDate.equals(selectedDate)) {

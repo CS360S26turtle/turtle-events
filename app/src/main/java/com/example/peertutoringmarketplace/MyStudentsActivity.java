@@ -284,6 +284,13 @@ public class MyStudentsActivity extends AppCompatActivity {
                 drawerLayout.closeDrawer(GravityCompat.START);
             });
 
+        LinearLayout menuLeaderboard = menuView.findViewById(R.id.menu_leaderboard);
+        if (menuLeaderboard != null)
+            menuLeaderboard.setOnClickListener(v -> {
+                startActivity(new Intent(this, LeaderboardActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });
+
         LinearLayout menuProfile = menuView.findViewById(R.id.menu_profile);
         if (menuProfile != null)
             menuProfile.setOnClickListener(v -> {

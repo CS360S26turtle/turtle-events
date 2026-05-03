@@ -13,6 +13,20 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.example.peertutoringmarketplace.Badge;
+import com.example.peertutoringmarketplace.BookSessionActivity;
+import com.example.peertutoringmarketplace.LeaveReviewActivity;
+import com.example.peertutoringmarketplace.LoginActivity;
+import com.example.peertutoringmarketplace.MyTutorsActivity;
+import com.example.peertutoringmarketplace.SessionManager;
+import com.example.peertutoringmarketplace.StudentProfileActivity;
+import com.example.peertutoringmarketplace.StudentUpcomingSessionsActivity;
+import com.example.peertutoringmarketplace.TutorProfile;
+import com.example.peertutoringmarketplace.UpcomingSessionsActivity;
+import com.example.peertutoringmarketplace.UpdateProfileActivity;
+import com.example.peertutoringmarketplace.User;
+import com.example.peertutoringmarketplace.ViewReviewActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -38,6 +52,7 @@ public class TutorProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_profile);
 
+        // Setup Firebase and IDs
         db = FirebaseFirestore.getInstance();
         viewedTutorId = getIntent().getStringExtra("tutorId");
         String currentUserId = SessionManager.getInstance().getCurrentUserId();
@@ -50,18 +65,20 @@ public class TutorProfileActivity extends AppCompatActivity {
         ivProfile = findViewById(R.id.profile_image);
         chipGroupSubjects = findViewById(R.id.chip_group_subjects);
         tvTeachingMode = findViewById(R.id.tv_teaching_mode_display);
-        btnMainAction = findViewById(R.id.btn_book_session); 
+        btnMainAction = findViewById(R.id.btn_book_session);
         btnReport = findViewById(R.id.btn_report_tutor);
         cardViewReviews = findViewById(R.id.card_view_reviews);
         badgesContainer = findViewById(R.id.badges_container);
         drawerLayout = findViewById(R.id.drawer_layout);
         ivMenuHamburger = findViewById(R.id.btn_hamburger);
 
+        // Setup Navigation
         if (ivMenuHamburger != null) {
             ivMenuHamburger.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
         }
         setupNavigationDrawer();
 
+        // Setup Reviews Click Listener
         if (cardViewReviews != null) {
             cardViewReviews.setOnClickListener(v -> {
                 String idToView = (viewedTutorId != null && !viewedTutorId.isEmpty()) ? viewedTutorId : currentUserId;
@@ -73,6 +90,7 @@ public class TutorProfileActivity extends AppCompatActivity {
             });
         }
 
+        // Logic: Determine Profile Mode (Own Profile vs Viewing Another)
         if (viewedTutorId != null && !viewedTutorId.equals(currentUserId)) {
             // VIEWING ANOTHER TUTOR
             loadTutorProfile(viewedTutorId);
@@ -223,26 +241,26 @@ public class TutorProfileActivity extends AppCompatActivity {
 
     private void setupTutorMenu(View menuView) {
         menuView.findViewById(R.id.menu_logout).setOnClickListener(v -> performLogout());
-        menuView.findViewById(R.id.menu_profile).setOnClickListener(v -> startActivity(new Intent(this, UpdateProfileActivity.class)));
-        menuView.findViewById(R.id.menu_upcoming).setOnClickListener(v -> startActivity(new Intent(this, UpcomingSessionsActivity.class)));
+        menuView.findViewById(R.id.menu_profile).setOnClickListener(v -> {
+            drawerLayout.closeDrawer(GravityCompat.START);
+            startActivity(new Intent(this, UpdateProfileActivity.class));
+        });
         View menuStudents = menuView.findViewById(R.id.menu_students);
         if (menuStudents != null) menuStudents.setOnClickListener(v -> startActivity(new Intent(this, MyStudentsActivity.class)));
-        
-        View menuSwitch = menuView.findViewById(R.id.menu_switch_role);
-        if (menuSwitch != null) {
-            menuSwitch.setOnClickListener(v -> {
-                SessionManager.getInstance().setCurrentRole("student");
-                Intent intent = new Intent(this, RoleActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            });
-        }
+        menuView.findViewById(R.id.menu_upcoming).setOnClickListener(v -> startActivity(new Intent(this, UpcomingSessionsActivity.class)));
+        menuView.findViewById(R.id.menu_leaderboard).setOnClickListener(v -> startActivity(new Intent(this, LeaderboardActivity.class)));
+        menuView.findViewById(R.id.menu_switch_role).setOnClickListener(v -> {
+            SessionManager.getInstance().setCurrentRole("student");
+            Intent intent = new Intent(this, StudentProfileActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void setupStudentMenu(View menuView) {
         menuView.findViewById(R.id.menu_logout).setOnClickListener(v -> performLogout());
-        
+
         // Find a Tutor reroutes to search page
         View btnFind = menuView.findViewById(R.id.menu_find_tutor);
         if (btnFind != null) {
@@ -257,16 +275,14 @@ public class TutorProfileActivity extends AppCompatActivity {
 
         menuView.findViewById(R.id.menu_upcoming).setOnClickListener(v -> startActivity(new Intent(this, StudentUpcomingSessionsActivity.class)));
         menuView.findViewById(R.id.menu_settings).setOnClickListener(v -> startActivity(new Intent(this, StudentProfileActivity.class)));
-        
-        View menuSwitch = menuView.findViewById(R.id.menu_switch_role);
-        if (menuSwitch != null) {
-            menuSwitch.setOnClickListener(v -> {
-                Intent intent = new Intent(this, RoleActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            });
-        }
+        menuView.findViewById(R.id.menu_leaderboard).setOnClickListener(v -> startActivity(new Intent(this, LeaderboardActivity.class)));
+        menuView.findViewById(R.id.menu_switch_role).setOnClickListener(v -> {
+            SessionManager.getInstance().setCurrentRole("tutor");
+            Intent intent = new Intent(this, TutorProfileActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void performLogout() {
