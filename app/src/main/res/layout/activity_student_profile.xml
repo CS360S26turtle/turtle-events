@@ -21,16 +21,21 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="20dp"
                 android:background="#4A7563">
+
                 <ImageView
                     android:id="@+id/btn_hamburger"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="8dp"
-                    android:padding="8dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="12dp"
+                    android:padding="10dp"
+                    android:scaleType="centerInside"
                     android:src="@android:drawable/ic_menu_sort_by_size"
                     app:tint="#EFEBEB" />
+
             </RelativeLayout>
 
             <androidx.core.widget.NestedScrollView
@@ -42,7 +47,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-40dp"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
                     android:paddingHorizontal="28dp"
@@ -50,8 +54,9 @@
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/profile_image"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_marginTop="10dp"
                         android:padding="2dp"
                         android:scaleType="centerCrop"
                         android:src="@android:drawable/sym_def_app_icon"
@@ -63,10 +68,10 @@
                         android:id="@+id/student_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="12dp"
                         android:text="Student Name"
                         android:textColor="#EFEBEB"
-                        android:textSize="22sp"
+                        android:textSize="24sp"
                         android:textStyle="bold" />
 
                     <EditText
@@ -79,40 +84,76 @@
                         android:inputType="textMultiLine"
                         android:textColor="#EFEBEB"
                         android:textColorHint="#C0EFEBEB"
-                        android:textSize="13sp"
-                        android:alpha="0.8" />
+                        android:textSize="14sp"
+                        android:alpha="0.9"
+                        android:layout_marginTop="4dp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="24dp"
                         android:weightSum="2">
+
                         <androidx.cardview.widget.CardView
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="80dp"
                             android:layout_weight="1"
-                            android:layout_marginEnd="8dp"
+                            android:layout_marginEnd="10dp"
                             app:cardBackgroundColor="#C8D6CF"
-                            app:cardCornerRadius="14dp"
+                            app:cardCornerRadius="16dp"
                             app:cardElevation="0dp">
-                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="10dp" android:gravity="center">
-                                <TextView android:id="@+id/tv_sessions_attended" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="#578974" android:textSize="16sp" android:textStyle="bold"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sessions Attended" android:textColor="#578974" android:textSize="10sp"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:gravity="center">
+                                <TextView
+                                    android:id="@+id/tv_sessions_attended"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textColor="#578974"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Sessions Attended"
+                                    android:textColor="#578974"
+                                    android:textSize="11sp"/>
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
+
                         <androidx.cardview.widget.CardView
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="80dp"
                             android:layout_weight="1"
-                            android:layout_marginStart="1dp"
+                            android:layout_marginStart="10dp"
                             app:cardBackgroundColor="#C8D6CF"
-                            app:cardCornerRadius="14dp"
+                            app:cardCornerRadius="16dp"
                             app:cardElevation="0dp">
-                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="10dp" android:gravity="center">
-                                <TextView android:id="@+id/tv_student_rating" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0.0" android:textColor="#578974" android:textSize="16sp" android:textStyle="bold"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Student Rating" android:textColor="#578974" android:textSize="10sp"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:gravity="center">
+                                <TextView
+                                    android:id="@+id/tv_student_rating"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0.0"
+                                    android:textColor="#578974"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Student Rating"
+                                    android:textColor="#578974"
+                                    android:textSize="11sp"/>
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
+
                     </LinearLayout>
 
                     <TextView
@@ -125,6 +166,7 @@
                         android:textColor="#EFEBEB"
                         android:textSize="14sp"
                         android:letterSpacing="0.05"/>
+
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -155,6 +197,7 @@
                         android:textColor="#EFEBEB"
                         android:textSize="14sp"
                         android:letterSpacing="0.05"/>
+
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -186,6 +229,7 @@
                         android:textColor="#EFEBEB"
                         android:textSize="14sp"
                         android:letterSpacing="0.05"/>
+
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -215,6 +259,7 @@
                         android:textStyle="bold"
                         android:textColor="#EFEBEB"
                         android:textSize="14sp"/>
+
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -274,15 +319,15 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@android:color/transparent"
         app:elevation="0dp">
         <FrameLayout
             android:id="@+id/menu_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="280dp"
+            android:layout_height="match_parent"
             android:layout_marginTop="40dp" />
     </com.google.android.material.navigation.NavigationView>
 
