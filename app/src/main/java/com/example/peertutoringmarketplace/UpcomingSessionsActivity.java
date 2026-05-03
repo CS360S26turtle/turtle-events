@@ -454,6 +454,14 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
             });
         }
 
+        LinearLayout menuNotifications = menuView.findViewById(R.id.menu_notifications);
+        if (menuNotifications != null) {
+            menuNotifications.setOnClickListener(v -> {
+                startActivity(new Intent(this, NotificationsActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });
+        }
+
         LinearLayout menuLogout = menuView.findViewById(R.id.menu_logout);
         if (menuLogout != null) {
             menuLogout.setOnClickListener(v -> {
@@ -586,6 +594,13 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
                                         item.type      = sessionDoc.getString("type");
                                         List<String> sts = (List<String>) sessionDoc.get("studentsId");
                                         item.students = sts != null ? sts : new ArrayList<>();
+                                        
+                                        if (!item.students.isEmpty()) {
+                                            ReminderScheduler.scheduleSessionReminder(
+                                                    UpcomingSessionsActivity.this,
+                                                    item.sessionId, 
+                                                    item.startTime);
+                                        }
                                     }
 
                                     loadStudentNamesForItem(item, () -> {

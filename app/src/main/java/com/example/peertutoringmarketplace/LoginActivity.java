@@ -1,6 +1,7 @@
 package com.example.peertutoringmarketplace;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -74,6 +75,25 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        requestNotificationPermission();
+    }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                androidx.core.app.ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
+
+        // For Android 12+ (API 31+), check for exact alarm permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            android.app.AlarmManager alarmManager = (android.app.AlarmManager) getSystemService(android.content.Context.ALARM_SERVICE);
+            if (alarmManager != null && !alarmManager.canScheduleExactAlarms()) {
+                Intent intent = new Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                startActivity(intent);
+            }
+        }
     }
 
     /**
