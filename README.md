@@ -395,10 +395,7 @@ with each other.
 | US 16 - Reporting | As a student or tutor, I want to be able to report inappropriate behavior so that the platform maintains safety and accountability. | High | To Do |
 | US 17 - Tutor Verification | As an administrator, I want to verify tutor credentials, so that the platform maintains quality and trust. | High | To Do |
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | To Do |
-<<<<<<< HEAD
-=======
 | US 19 - Forget Password Option | As a user, I want to be able to reset my password in case I forget my password through sending a request with an email. | Low | To Do|
->>>>>>> 1d3b2e4e56053ef9f2150d085fc5063029f54cff
 
 
 ### Product Backlog – Project Part 2 (Halfway)
@@ -414,7 +411,7 @@ with each other.
 | US 08 - Achievement Badges | As a tutor, I want achievement badges so students can trust my credibility. | Low | To Do |
 | US 09 - Tutor Review | As a student, I want to be able to leave rating and reviews for tutors and read existing reviews so that I, and other students, can pick more suitable tutors. | Medium | To Do |
 | US 10 - Tutor Search | As a student, I want to search for tutors by subject and course code and filter the results by rating so that I can quickly find the most suitable tutor. | High | Done |
-| US 12 - Session Cancelation | As a tutor, I want to be able to reschedule or cancel sessions if a student is unresponsive or if I have other commitments so that I can manage my time efficiently. | High | Doneo |
+| US 12 - Session Cancelation | As a tutor, I want to be able to reschedule or cancel sessions if a student is unresponsive or if I have other commitments so that I can manage my time efficiently. | High | Done |
 | US 13 - Recommendation System | As a student, I want to be algorithmically matched with a suitable tutor based on my requirements so that I can find a tutor without having to search manually. | High | To Do |
 | US 14 - Study Notes | As a tutor, I want an interface to manage study resources (links, PDFs, notes) for each student so that I can organize lessons and provide personalized materials efficiently. | High | To Do |
 | US 15 - Chat Feature | As a student or tutor, I want to be able to chat with the other party so that I can communicate whenever needed. | Medium | To Do |
@@ -422,6 +419,29 @@ with each other.
 | US 17 - Tutor Verification | As an administrator, I want to verify tutor credentials, so that the platform maintains quality and trust. | High | Done |
 | US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | To Do |
 | US 19 - Forget Password Option | As a user, I want to be able to reset my password in case I forget my password through sending a request with an email. | Low | Done|
+
+### Product Backlog – Project Part 2 (Final Checkpoint)
+| ID | User Story | Priority | Status |
+|----|------------|----------|--------|
+| US 01 - User Registration | As a student, I want to create and edit my profile with my courses, academic level, learning goals/style(in-person, online, visual, auditory etc ) so that tutors can understand my needs. | High | Done |
+| US 02 - Session Reminders | As a student or tutor, I want to receive an automatic reminder before my scheduled session so that I don’t forget it. | High | Done |
+| US 03 - Session Notes | As a tutor, I want to add private notes after a session so I can see agendas achieved for the particular session and track progress for future sessions. | Medium | Done |
+| US 04 - Tutor Session Slots | As a tutor, I want to create separate time slots for individual and group tutoring sessions and set a maximum capacity for group sessions so that I can manage my schedule effectively and avoid overbooking or conflicts. | High | Done |
+| US 05 - Tutor Profile | As a tutor, I want to create a profile that lists my subjects, courses, hourly rate, preferred teaching modes (e.g., in-person or online), learning styles (e.g., visual or auditory), and total hours taught so that students can evaluate my suitability before booking a session. | High | Done |
+| US 06 - Scheduling Calendar | As a tutor or student, I want to view upcoming sessions in a calendar format, so that I can manage my availability. | High | Done |
+| US 07 - LeaderBoard | As a student, I want to view a leaderboard of top tutors by school and see a “Tutor of the Month” for each school so that I can quickly identify highly trusted and well-performing tutors. | Low | Done |
+| US 08 - Achievement Badges | As a tutor, I want achievement badges so students can trust my credibility. | Low | Done |
+| US 09 - Tutor Review | As a student, I want to be able to leave rating and reviews for tutors and read existing reviews so that I, and other students, can pick more suitable tutors. | Medium | Done |
+| US 10 - Tutor Search | As a student, I want to search for tutors by subject and course code and filter the results by rating so that I can quickly find the most suitable tutor. | High | Done |
+| US 12 - Session Cancelation | As a tutor, I want to be able to reschedule or cancel sessions if a student is unresponsive or if I have other commitments so that I can manage my time efficiently. | High | Done |
+| US 13 - Recommendation System | As a student, I want to be algorithmically matched with a suitable tutor based on my requirements so that I can find a tutor without having to search manually. | High | Done |
+| US 14 - Study Notes | As a tutor, I want an interface to manage study resources (links, PDFs, notes) for each student so that I can organize lessons and provide personalized materials efficiently. | High | Done |
+| US 15 - Chat Feature | As a student or tutor, I want to be able to chat with the other party so that I can communicate whenever needed. | Medium | Done |
+| US 16 - Reporting | As a student or tutor, I want to be able to report inappropriate behavior so that the platform maintains safety and accountability. | High | Done |
+| US 17 - Tutor Verification | As an administrator, I want to verify tutor credentials, so that the platform maintains quality and trust. | High | Done |
+| US 18 - Malicious Activity Monitoring for Tutors and Students | As an administrator, I want to monitor cancellation patterns and review existing reports against students and tutors so that I can detect malicious or abusive activity. | High | Done |
+| US 19 - Forget Password Option | As a user, I want to be able to reset my password in case I forget my password through sending a request with an email. | Low | Done|
+
 
 
 ## UI interface - Halfway
