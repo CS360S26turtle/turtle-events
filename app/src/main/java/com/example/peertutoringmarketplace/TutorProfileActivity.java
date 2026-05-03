@@ -256,6 +256,14 @@ public class TutorProfileActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        View menuNotifications = menuView.findViewById(R.id.menu_notifications);
+        if (menuNotifications != null) {
+            menuNotifications.setOnClickListener(v -> {
+                startActivity(new Intent(this, NotificationsActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });
+        }
     }
 
     private void setupStudentMenu(View menuView) {
@@ -283,6 +291,14 @@ public class TutorProfileActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        View menuNotifications = menuView.findViewById(R.id.menu_notifications);
+        if (menuNotifications != null) {
+            menuNotifications.setOnClickListener(v -> {
+                startActivity(new Intent(this, NotificationsActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });
+        }
     }
 
     private void performLogout() {

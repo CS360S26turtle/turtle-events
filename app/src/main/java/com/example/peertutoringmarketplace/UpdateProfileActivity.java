@@ -90,6 +90,14 @@ public class UpdateProfileActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.START);
         });
 
+        View menuNotifications = menuView.findViewById(R.id.menu_notifications);
+        if (menuNotifications != null) {
+            menuNotifications.setOnClickListener(v -> {
+                startActivity(new Intent(this, NotificationsActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });
+        }
+
         menuView.findViewById(R.id.menu_logout).setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             SessionManager.getInstance().logout();

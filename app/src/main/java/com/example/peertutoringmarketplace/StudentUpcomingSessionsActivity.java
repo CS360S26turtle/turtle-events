@@ -295,6 +295,8 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
                                                 item.tutorId    = tutorId;
                                                 item.startTime  = startTs.toDate();
                                                 item.endTime    = endTs.toDate();
+                                                
+                                                ReminderScheduler.scheduleSessionReminder(this, item.sessionId, item.startTime);
 
                                                 loadTutorNameForItem(item, () -> {
                                                     if (myGeneration != loadGeneration) return;  // stale
@@ -408,6 +410,14 @@ public class StudentUpcomingSessionsActivity extends AppCompatActivity {
             startActivity(new Intent(this, StudentProfileActivity.class));
             drawerLayout.closeDrawer(GravityCompat.START);
         });
+
+        LinearLayout menuNotifications = menuView.findViewById(R.id.menu_notifications);
+        if (menuNotifications != null) {
+            menuNotifications.setOnClickListener(v -> {
+                startActivity(new Intent(this, NotificationsActivity.class));
+                drawerLayout.closeDrawer(GravityCompat.START);
+            });
+        }
 
         LinearLayout menuLogout = menuView.findViewById(R.id.menu_logout);
         if (menuLogout != null) menuLogout.setOnClickListener(v -> {
