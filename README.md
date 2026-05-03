@@ -20,6 +20,7 @@
 
 * [StoryBoards](#storyboards)
   * [StoryBoards - Halfway](#ui-interface---halfway)
+  * [StoryBoards - Halfway](#ui-interface---final chekpoint)
 
 * [Product Backlog](#product-backlog)
   * [Product Backlog – Project Part 1](#product-backlog--project-part-1)
