@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.peertutoringmarketplace.R;
@@ -17,12 +18,10 @@ import java.util.List;
  * TutorAdapter binds a list of User objects to a RecyclerView for display.
  * It is shared by both AdminActivity and SearchTutorActivity, routing clicks
  * to different destinations based on the current session role.
- * Design: Acts as a View-layer adapter between the User model and RecyclerView UI.
  */
 public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> {
 
     List<User> tutorList;
-    // ADD THIS: A boolean to track if we are in the "My Tutors" screen
     private boolean isMyTutorsContext;
 
     public TutorAdapter(List<User> tutorList, boolean isMyTutorsContext) {
@@ -71,6 +70,10 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
                 intent.putExtra("status", user.getVerificationStatus());
                 intent.putExtra("uid", user.getUserID());
                 v.getContext().startActivity(intent);
+            } else if (isMyTutorsContext) {
+                // Show bottom sheet instead of going directly
+                TutorOptionsBottomSheet sheet = new TutorOptionsBottomSheet(user, isMyTutorsContext);
+                sheet.show(((AppCompatActivity) v.getContext()).getSupportFragmentManager(), sheet.getTag());
             } else {
                 Intent intent = new Intent(v.getContext(), TutorProfileActivity.class);
                 intent.putExtra("tutorId", user.getUserID());

@@ -1,10 +1,6 @@
 /**
  * AdminActivity provides an interface for admins to view and manage
- * user accounts pending verification in the peer tutoring application.
- * It supports filtering by user roles and handles admin logout.
- *
- * Design: Acts as a controller between Firebase (data layer) and UI components.
- * Known Issue: Multiple async calls may cause repeated UI updates.
+ * user accounts pending verification and system reports.
  */
 
 package com.example.peertutoringmarketplace;
@@ -27,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -42,7 +37,7 @@ public class AdminActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private ImageButton btnLogout;
     private ChipGroup filterChipGroup;
-    private String currentFilter = "all";
+    private String currentFilter = "tutor"; // Default to Tutor Requests
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +54,7 @@ public class AdminActivity extends AppCompatActivity {
         filterChipGroup = findViewById(R.id.filterChipGroup);
 
         tutorList = new ArrayList<>();
-        adapter = new TutorAdapter(tutorList,false);
+        adapter = new TutorAdapter(tutorList, false);
 
         if (recyclerView != null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -79,14 +74,12 @@ public class AdminActivity extends AppCompatActivity {
 
         if (filterChipGroup != null) {
             filterChipGroup.setOnCheckedChangeListener((group, checkedId) -> {
-                if (checkedId == R.id.chipAll) {
-                    currentFilter = "all";
-                } else if (checkedId == R.id.chipTutors) {
+                if (checkedId == R.id.chipTutors) {
                     currentFilter = "tutor";
-                } else if (checkedId == R.id.chipStudents) {
-                    currentFilter = "student";
+                } else if (checkedId == R.id.chipReports) {
+                    currentFilter = "reports";
                 }
-                fetchPendingAccounts();
+                fetchData();
             });
         }
 
@@ -103,55 +96,68 @@ public class AdminActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fetchPendingAccounts();
+        fetchData();
     }
 
-    private void fetchPendingAccounts() {
+    private void fetchData() {
         tutorList.clear();
-        updateUI(); // Reset UI immediately when clearing to keep items and count in sync
+        updateUI();
 
-        if ("tutor".equals(currentFilter)) {
-            db.collection("pendingTutors").get().addOnSuccessListener(queryDocumentSnapshots -> {
-                for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                    String uid = doc.getString("uid");
-                    if (uid != null) {
-                        fetchUserByUid(uid);
-                    }
-                }
-                updateUI();
-            });
-        } else {
-            db.collection("users")
-                    .whereEqualTo("verificationStatus", "pending")
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                            User user = doc.toObject(User.class);
-                            if (user != null) {
-                                if ("admin".equalsIgnoreCase(user.getRole())) continue;
-                                user.setUserID(doc.getId());
-
-                                if ("all".equals(currentFilter)) {
-                                    tutorList.add(user);
-                                } else if ("student".equals(currentFilter) && user.getStudentID() != null) {
-                                    tutorList.add(user);
-                                }
-                            }
-                        }
-                        updateUI();
-                    });
+        if ("reports".equals(currentFilter)) {
+            fetchReports();
+        } else if ("tutor".equals(currentFilter)) {
+            fetchPendingTutors();
         }
     }
 
-    private void fetchUserByUid(String uid) {
+    private void fetchReports() {
+        db.collection("reports")
+                .whereEqualTo("status", "PENDING")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        String againstId = doc.getString("againstId");
+                        if (againstId != null) {
+                            fetchUserByUid(againstId, true);
+                        }
+                    }
+                });
+    }
+
+    private void fetchPendingTutors() {
+        db.collection("pendingTutors").get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                String uid = doc.getString("uid");
+                if (uid != null) {
+                    fetchUserByUid(uid, false);
+                }
+            }
+        });
+    }
+
+    private void fetchUserByUid(String uid, boolean isReport) {
         db.collection("users").document(uid).get().addOnSuccessListener(doc -> {
             User user = doc.toObject(User.class);
             if (user != null) {
-                if ("pending".equalsIgnoreCase(user.getVerificationStatus()) &&
-                        !"admin".equalsIgnoreCase(user.getRole())) {
-                    user.setUserID(doc.getId());
-                    tutorList.add(user);
-                    updateUI();
+                user.setUserID(doc.getId());
+                // Avoid duplicates
+                boolean exists = false;
+                for (User u : tutorList) {
+                    if (uid.equals(u.getUserID())) {
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (!exists) {
+                    if (isReport) {
+                        tutorList.add(user);
+                        updateUI();
+                    } else if ("pending".equalsIgnoreCase(user.getVerificationStatus())) {
+                        // For Tutor Requests, we only care about pending status
+                        tutorList.add(user);
+                        updateUI();
+                    }
                 }
             }
         });

@@ -76,7 +76,7 @@
                 android:textSize="18sp"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- Subjects (New) -->
+            <!-- Subjects -->
             <TextView
                 android:id="@+id/labelSubjects"
                 android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
                 android:layout_marginBottom="16dp"
                 android:visibility="gone"/>
 
-            <!-- Transcript Placeholder (New) -->
+            <!-- Transcript Section -->
             <TextView
                 android:id="@+id/labelTranscript"
                 android:layout_width="wrap_content"
@@ -133,7 +133,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Status:"
+                android:text="Verification Status:"
                 android:textColor="#A8C8B6"
                 android:textSize="12sp"/>
             <TextView
@@ -144,6 +144,29 @@
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:layout_marginBottom="24dp"/>
+
+            <!-- Reports Section -->
+            <TextView
+                android:id="@+id/labelReports"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ACTIVE REPORTS:"
+                android:textColor="#FF5252"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:visibility="gone"
+                android:layout_marginBottom="8dp"/>
+
+            <LinearLayout
+                android:id="@+id/reportsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_marginBottom="24dp">
+                <!-- Report items will be added here dynamically -->
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 
@@ -151,17 +174,29 @@
         android:id="@+id/ACCEPT_BUTTON"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Approve"
+        android:text="Approve Account"
         android:backgroundTint="#FFFFFF"
         android:textColor="#4a7c6f"
-        android:layout_marginBottom="12dp"/>
+        android:layout_marginBottom="12dp"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/REJECT_BUTTON"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Reject"
+        android:text="Reject Account"
         android:backgroundTint="#FF5252"
-        android:textColor="#FFFFFF"/>
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="12dp"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/RESOLVE_REPORT_BUTTON"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mark Reports as Resolved"
+        android:backgroundTint="#A8C8B6"
+        android:textColor="#4a7c6f"
+        android:visibility="gone"/>
 
 </LinearLayout>

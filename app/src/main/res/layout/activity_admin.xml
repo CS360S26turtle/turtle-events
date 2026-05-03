@@ -56,30 +56,21 @@
                 app:selectionRequired="true">
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chipAll"
+                    android:id="@+id/chipTutors"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="All"
+                    android:text="Tutor Requests"
                     android:checked="true"
                     app:chipBackgroundColor="@color/white"
                     android:textColor="@color/primary_background"/>
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chipTutors"
+                    android:id="@+id/chipReports"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tutors"
-                    app:chipBackgroundColor="@color/white"
-                    android:textColor="@color/primary_background"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipStudents"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Students"
+                    android:text="Reports"
                     app:chipBackgroundColor="@color/white"
                     android:textColor="@color/primary_background"/>
             </com.google.android.material.chip.ChipGroup>
@@ -88,7 +79,7 @@
                 android:id="@+id/textPendingCountLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pending Verification:"
+                android:text="Count:"
                 android:textColor="#A8C8B6"
                 android:textSize="12sp"/>
 

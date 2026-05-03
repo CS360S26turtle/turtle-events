@@ -23,7 +23,6 @@ public class MyTutorsActivity extends AppCompatActivity {
     private RecyclerView rvMyTutors;
     private TextView tvEmptyState;
     private TutorAdapter adapter;
-    // CHANGE 1: Use List<User> to match TutorAdapter's requirement
     private List<User> tutorList = new ArrayList<>();
     private FirebaseFirestore db;
 
@@ -40,25 +39,28 @@ public class MyTutorsActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         rvMyTutors.setLayoutManager(new LinearLayoutManager(this));
-
-        // CHANGE 2: Call constructor with only the list (matches your TutorAdapter code)
-        adapter = new TutorAdapter(tutorList,true);
+        adapter = new TutorAdapter(tutorList, true);
         rvMyTutors.setAdapter(adapter);
 
         loadBookedTutors();
     }
 
     private void loadBookedTutors() {
-        // FIX: Get the correct ID from the session
-        String currentStudentId = SessionManager.getInstance().getCurrentUser().getStudentID();
+        User currentUser = SessionManager.getInstance().getCurrentUser();
+        if (currentUser == null) return;
+        
+        String currentStudentId = currentUser.getStudentID();
+        if (currentStudentId == null || currentStudentId.isEmpty()) {
+            currentStudentId = currentUser.getStudentID();
+        }
 
-        if (currentStudentId == null) {
+        if (currentStudentId == null || currentStudentId.isEmpty()) {
             Toast.makeText(this, "Student ID not found", Toast.LENGTH_SHORT).show();
             return;
         }
 
         db.collection("sessions")
-                .whereArrayContains("studentsId", currentStudentId) // Must match session doc field
+                .whereArrayContains("studentsId", currentStudentId)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     Set<String> tutorIds = new HashSet<>();
@@ -82,13 +84,13 @@ public class MyTutorsActivity extends AppCompatActivity {
     private void fetchUserProfiles(List<String> ids) {
         tutorList.clear();
         for (String id : ids) {
-            // Your Firestore shows tutor profiles might be in the "tutors" collection
-            // with the same document ID as the user.
             db.collection("users").document(id).get()
                     .addOnSuccessListener(doc -> {
                         if (doc.exists()) {
                             User user = doc.toObject(User.class);
                             if (user != null) {
+                                // CRITICAL FIX: Set the userID so the adapter can use it
+                                user.setUserID(doc.getId());
                                 tutorList.add(user);
                                 adapter.notifyDataSetChanged();
                             }
