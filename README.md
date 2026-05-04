@@ -516,6 +516,7 @@ with each other.
 </p>
 
 ## UI interface - Final Checkpoint 
+[UML Diagram - Final Checkpoint](https://lucid.app/lucidchart/8cb1f86e-cb31-4579-8528-1a4b0cb7ddea/edit?invitationId=inv_a80168cc-d385-41fa-bcc7-b7268c959c3f&page=0_0#)
 
 
 ### Tutor Flow
