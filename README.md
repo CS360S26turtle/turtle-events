@@ -515,9 +515,6 @@ with each other.
   <img src="images/role_page_halfway.png" width="120">
 </p>
 
-## UI interface - Final Checkpoint 
-[UML Diagram - Final Checkpoint](https://lucid.app/lucidchart/8cb1f86e-cb31-4579-8528-1a4b0cb7ddea/edit?invitationId=inv_a80168cc-d385-41fa-bcc7-b7268c959c3f&page=0_0#)
-
 
 ### Tutor Flow
 
@@ -564,6 +561,15 @@ with each other.
 </p>
 
 Link: https://lucid.app/lucidchart/9cc2bf68-ca08-4504-a752-03784cc5fa5f/edit?viewport_loc=-6520%2C-2145%2C8449%2C4561%2C0_0&invitationId=inv_83110f14-47e6-4924-b7de-9712be12e07d
+
+## UML Diagram - Final 
+<p align="center">
+  <img src="images/Updated UML Diagram.png" width="500">
+  <br>
+  <a href="https://lucid.app/lucidchart/8cb1f86e-cb31-4579-8528-1a4b0cb7ddea/edit?invitationId=inv_a80168cc-d385-41fa-bcc7-b7268c959c3f&page=0_0#">UML Diagram - Final Checkpoint</a>
+</p>
+
+Link: https://lucid.app/lucidchart/8cb1f86e-cb31-4579-8528-1a4b0cb7ddea/edit?invitationId=inv_a80168cc-d385-41fa-bcc7-b7268c959c3f&page=0_0#
 
 ## UI interface - Final Checkpoint 
 
