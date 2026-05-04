@@ -263,66 +263,14 @@ public class MyStudentsActivity extends AppCompatActivity {
     // ── Navigation drawer ─────────────────────────────────────────────────────
 
     private void setupNavigationDrawer() {
-        FrameLayout menuContainer = findViewById(R.id.menu_container);
-        if (menuContainer == null) return;
-
-        View menuView = getLayoutInflater().inflate(R.layout.fragment_tutor_menu, menuContainer, false);
-        menuContainer.removeAllViews();
-        menuContainer.addView(menuView);
-
-        LinearLayout menuStudents = menuView.findViewById(R.id.menu_students);
-        if (menuStudents != null)
-            menuStudents.setOnClickListener(v -> drawerLayout.closeDrawer(GravityCompat.START));
-
-        LinearLayout menuUpcoming = menuView.findViewById(R.id.menu_upcoming);
-        if (menuUpcoming != null)
-            menuUpcoming.setOnClickListener(v -> {
-                startActivity(new Intent(this, UpcomingSessionsActivity.class));
-                drawerLayout.closeDrawer(GravityCompat.START);
-            });
-
-        LinearLayout menuLeaderboard = menuView.findViewById(R.id.menu_leaderboard);
-        if (menuLeaderboard != null)
-            menuLeaderboard.setOnClickListener(v -> {
-                startActivity(new Intent(this, LeaderboardActivity.class));
-                drawerLayout.closeDrawer(GravityCompat.START);
-            });
-
-        LinearLayout menuProfile = menuView.findViewById(R.id.menu_profile);
-        if (menuProfile != null)
-            menuProfile.setOnClickListener(v -> {
-                startActivity(new Intent(this, UpdateProfileActivity.class));
-                drawerLayout.closeDrawer(GravityCompat.START);
-            });
-
-        LinearLayout menuLogout = menuView.findViewById(R.id.menu_logout);
-        if (menuLogout != null)
-            menuLogout.setOnClickListener(v -> {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            });
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.menu_container, new TutorMenuFragment())
+                .commit();
     }
     private void showStudentOptionsDialog(StudentRow row) {
-        String[] options = {"Study Resources", "Session Notes"};
-        new android.app.AlertDialog.Builder(this)
-                .setTitle(row.studentName)
-                .setItems(options, (dialog, which) -> {
-                    if (which == 0) {
-                        Intent intent = new Intent(this, StudyResourceActivity.class);
-                        intent.putExtra(StudyResourceActivity.EXTRA_STUDENT_ID,   row.studentId);
-                        intent.putExtra(StudyResourceActivity.EXTRA_STUDENT_NAME, row.studentName);
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(this, SessionNotesActivity.class);
-                        intent.putExtra(SessionNotesActivity.EXTRA_STUDENT_ID,   row.studentId);
-                        intent.putExtra(SessionNotesActivity.EXTRA_STUDENT_NAME, row.studentName);
-                        startActivity(intent);
-                    }
-                })
-                .show();
+        StudentOptionsBottomSheet sheet = new StudentOptionsBottomSheet(row.studentId, row.studentName);
+        sheet.show(getSupportFragmentManager(), sheet.getTag());
     }
     // ── Inner data class ──────────────────────────────────────────────────────
 

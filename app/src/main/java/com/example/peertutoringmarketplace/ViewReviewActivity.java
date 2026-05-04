@@ -1,6 +1,8 @@
 package com.example.peertutoringmarketplace;
 
 import android.os.Bundle;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,6 +50,12 @@ public class ViewReviewActivity extends AppCompatActivity {
                         reviewList.addAll(querySnapshot.toObjects(Review.class));
                         adapter.notifyDataSetChanged();
                     }
+//                    if (!querySnapshot.isEmpty()) {
+//                        reviewList.addAll(querySnapshot.toObjects(Review.class));
+//                        adapter.notifyDataSetChanged();
+//                    } else {
+//                        findViewById(R.id.tv_no_reviews).setVisibility(View.VISIBLE); // if you add this TextView to the layout
+//                    }
                 });
     }
 }

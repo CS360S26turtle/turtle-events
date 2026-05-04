@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import com.example.peertutoringmarketplace.Badge;
 import com.example.peertutoringmarketplace.BookSessionActivity;
@@ -73,10 +74,21 @@ public class TutorProfileActivity extends AppCompatActivity {
         ivMenuHamburger = findViewById(R.id.btn_hamburger);
 
         // Setup Navigation
-        if (ivMenuHamburger != null) {
-            ivMenuHamburger.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
+        String role = SessionManager.getInstance().getCurrentRole();
+        boolean isViewingAsTutor = "tutor".equalsIgnoreCase(role);
+
+        if (isViewingAsTutor) {
+            if (ivMenuHamburger != null) {
+                ivMenuHamburger.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
+            }
+            setupNavigationDrawer();
+        } else {
+            // Student viewing a tutor profile — show back button instead
+            if (ivMenuHamburger != null) {
+                ivMenuHamburger.setImageResource(android.R.drawable.ic_menu_revert);
+                ivMenuHamburger.setOnClickListener(v -> finish());
+            }
         }
-        setupNavigationDrawer();
 
         // Setup Reviews Click Listener
         if (cardViewReviews != null) {
@@ -228,77 +240,15 @@ public class TutorProfileActivity extends AppCompatActivity {
     }
 
     private void setupNavigationDrawer() {
-        FrameLayout menuContainer = findViewById(R.id.menu_container);
-        if (menuContainer == null) return;
         String role = SessionManager.getInstance().getCurrentRole();
-        int menuLayoutRes = "tutor".equalsIgnoreCase(role) ? R.layout.fragment_tutor_menu : R.layout.fragment_student_menu;
-        View menuView = getLayoutInflater().inflate(menuLayoutRes, menuContainer, false);
-        menuContainer.removeAllViews();
-        menuContainer.addView(menuView);
-        if ("tutor".equalsIgnoreCase(role)) setupTutorMenu(menuView);
-        else setupStudentMenu(menuView);
-    }
+        Fragment menuFragment = "tutor".equalsIgnoreCase(role)
+                ? new TutorMenuFragment()
+                : new StudentMenuFragment();
 
-    private void setupTutorMenu(View menuView) {
-        menuView.findViewById(R.id.menu_logout).setOnClickListener(v -> performLogout());
-        menuView.findViewById(R.id.menu_profile).setOnClickListener(v -> {
-            drawerLayout.closeDrawer(GravityCompat.START);
-            startActivity(new Intent(this, UpdateProfileActivity.class));
-        });
-        View menuStudents = menuView.findViewById(R.id.menu_students);
-        if (menuStudents != null) menuStudents.setOnClickListener(v -> startActivity(new Intent(this, MyStudentsActivity.class)));
-        menuView.findViewById(R.id.menu_upcoming).setOnClickListener(v -> startActivity(new Intent(this, UpcomingSessionsActivity.class)));
-        menuView.findViewById(R.id.menu_leaderboard).setOnClickListener(v -> startActivity(new Intent(this, LeaderboardActivity.class)));
-        menuView.findViewById(R.id.menu_switch_role).setOnClickListener(v -> {
-            SessionManager.getInstance().setCurrentRole("student");
-            Intent intent = new Intent(this, StudentProfileActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        });
-
-        View menuNotifications = menuView.findViewById(R.id.menu_notifications);
-        if (menuNotifications != null) {
-            menuNotifications.setOnClickListener(v -> {
-                startActivity(new Intent(this, NotificationsActivity.class));
-                drawerLayout.closeDrawer(GravityCompat.START);
-            });
-        }
-    }
-
-    private void setupStudentMenu(View menuView) {
-        menuView.findViewById(R.id.menu_logout).setOnClickListener(v -> performLogout());
-
-        // Find a Tutor reroutes to search page
-        View btnFind = menuView.findViewById(R.id.menu_find_tutor);
-        if (btnFind != null) {
-            btnFind.setOnClickListener(v -> startActivity(new Intent(this, SearchTutorActivity.class)));
-        }
-
-        // My Tutors shows a placeholder Toast
-        View btnTutors = menuView.findViewById(R.id.menu_tutors);
-        if (btnTutors != null) {
-            btnTutors.setOnClickListener(v -> Toast.makeText(this, "My Tutors feature coming soon!", Toast.LENGTH_SHORT).show());
-        }
-
-        menuView.findViewById(R.id.menu_upcoming).setOnClickListener(v -> startActivity(new Intent(this, StudentUpcomingSessionsActivity.class)));
-        menuView.findViewById(R.id.menu_settings).setOnClickListener(v -> startActivity(new Intent(this, StudentProfileActivity.class)));
-        menuView.findViewById(R.id.menu_leaderboard).setOnClickListener(v -> startActivity(new Intent(this, LeaderboardActivity.class)));
-        menuView.findViewById(R.id.menu_switch_role).setOnClickListener(v -> {
-            SessionManager.getInstance().setCurrentRole("tutor");
-            Intent intent = new Intent(this, TutorProfileActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        });
-
-        View menuNotifications = menuView.findViewById(R.id.menu_notifications);
-        if (menuNotifications != null) {
-            menuNotifications.setOnClickListener(v -> {
-                startActivity(new Intent(this, NotificationsActivity.class));
-                drawerLayout.closeDrawer(GravityCompat.START);
-            });
-        }
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.menu_container, menuFragment)
+                .commit();
     }
 
     private void performLogout() {
