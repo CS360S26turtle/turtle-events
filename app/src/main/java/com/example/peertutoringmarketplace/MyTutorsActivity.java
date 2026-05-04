@@ -1,3 +1,16 @@
+/**
+ * MyTutorsActivity displays a list of tutors that the current student
+ * has booked sessions with, fetched from Firebase Firestore.
+ * It retrieves unique tutor IDs from the sessions collection and loads
+ * their profiles into a RecyclerView with an empty state fallback.
+ *
+ * Design: Acts as a controller between Firebase (data layer) and the
+ * RecyclerView UI, using SessionManager to identify the current user.
+ * Known Issue: Tutor profiles are fetched in individual async loops,
+ * causing redundant notifyDataSetChanged() calls which could be improved.
+ */
+
+
 package com.example.peertutoringmarketplace;
 
 import android.os.Bundle;
@@ -10,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.peertutoringmarketplace.TutorAdapter;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
