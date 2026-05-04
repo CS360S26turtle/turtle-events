@@ -16,12 +16,13 @@
 * [UML Diagrams](#uml-diagrams)
   * [UML Diagrams - Project Halfway](#uml-diagram---halfway)
   * [UML Diagrams - Project Final](images/Updated%20UML%20Diagram.png)
+  * [UML Diagrams - Project Final Activitys] (images/UML%diagram%activities.png)
 
 * [CRC Diagrams](#crc-diagrams)
 
 * [StoryBoards](#storyboards)
   * [StoryBoards - Halfway](#ui-interface---halfway)
-  * [StoryBoards - Halfway](#ui-interface---final chekpoint)
+  * [StoryBoards - Final](#ui-interface---final-checkpoint)
 
 * [Product Backlog](#product-backlog)
   * [Product Backlog – Project Part 1](#product-backlog--project-part-1)
