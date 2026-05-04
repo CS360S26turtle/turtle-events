@@ -568,8 +568,8 @@ Link: https://lucid.app/lucidchart/9cc2bf68-ca08-4504-a752-03784cc5fa5f/edit?vie
 <p align="center">
   <img src="images/TutorMenuFinal.jpeg" width="120">
   <img src="images/TutorProfileFinal.jpeg" width="120">
-  <img src="images/TutorUpcomingSessionFinal.jpeg" width="120">
-  <img src="images/AddSessionFinal.jpeg" width="120">
+  <img src="images/UpcomingSessionsFinal2.jpeg" width="120">
+  <img src="images/AddSessionFinal2.jpeg" width="120">
   <img src="images/SessionAddedFinal.jpeg" width="120">
   <img src="images/LeaderboardFinal.jpeg" width="120">
   <img src="images/MyStudentsFinal.jpeg" width="120">
@@ -579,13 +579,14 @@ Link: https://lucid.app/lucidchart/9cc2bf68-ca08-4504-a752-03784cc5fa5f/edit?vie
 
 <p align="center">
   <img src="images/MyStudentsFinal.jpeg" width="120">
-  <img src="images/MyStudentsOptionsFinal.jpeg" width="120">
-  <img src="images/AddResource1Final.jpeg" width="120">
-  <img src="images/AddResource2Final.jpeg" width="120">
+  <img src="images/MyStudentsOptionsFinal2.jpeg" width="120">
+  <img src="images/AddStudyResource1Final2.jpeg" width="120">
+  <img src="images/AddStudyResource2Final2.jpeg" width="120">
   <img src="images/TutorStudyResourcesFinal.jpeg" width="120">
-  <img src="images/SessionNoteFinal.jpeg" width="120">
-  <img src="images/AddSessionNote1Final.jpeg" width="120">
-  <img src="images/AddSessionNote2Final.jpeg" width="120">
+  <img src="images/SessionNotesFinal2.jpeg" width="120">
+  <img src="images/AddSessionNote1Final2.jpeg" width="120">
+  <img src="images/AddSessionNote2Final2.jpeg" width="120">
+  <img src="images/EditSessionNoteFinal2.jpeg" width="120">
   <img src="images/TutorAddedSessionNoteFinal.jpeg" width="120">
   
 </p>
@@ -597,7 +598,7 @@ Link: https://lucid.app/lucidchart/9cc2bf68-ca08-4504-a752-03784cc5fa5f/edit?vie
   <img src="images/StudentProfileFinal.jpeg" width="120">
   <img src="images/SearchTutorFinal.jpeg" width="120">
   <img src="images/TutorViewAfterSearchFinal.jpeg" width="120">
-  <img src="images/BookSessionFinal.jpeg" width="120">
+  <img src="images/BookSessionFinal2.jpeg" width="120">
   <img src="images/SessionBookedFinal.jpeg" width="120">
   <img src="images/StudentUpcomingSessionFinal.jpeg" width="120">
   <img src="images/LeaderboardFinal.jpeg" width="120">
@@ -612,10 +613,9 @@ Link: https://lucid.app/lucidchart/9cc2bf68-ca08-4504-a752-03784cc5fa5f/edit?vie
   <img src="images/MyTutorProfile1Final.jpeg" width="120">
   <img src="images/RateTutor1Final.jpeg" width="120">
   <img src="images/RateTutor2Final.jpeg" width="120">
-  <img src="images/RegisterReport1Final.jpeg" width="120">
-  <img src="images/RegisterReport2Final.jpeg" width="120">
+  <img src="images/ReportTutorFinal2.jpeg" width="120">
   <img src="images/StudentStudyResourceFinal.jpeg" width="120">
-  <img src="images/StudentStudyResourceDetailFinal.jpeg" width="120">
+  <img src="images/StudentStudyResourceDetailFinal2.jpeg" width="120">
 </p>
 
 ### Admin View
