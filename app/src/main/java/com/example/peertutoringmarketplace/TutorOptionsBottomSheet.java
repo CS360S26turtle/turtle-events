@@ -37,6 +37,15 @@ public class TutorOptionsBottomSheet extends BottomSheetDialogFragment {
         this.isMyTutorsContext = isMyTutorsContext;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        View parent = (View) view.getParent();
+        if (parent != null) {
+            parent.setBackgroundResource(android.R.color.transparent);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

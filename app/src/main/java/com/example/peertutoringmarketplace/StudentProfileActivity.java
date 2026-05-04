@@ -32,7 +32,7 @@ import java.util.List;
 
 public class StudentProfileActivity extends AppCompatActivity {
 
-    private TextView tvName, tvSessions, tvRating;
+    private TextView tvName;
     private EditText etBio, etPreference, etAcademicLevel, etLearningGoals, etCoursesInput;
     private ChipGroup chipGroupCourses;
     private FirebaseFirestore db;
@@ -48,8 +48,6 @@ public class StudentProfileActivity extends AppCompatActivity {
         // Initialize Views
         tvName = findViewById(R.id.student_name);
         etBio = findViewById(R.id.et_student_bio);
-        tvSessions = findViewById(R.id.tv_sessions_attended);
-        tvRating = findViewById(R.id.tv_student_rating);
         etPreference = findViewById(R.id.et_learning_preference);
         etAcademicLevel = findViewById(R.id.et_academic_level);
         etLearningGoals = findViewById(R.id.et_learning_goals);
@@ -107,8 +105,6 @@ public class StudentProfileActivity extends AppCompatActivity {
                         StudentProfile profile = documentSnapshot.toObject(StudentProfile.class);
                         if (profile != null) {
                             if (etBio != null) etBio.setText(profile.getBio());
-                            if (tvSessions != null) tvSessions.setText(String.valueOf(profile.getSessionsAttended()));
-                            if (tvRating != null) tvRating.setText(String.format("%.1f", profile.getRating()));
                             if (etPreference != null) etPreference.setText(profile.getLearningPreference());
                             if (etAcademicLevel != null) etAcademicLevel.setText(profile.getAcademicLevel());
                             if (etLearningGoals != null) etLearningGoals.setText(profile.getLearningGoals());

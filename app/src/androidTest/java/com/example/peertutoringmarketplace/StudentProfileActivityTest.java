@@ -88,7 +88,6 @@ public class StudentProfileActivityTest {
             onView(withId(R.id.student_name)).check(matches(withText("Test Student")));
             onView(withId(R.id.et_student_bio)).check(matches(withText("Initial Bio")));
             onView(withId(R.id.et_academic_level)).check(matches(withText("Sophomore")));
-            onView(withId(R.id.tv_sessions_attended)).check(matches(withText("5")));
         }
     }
 
