@@ -74,10 +74,21 @@ public class TutorProfileActivity extends AppCompatActivity {
         ivMenuHamburger = findViewById(R.id.btn_hamburger);
 
         // Setup Navigation
-        if (ivMenuHamburger != null) {
-            ivMenuHamburger.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
+        String role = SessionManager.getInstance().getCurrentRole();
+        boolean isViewingAsTutor = "tutor".equalsIgnoreCase(role);
+
+        if (isViewingAsTutor) {
+            if (ivMenuHamburger != null) {
+                ivMenuHamburger.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
+            }
+            setupNavigationDrawer();
+        } else {
+            // Student viewing a tutor profile — show back button instead
+            if (ivMenuHamburger != null) {
+                ivMenuHamburger.setImageResource(android.R.drawable.ic_menu_revert);
+                ivMenuHamburger.setOnClickListener(v -> finish());
+            }
         }
-        setupNavigationDrawer();
 
         // Setup Reviews Click Listener
         if (cardViewReviews != null) {

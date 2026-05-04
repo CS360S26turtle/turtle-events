@@ -269,23 +269,8 @@ public class MyStudentsActivity extends AppCompatActivity {
                 .commit();
     }
     private void showStudentOptionsDialog(StudentRow row) {
-        String[] options = {"Study Resources", "Session Notes"};
-        new android.app.AlertDialog.Builder(this)
-                .setTitle(row.studentName)
-                .setItems(options, (dialog, which) -> {
-                    if (which == 0) {
-                        Intent intent = new Intent(this, StudyResourceActivity.class);
-                        intent.putExtra(StudyResourceActivity.EXTRA_STUDENT_ID,   row.studentId);
-                        intent.putExtra(StudyResourceActivity.EXTRA_STUDENT_NAME, row.studentName);
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(this, SessionNotesActivity.class);
-                        intent.putExtra(SessionNotesActivity.EXTRA_STUDENT_ID,   row.studentId);
-                        intent.putExtra(SessionNotesActivity.EXTRA_STUDENT_NAME, row.studentName);
-                        startActivity(intent);
-                    }
-                })
-                .show();
+        StudentOptionsBottomSheet sheet = new StudentOptionsBottomSheet(row.studentId, row.studentName);
+        sheet.show(getSupportFragmentManager(), sheet.getTag());
     }
     // ── Inner data class ──────────────────────────────────────────────────────
 
