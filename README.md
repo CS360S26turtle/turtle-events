@@ -579,7 +579,7 @@ Link: https://lucid.app/lucidchart/9cc2bf68-ca08-4504-a752-03784cc5fa5f/edit?vie
 
 <p align="center">
   <img src="images/MyStudentsFinal.jpeg" width="120">
-  <img src="images/MyStudentsOptionsFinal2.jpeg" width="120">
+  <img src="images/MyStudentOptionsFinal2.jpeg" width="120">
   <img src="images/AddStudyResource1Final2.jpeg" width="120">
   <img src="images/AddStudyResource2Final2.jpeg" width="120">
   <img src="images/TutorStudyResourcesFinal.jpeg" width="120">
