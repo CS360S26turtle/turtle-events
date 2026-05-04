@@ -1,6 +1,10 @@
 /**
  * AdminActivity provides an interface for admins to view and manage
- * user accounts pending verification and system reports.
+ * user accounts pending verification in the peer tutoring application.
+ * It supports filtering by user roles and handles admin logout.
+ *
+ * Design: Acts as a controller between Firebase (data layer) and UI components.
+ * Known Issue: Multiple async calls may cause repeated UI updates.
  */
 
 package com.example.peertutoringmarketplace;

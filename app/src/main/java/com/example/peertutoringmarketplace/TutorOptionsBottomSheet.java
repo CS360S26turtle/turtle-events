@@ -1,17 +1,18 @@
+/**
+ This class is simply to add logic to allow a student to pick whether they want to view tutor profile or view resources when the click on a tutor card in the MyTutors view
+
+ PURPOSE:
+ Shown when a student taps a tutor card in MyTutors. Gives them two options —
+ view the tutor's profile or access their shared resources — without needing
+ a full intermediate screen.
+
+ DESIGN PATTERN:
+ BottomSheetDialogFragment — recommended by Material Design for 2-3 option
+ branching on a tapped item. Launched from TutorAdapter when role is not admin.
+
+ OUTSTANDING ISSUES: None **/
+
 package com.example.peertutoringmarketplace;
-
-// This class is simply to add logic to allow a student to pick whether they want to view tutor profile or view resources when the click on a tutor card in the MyTutors view
-
-// PURPOSE:
-// Shown when a student taps a tutor card in MyTutors. Gives them two options —
-// view the tutor's profile or access their shared resources — without needing
-// a full intermediate screen.
-
-// DESIGN PATTERN:
-// BottomSheetDialogFragment — recommended by Material Design for 2-3 option
-// branching on a tapped item. Launched from TutorAdapter when role is not admin.
-
-// OUTSTANDING ISSUES: None
 
 import android.content.Intent;
 import android.os.Bundle;
