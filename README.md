@@ -16,7 +16,7 @@
 * [UML Diagrams](#uml-diagrams)
   * [UML Diagrams - Project Halfway](#uml-diagram---halfway)
   * [UML Diagrams - Project Final](images/Updated%20UML%20Diagram.png)
-  * [UML Diagrams - Project Final Activitys] (images/UML%diagram%activities.png)
+  * [UML Diagrams - Project Final Activitys] (#uml-activities-diagram-final)
 
 * [CRC Diagrams](#crc-diagrams)
 
@@ -571,6 +571,13 @@ Link: https://lucid.app/lucidchart/9cc2bf68-ca08-4504-a752-03784cc5fa5f/edit?vie
 </p>
 
 Link: https://lucid.app/lucidchart/8cb1f86e-cb31-4579-8528-1a4b0cb7ddea/edit?invitationId=inv_a80168cc-d385-41fa-bcc7-b7268c959c3f&page=0_0#
+
+## UML Activities Diagram Final
+<p align="center">
+  <img src="images/UML diagram activities.png" width="500">
+  <br>
+  <a href="https://lucid.app/lucidchart/70055999-7b0f-4970-abbf-b9d9ee3add61/edit?view_items=ZVdUDqxKP9Pv&page=0_0&invitationId=inv_9dcef5f0-ca5d-4ac3-beec-4d774a52b567">Activities UML Diagram - Final Checkpoint</a>
+</p>
 
 ## UI interface - Final Checkpoint 
 
