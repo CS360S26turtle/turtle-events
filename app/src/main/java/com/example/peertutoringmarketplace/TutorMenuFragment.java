@@ -23,58 +23,65 @@ public class TutorMenuFragment extends Fragment {
         LinearLayout btnStudents      = view.findViewById(R.id.menu_students);
         LinearLayout btnUpcoming      = view.findViewById(R.id.menu_upcoming);
         LinearLayout btnUpdateProfile = view.findViewById(R.id.menu_profile);
+        LinearLayout btnNotifications = view.findViewById(R.id.menu_notifications);
         LinearLayout btnLeaderboard   = view.findViewById(R.id.menu_leaderboard);
         LinearLayout btnSwitchRole    = view.findViewById(R.id.menu_switch_role);
         LinearLayout btnLogout        = view.findViewById(R.id.menu_logout);
 
         if (btnStudents != null) btnStudents.setOnClickListener(v -> {
-            if (getActivity() instanceof MyStudentsActivity) { closeDrawer(); return; }
+            if (requireActivity() instanceof MyStudentsActivity) { closeDrawer(); return; }
             closeDrawer();
-            startActivity(new Intent(getActivity(), MyStudentsActivity.class));
+            startActivity(new Intent(requireActivity(), MyStudentsActivity.class));
         });
 
-        btnUpcoming.setOnClickListener(v -> {
-            if (getActivity() instanceof UpcomingSessionsActivity) { closeDrawer(); return; }
+        if (btnUpcoming != null) btnUpcoming.setOnClickListener(v -> {
+            if (requireActivity() instanceof UpcomingSessionsActivity) { closeDrawer(); return; }
             closeDrawer();
             startActivity(new Intent(requireActivity(), UpcomingSessionsActivity.class));
         });
 
-        btnUpdateProfile.setOnClickListener(v -> {
-            if (getActivity() instanceof UpdateProfileActivity) { closeDrawer(); return; }
+        if (btnUpdateProfile != null) btnUpdateProfile.setOnClickListener(v -> {
+            if (requireActivity() instanceof UpdateProfileActivity) { closeDrawer(); return; }
             closeDrawer();
-            startActivity(new Intent(getActivity(), UpdateProfileActivity.class));
+            startActivity(new Intent(requireActivity(), UpdateProfileActivity.class));
         });
 
-        btnLeaderboard.setOnClickListener(v -> {
-            if (getActivity() instanceof LeaderboardActivity) { closeDrawer(); return; }
+        if (btnNotifications != null) btnNotifications.setOnClickListener(v -> {
+            if (requireActivity() instanceof NotificationsActivity) { closeDrawer(); return; }
             closeDrawer();
-            startActivity(new Intent(getActivity(), LeaderboardActivity.class));
+            startActivity(new Intent(requireActivity(), NotificationsActivity.class));
         });
 
-        btnSwitchRole.setOnClickListener(v -> {
+        if (btnLeaderboard != null) btnLeaderboard.setOnClickListener(v -> {
+            if (requireActivity() instanceof LeaderboardActivity) { closeDrawer(); return; }
+            closeDrawer();
+            startActivity(new Intent(requireActivity(), LeaderboardActivity.class));
+        });
+
+        if (btnSwitchRole != null) btnSwitchRole.setOnClickListener(v -> {
+            closeDrawer();
             SessionManager.getInstance().setCurrentRole("student");
-            Intent intent = new Intent(getActivity(), StudentProfileActivity.class);
+            Intent intent = new Intent(requireActivity(), StudentProfileActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            if (getActivity() != null) getActivity().finish();
+            requireActivity().finish();
         });
 
-        btnLogout.setOnClickListener(v -> {
+        if (btnLogout != null) btnLogout.setOnClickListener(v -> {
+            closeDrawer();
             FirebaseAuth.getInstance().signOut();
             SessionManager.getInstance().logout();
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            Intent intent = new Intent(requireActivity(), LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            if (getActivity() != null) getActivity().finish();
+            requireActivity().finish();
         });
 
         return view;
     }
 
     private void closeDrawer() {
-        if (getActivity() != null) {
-            DrawerLayout drawer = getActivity().findViewById(R.id.drawer_layout);
-            if (drawer != null) drawer.closeDrawer(GravityCompat.START);
-        }
+        DrawerLayout drawer = requireActivity().findViewById(R.id.drawer_layout);
+        if (drawer != null) drawer.closeDrawer(GravityCompat.START);
     }
 }

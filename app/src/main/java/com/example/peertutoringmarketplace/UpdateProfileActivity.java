@@ -69,56 +69,10 @@ public class UpdateProfileActivity extends AppCompatActivity {
     }
 
     private void setupNavigationDrawer() {
-        FrameLayout menuContainer = findViewById(R.id.menu_container);
-        if (menuContainer == null) return;
-
-        View menuView = getLayoutInflater().inflate(R.layout.fragment_tutor_menu, menuContainer, false);
-        menuContainer.removeAllViews();
-        menuContainer.addView(menuView);
-        TextView tvProfile = menuView.findViewById(R.id.tv_menu_profile_text);
-        if (tvProfile != null) tvProfile.setText("My Profile");
-
-        menuView.findViewById(R.id.menu_profile).setOnClickListener(v -> {
-            Intent intent = new Intent(this, TutorProfileActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
-            finish();
-        });
-
-        menuView.findViewById(R.id.menu_upcoming).setOnClickListener(v -> {
-            startActivity(new Intent(this, UpcomingSessionsActivity.class));
-            drawerLayout.closeDrawer(GravityCompat.START);
-        });
-
-        View menuNotifications = menuView.findViewById(R.id.menu_notifications);
-        if (menuNotifications != null) {
-            menuNotifications.setOnClickListener(v -> {
-                startActivity(new Intent(this, NotificationsActivity.class));
-                drawerLayout.closeDrawer(GravityCompat.START);
-            });
-        }
-
-        menuView.findViewById(R.id.menu_logout).setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            SessionManager.getInstance().logout();
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        });
-
-        menuView.findViewById(R.id.menu_leaderboard).setOnClickListener(v -> {
-            startActivity(new Intent(this, LeaderboardActivity.class));
-            drawerLayout.closeDrawer(GravityCompat.START);
-        });
-
-        menuView.findViewById(R.id.menu_switch_role).setOnClickListener(v -> {
-            SessionManager.getInstance().setCurrentRole("student");
-            Intent intent = new Intent(this, StudentProfileActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        });
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.menu_container, new TutorMenuFragment())
+                .commit();
     }
 
     private void setupTeachingModeDropdown() {

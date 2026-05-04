@@ -425,74 +425,10 @@ public class UpcomingSessionsActivity extends AppCompatActivity {
     // ── Navigation drawer ────────────────────────────────────────────────────
 
     private void setupNavigationDrawer() {
-        FrameLayout menuContainer = findViewById(R.id.menu_container);
-        if (menuContainer == null) return;
-
-        View menuView = getLayoutInflater().inflate(R.layout.fragment_tutor_menu, menuContainer, false);
-        menuContainer.removeAllViews();
-        menuContainer.addView(menuView);
-
-        TextView tvProfileText = menuView.findViewById(R.id.tv_menu_profile_text);
-        if (tvProfileText != null) tvProfileText.setText("My Profile");
-
-        LinearLayout menuUpdateProfile = menuView.findViewById(R.id.menu_profile);
-        if (menuUpdateProfile != null) {
-            menuUpdateProfile.setOnClickListener(v -> {
-                drawerLayout.closeDrawer(GravityCompat.START);
-                startActivity(new Intent(this, UpdateProfileActivity.class));
-            });
-        }
-
-        LinearLayout menuUpcoming = menuView.findViewById(R.id.menu_upcoming);
-        if (menuUpcoming != null) {
-            menuUpcoming.setOnClickListener(v -> {
-                Intent intent = new Intent(this, TutorProfileActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-                drawerLayout.closeDrawer(GravityCompat.START);
-                finish();
-            });
-        }
-
-        LinearLayout menuNotifications = menuView.findViewById(R.id.menu_notifications);
-        if (menuNotifications != null) {
-            menuNotifications.setOnClickListener(v -> {
-                startActivity(new Intent(this, NotificationsActivity.class));
-                drawerLayout.closeDrawer(GravityCompat.START);
-            });
-        }
-
-        LinearLayout menuLogout = menuView.findViewById(R.id.menu_logout);
-        if (menuLogout != null) {
-            menuLogout.setOnClickListener(v -> {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            });
-        }
-
-        LinearLayout menuLeaderboard = menuView.findViewById(R.id.menu_leaderboard);
-        if (menuLeaderboard != null) menuLeaderboard.setOnClickListener(v -> {
-            startActivity(new Intent(this, LeaderboardActivity.class));
-            drawerLayout.closeDrawer(GravityCompat.START);
-        });
-
-        LinearLayout menuSwitchRole = menuView.findViewById(R.id.menu_switch_role);
-        if (menuSwitchRole != null) menuSwitchRole.setOnClickListener(v -> {
-            SessionManager.getInstance().setCurrentRole("student");
-            Intent intent = new Intent(this, StudentProfileActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        });
-        LinearLayout menuStudents = menuView.findViewById(R.id.menu_students);
-        if (menuStudents != null) {
-            menuStudents.setOnClickListener(v -> {
-                startActivity(new Intent(this, MyStudentsActivity.class));
-                drawerLayout.closeDrawer(GravityCompat.START);
-            });}
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.menu_container, new TutorMenuFragment())
+                .commit();
     }
 
 

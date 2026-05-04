@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -24,11 +25,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * to reset password or create a new account.
  * @author Maha Shabbir
  */
+
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private TextInputEditText emailEditText, passwordEditText;
+    private TextInputLayout emailLayout, passwordLayout;
 
     /**
      * This describes behavior upon creation of activity with input text boxes and buttons. It implements the navigation between
@@ -49,6 +52,8 @@ public class LoginActivity extends AppCompatActivity {
 
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
+        emailLayout = findViewById(R.id.emailLayout);
+        passwordLayout = findViewById(R.id.passwordLayout);
         MaterialButton loginButton = findViewById(R.id.loginButton);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -105,17 +110,17 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
-            emailEditText.setError("Email is required");
+            emailLayout.setError("Email is required");
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            passwordEditText.setError("Password is required");
+            passwordLayout.setError("Password is required");
             return;
         }
 
         if (!(Patterns.EMAIL_ADDRESS.matcher(email).matches())) {
-            emailEditText.setError("Please enter a valid email address");
+            emailLayout.setError("Please enter a valid email address");
             return;
         }
 

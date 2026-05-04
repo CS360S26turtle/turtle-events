@@ -435,43 +435,10 @@ public class SessionNotesActivity extends AppCompatActivity {
     // ── Navigation drawer ─────────────────────────────────────────────────────
 
     private void setupNavigationDrawer() {
-        FrameLayout menuContainer = findViewById(R.id.menu_container);
-        if (menuContainer == null) return;
-
-        View menuView = getLayoutInflater().inflate(R.layout.fragment_tutor_menu, menuContainer, false);
-        menuContainer.removeAllViews();
-        menuContainer.addView(menuView);
-
-        LinearLayout menuStudents = menuView.findViewById(R.id.menu_students);
-        if (menuStudents != null)
-            menuStudents.setOnClickListener(v -> {
-                startActivity(new Intent(this, MyStudentsActivity.class));
-                drawerLayout.closeDrawer(GravityCompat.START);
-            });
-
-        LinearLayout menuUpcoming = menuView.findViewById(R.id.menu_upcoming);
-        if (menuUpcoming != null)
-            menuUpcoming.setOnClickListener(v -> {
-                startActivity(new Intent(this, UpcomingSessionsActivity.class));
-                drawerLayout.closeDrawer(GravityCompat.START);
-            });
-
-        LinearLayout menuProfile = menuView.findViewById(R.id.menu_profile);
-        if (menuProfile != null)
-            menuProfile.setOnClickListener(v -> {
-                startActivity(new Intent(this, UpdateProfileActivity.class));
-                drawerLayout.closeDrawer(GravityCompat.START);
-            });
-
-        LinearLayout menuLogout = menuView.findViewById(R.id.menu_logout);
-        if (menuLogout != null)
-            menuLogout.setOnClickListener(v -> {
-                FirebaseAuth.getInstance().signOut();
-                Intent i = new Intent(this, LoginActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-                finish();
-            });
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.menu_container, new TutorMenuFragment())
+                .commit();
     }
 
     // ── Inner data class ──────────────────────────────────────────────────────
