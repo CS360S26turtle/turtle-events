@@ -589,7 +589,7 @@ Link: https://lucid.app/lucidchart/8cb1f86e-cb31-4579-8528-1a4b0cb7ddea/edit?inv
 
 <p align="center">
   <img src="images/MyStudentsFinal.jpeg" width="120">
-  <img src="images/MyStudentOptionsFinalFinal.jpeg" width="120">
+  <img src="images/MyStudentOptionsFinalFinal.png" width="120">
   <img src="images/AddStudyResource1Final2.jpeg" width="120">
   <img src="images/AddStudyResource2Final2.jpeg" width="120">
   <img src="images/TutorStudyResourcesFinal.jpeg" width="120">
@@ -605,7 +605,7 @@ Link: https://lucid.app/lucidchart/8cb1f86e-cb31-4579-8528-1a4b0cb7ddea/edit?inv
 
 <p align="center">
   <img src="images/StudentMenuFinal.jpeg" width="120">
-  <img src="images/StudentProfileFinalFinal.jpeg" width="120">
+  <img src="images/StudentProfileFinalFinal.png" width="120">
   <img src="images/SearchTutorFinal.jpeg" width="120">
   <img src="images/TutorViewAfterSearchFinal.jpeg" width="120">
   <img src="images/BookSessionFinal2.jpeg" width="120">
