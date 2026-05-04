@@ -16,7 +16,7 @@
 * [UML Diagrams](#uml-diagrams)
   * [UML Diagrams - Project Halfway](#uml-diagram---halfway)
   * [UML Diagrams - Project Final](images/Updated%20UML%20Diagram.png)
-  * [Activity UML Diagrams - Project Final] (#uml-activities-diagram-final)
+  * [Activity UML Diagrams - Project Final](#uml-activities-diagram-final)
 
 * [CRC Diagrams](#crc-diagrams)
 
